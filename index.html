@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MonTech — Demos y Recursos</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#070707;--card:#0e0e0e;--line:rgba(200,200,200,0.07);--line-b:rgba(200,200,200,0.14);--txt:#e0e0e0;--txt2:#8a8a8a;--txt3:#4a4a4a;--silver:#c8c8c8;--fd:'Syne',sans-serif;--fb:'DM Sans',sans-serif}
+    html,body{min-height:100%}
+    body{background:var(--bg);color:var(--txt);font-family:var(--fb);font-size:14px;line-height:1.6}
+    .grid-bg{position:fixed;inset:0;background-image:linear-gradient(rgba(200,200,200,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(200,200,200,0.02) 1px,transparent 1px);background-size:48px 48px;pointer-events:none}
+    .wrap{max-width:860px;margin:0 auto;padding:3rem 1.5rem 4rem}
+    header{text-align:center;margin-bottom:3rem;padding-bottom:2rem;border-bottom:1px solid var(--line)}
+    .logo{font-family:var(--fd);font-size:2rem;font-weight:800;letter-spacing:-.04em;background:linear-gradient(135deg,#fff,#888);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.5rem}
+    .sub{font-size:.9rem;color:var(--txt2)}
+    .wa-btn{display:inline-flex;align-items:center;gap:.5rem;margin-top:1.2rem;background:#fff;color:#000;font-family:var(--fd);font-size:.8rem;font-weight:700;padding:.45rem 1.2rem;border-radius:30px;text-decoration:none;transition:background .2s}
+    .wa-btn:hover{background:var(--silver)}
+    section{margin-bottom:2.5rem}
+    .sec-title{font-family:var(--fd);font-size:.75rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--txt3);margin-bottom:1rem}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:.8rem}
+    .item{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1.2rem 1.3rem;text-decoration:none;display:block;transition:border-color .18s,transform .18s}
+    .item:hover{border-color:rgba(200,200,200,0.25);transform:translateY(-2px)}
+    .item-ico{font-size:1.5rem;margin-bottom:.6rem}
+    .item-name{font-family:var(--fd);font-size:.88rem;font-weight:700;color:var(--txt);margin-bottom:.25rem}
+    .item-desc{font-size:.76rem;color:var(--txt2);line-height:1.5}
+    .item-badge{display:inline-block;font-size:.6rem;font-weight:700;padding:.12rem .5rem;border-radius:20px;margin-top:.5rem;letter-spacing:.04em}
+    .badge-demo{background:rgba(66,165,245,0.12);color:#90caf9}
+    .badge-pdf{background:rgba(239,83,80,0.12);color:#ef9a9a}
+    .badge-land{background:rgba(200,200,200,0.1);color:var(--silver)}
+    footer{text-align:center;padding-top:2rem;border-top:1px solid var(--line);font-size:.76rem;color:var(--txt3)}
+  </style>
+</head>
+<body>
+<div class="grid-bg"></div>
+<div class="wrap">
+  <header>
+    <div class="logo">MonTech</div>
+    <div class="sub">Software empresarial para República Dominicana · Santo Domingo</div>
+    <a class="wa-btn" href="https://wa.me/18293430288?text=Hola%2C%20vi%20las%20demos%20de%20MonTech%20y%20quiero%20más%20información" target="_blank">📲 829-343-0288 — Hablar con un asesor</a>
+  </header>
+
+  <section>
+    <div class="sec-title">🌐 Landing Page</div>
+    <div class="grid">
+      <a class="item" href="landing-page.html">
+        <div class="item-ico">🏠</div>
+        <div class="item-name">Sitio Web Principal</div>
+        <div class="item-desc">Landing page completa con todos los servicios, precios y formulario de contacto.</div>
+        <div class="item-badge badge-land">LANDING</div>
+      </a>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-title">🖥️ Demos Interactivas</div>
+    <div class="grid">
+      <a class="item" href="demo-erp.html">
+        <div class="item-ico">📊</div>
+        <div class="item-name">ERP Completo</div>
+        <div class="item-desc">Ventas, inventario, contabilidad y reportes DGII (606/607/608) integrados.</div>
+        <div class="item-badge badge-demo">DEMO INTERACTIVA</div>
+      </a>
+      <a class="item" href="demo-crm.html">
+        <div class="item-ico">🗂️</div>
+        <div class="item-name">CRM de Ventas</div>
+        <div class="item-desc">Pipeline Kanban, seguimiento de clientes, cotizaciones y actividades del equipo.</div>
+        <div class="item-badge badge-demo">DEMO INTERACTIVA</div>
+      </a>
+      <a class="item" href="demo-pos.html">
+        <div class="item-ico">🖥️</div>
+        <div class="item-name">Punto de Venta (POS)</div>
+        <div class="item-desc">Caja interactiva con carrito, ITBIS automático, NCF y recibo imprimible.</div>
+        <div class="item-badge badge-demo">DEMO INTERACTIVA</div>
+      </a>
+      <a class="item" href="demo-nomina.html">
+        <div class="item-ico">💵</div>
+        <div class="item-name">Nómina y RRHH</div>
+        <div class="item-desc">ISR y TSS según Ley 11-92, reportes DGT-3/DGT-5/DGT-11, calculadora de salarios.</div>
+        <div class="item-badge badge-demo">DEMO INTERACTIVA</div>
+      </a>
+      <a class="item" href="demo-clinica.html">
+        <div class="item-ico">🏥</div>
+        <div class="item-name">Clínicas y Consultorios</div>
+        <div class="item-desc">Agenda de citas, expedientes digitales, facturación ARS/SENASA y farmacia.</div>
+        <div class="item-badge badge-demo">DEMO INTERACTIVA</div>
+      </a>
+      <a class="item" href="demo-construccion.html">
+        <div class="item-ico">🏗️</div>
+        <div class="item-name">Constructoras</div>
+        <div class="item-desc">Proyectos con Gantt, presupuesto por partidas, materiales y subcontratistas.</div>
+        <div class="item-badge badge-demo">DEMO INTERACTIVA</div>
+      </a>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-title">📄 Guías de Presentación (Equipo de Ventas)</div>
+    <div class="grid">
+      <a class="item" href="guia-presentacion-cliente.html">
+        <div class="item-ico">📋</div>
+        <div class="item-name">Guía ERP</div>
+        <div class="item-desc">Cómo presentar el ERP a un cliente en 20 minutos. Módulos, objeciones y cierre.</div>
+        <div class="item-badge badge-pdf">GUÍA DE VENTAS</div>
+      </a>
+      <a class="item" href="guia-crm.html">
+        <div class="item-ico">📋</div>
+        <div class="item-name">Guía CRM</div>
+        <div class="item-desc">Flujo de presentación del CRM para distribuidoras, servicios e inmobiliarias.</div>
+        <div class="item-badge badge-pdf">GUÍA DE VENTAS</div>
+      </a>
+      <a class="item" href="guia-pos.html">
+        <div class="item-ico">📋</div>
+        <div class="item-name">Guía POS</div>
+        <div class="item-desc">Cómo vender el POS a tiendas, farmacias y ferreterías dominicanas.</div>
+        <div class="item-badge badge-pdf">GUÍA DE VENTAS</div>
+      </a>
+      <a class="item" href="guia-nomina.html">
+        <div class="item-ico">📋</div>
+        <div class="item-name">Guía Nómina</div>
+        <div class="item-desc">Presentación del sistema de nómina con énfasis en cumplimiento DGII y TSS.</div>
+        <div class="item-badge badge-pdf">GUÍA DE VENTAS</div>
+      </a>
+      <a class="item" href="guia-clinica.html">
+        <div class="item-ico">📋</div>
+        <div class="item-name">Guía Clínicas</div>
+        <div class="item-desc">Cómo presentar el sistema a médicos y administradores de clínicas.</div>
+        <div class="item-badge badge-pdf">GUÍA DE VENTAS</div>
+      </a>
+      <a class="item" href="guia-construccion.html">
+        <div class="item-ico">📋</div>
+        <div class="item-name">Guía Constructoras</div>
+        <div class="item-desc">Presentación del sistema para constructoras e inmobiliarias dominicanas.</div>
+        <div class="item-badge badge-pdf">GUÍA DE VENTAS</div>
+      </a>
+    </div>
+  </section>
+
+  <footer>
+    MonTech · Software Empresarial · Santo Domingo, República Dominicana<br/>
+    📲 829-343-0288 · montech.do
+  </footer>
+</div>
+</body>
+</html>
