@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MonTech Nómina — Demo Interactiva</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#070707;--sb:#0a0a0a;--card:#0e0e0e;--card2:#131313;--line:rgba(200,200,200,0.07);--line-b:rgba(200,200,200,0.14);--txt:#e0e0e0;--txt2:#8a8a8a;--txt3:#4a4a4a;--silver:#c8c8c8;--green:#4caf50;--yellow:#ffc107;--red:#ef5350;--blue:#42a5f5;--fd:'Syne',sans-serif;--fb:'DM Sans',sans-serif}
+    html,body{height:100%;overflow:hidden}
+    body{background:var(--bg);color:var(--txt);font-family:var(--fb);font-size:13px;display:flex;flex-direction:column}
+    .banner{background:rgba(200,200,200,0.04);border-bottom:1px solid var(--line-b);padding:.45rem 1.5rem;display:flex;align-items:center;justify-content:space-between;font-size:.76rem;color:var(--txt2);flex-shrink:0;gap:1rem}
+    .banner strong{color:var(--silver)}
+    .bcta{background:#fff;color:#000;font-weight:700;padding:.3rem 1rem;border-radius:20px;text-decoration:none;font-family:var(--fd);font-size:.73rem;white-space:nowrap;transition:background .2s}
+    .bcta:hover{background:var(--silver)}
+    .app{display:flex;flex:1;overflow:hidden}
+    .sidebar{width:210px;background:var(--sb);border-right:1px solid var(--line);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto}
+    .sb-logo{padding:1.1rem;border-bottom:1px solid var(--line);font-family:var(--fd);font-size:1rem;font-weight:800;letter-spacing:-.02em;background:linear-gradient(135deg,#fff,#888);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .sb-sec{padding:.7rem .7rem .2rem}
+    .sb-lbl{font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--txt3);padding:0 .45rem;margin-bottom:.35rem}
+    .sb-btn{display:flex;align-items:center;gap:.65rem;padding:.5rem .75rem;border-radius:8px;color:var(--txt2);font-size:.82rem;cursor:pointer;border:none;background:transparent;width:100%;text-align:left;transition:background .18s,color .18s}
+    .sb-btn:hover{background:rgba(200,200,200,0.05);color:var(--txt)}
+    .sb-btn.active{background:rgba(200,200,200,0.1);color:#fff}
+    .sb-ico{font-size:.95rem;width:17px;text-align:center;flex-shrink:0}
+    .sb-footer{margin-top:auto;padding:.9rem;border-top:1px solid var(--line)}
+    .sb-user{display:flex;align-items:center;gap:.6rem}
+    .sb-av{width:28px;height:28px;border-radius:50%;background:rgba(200,200,200,0.08);border:1px solid var(--line-b);display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:.65rem;font-weight:700;color:var(--silver)}
+    .sb-un{font-size:.8rem;color:var(--txt);font-weight:500;line-height:1.2}
+    .sb-ur{font-size:.68rem;color:var(--txt3)}
+    .main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+    .topbar{height:54px;border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 1.3rem;gap:.8rem;flex-shrink:0}
+    .tb-t{font-family:var(--fd);font-size:.9rem;font-weight:700;flex:1}
+    .tb-date{font-size:.74rem;color:var(--txt3);white-space:nowrap}
+    .pa{flex:1;overflow-y:auto;padding:1.3rem}
+    .page{display:none}.page.active{display:block}
+    .krow{display:grid;grid-template-columns:repeat(4,1fr);gap:.9rem;margin-bottom:1.2rem}
+    .kpi{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1.1rem;position:relative;overflow:hidden}
+    .kpi::after{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+    .kpi.b::after{background:var(--blue)}.kpi.g::after{background:var(--green)}.kpi.y::after{background:var(--yellow)}.kpi.s::after{background:var(--silver)}
+    .kl{font-size:.68rem;color:var(--txt3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.45rem}
+    .kv{font-family:var(--fd);font-size:1.5rem;font-weight:700;color:var(--txt);line-height:1;margin-bottom:.35rem}
+    .ks{font-size:.7rem;color:var(--txt2)}
+    .up{color:var(--green)}.dn{color:var(--red)}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1.1rem}
+    .card-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:.9rem}
+    .card-t{font-family:var(--fd);font-size:.82rem;font-weight:700}
+    .card-a{font-size:.72rem;color:var(--txt3);cursor:pointer;transition:color .2s}
+    .card-a:hover{color:var(--silver)}
+    .tbl{width:100%;border-collapse:collapse}
+    .tbl th{text-align:left;font-size:.64rem;text-transform:uppercase;letter-spacing:.09em;color:var(--txt3);padding:.35rem .55rem;border-bottom:1px solid var(--line);font-weight:500}
+    .tbl td{padding:.55rem .55rem;font-size:.8rem;color:var(--txt2);border-bottom:1px solid rgba(200,200,200,0.03);vertical-align:middle}
+    .tbl tr:last-child td{border-bottom:none}
+    .tbl tr:hover td{background:rgba(200,200,200,0.015)}
+    .tw{color:var(--txt);font-weight:500}
+    .ts{font-size:.68rem;color:var(--txt3)}
+    .badge{display:inline-flex;align-items:center;font-size:.64rem;padding:.15rem .5rem;border-radius:20px;font-weight:600;white-space:nowrap}
+    .bg{background:rgba(76,175,80,.12);color:#81c784}.by{background:rgba(255,193,7,.12);color:#ffd54f}.br{background:rgba(239,83,80,.12);color:#ef9a9a}.bb{background:rgba(66,165,245,.12);color:#90caf9}.bgr{background:rgba(200,200,200,.07);color:var(--txt3)}
+    .ph{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.1rem}
+    .ph h1{font-family:var(--fd);font-size:1rem;font-weight:700}
+    .btn{padding:.48rem 1rem;border-radius:8px;font-family:var(--fb);font-size:.8rem;cursor:pointer;transition:all .18s;border:none}
+    .btn-p{background:#fff;color:#000;font-weight:600}
+    .btn-p:hover{background:var(--silver)}
+    .btn-s{background:rgba(200,200,200,0.07);color:var(--txt);font-weight:500}
+    .btn-s:hover{background:rgba(200,200,200,0.12)}
+    .g2{display:grid;grid-template-columns:1fr 1fr;gap:.9rem}
+
+    /* Nómina table highlight */
+    .tbl td.amt{color:var(--txt);font-weight:500;font-family:var(--fd);font-size:.78rem}
+    .tbl td.ded{color:#ef9a9a;font-size:.78rem}
+    .tbl td.net{color:#81c784;font-weight:700;font-family:var(--fd);font-size:.82rem}
+
+    /* Progress bar */
+    .prog-row{display:flex;align-items:center;gap:.7rem;margin-bottom:.55rem}
+    .prog-lbl{font-size:.72rem;color:var(--txt2);min-width:110px}
+    .prog-track{flex:1;height:5px;background:rgba(200,200,200,0.06);border-radius:3px;overflow:hidden}
+    .prog-fill{height:100%;border-radius:3px}
+    .prog-val{font-size:.72rem;color:var(--silver);min-width:70px;text-align:right}
+
+    /* modal */
+    .modal-bg{position:fixed;inset:0;z-index:999;background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center}
+    .modal-bg.open{display:flex}
+    .modal{background:#111;border:1px solid var(--line-b);border-radius:18px;padding:2rem;width:440px;max-height:90vh;overflow-y:auto;position:relative}
+    .modal h3{font-family:var(--fd);font-size:1rem;font-weight:700;margin-bottom:1.2rem}
+    .modal label{font-size:.72rem;color:var(--txt3);display:block;margin-bottom:.25rem;margin-top:.7rem}
+    .modal input,.modal select{width:100%;background:var(--card2);border:1px solid var(--line-b);border-radius:8px;padding:.5rem .75rem;color:var(--txt);font-family:var(--fb);font-size:.82rem;outline:none}
+    .modal-close{position:absolute;top:1rem;right:1rem;background:rgba(200,200,200,0.08);border:none;border-radius:50%;width:28px;height:28px;cursor:pointer;color:var(--txt2);font-size:.9rem;display:flex;align-items:center;justify-content:center}
+    .modal-close:hover{background:rgba(200,200,200,0.15);color:var(--txt)}
+    .modal-footer{display:flex;gap:.6rem;justify-content:flex-end;margin-top:1.2rem}
+    .calc-result{background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:1rem;margin-top:1rem}
+    .calc-row{display:flex;justify-content:space-between;font-size:.8rem;margin-bottom:.3rem;color:var(--txt2)}
+    .calc-row.total{font-family:var(--fd);font-size:.95rem;color:#fff;font-weight:700;border-top:1px solid var(--line);padding-top:.5rem;margin-top:.3rem}
+    .calc-row .ded{color:#ef9a9a}
+    .calc-row .net{color:#81c784}
+
+    /* ISR bracket table */
+    .isr-table{width:100%;border-collapse:collapse;margin-top:.5rem}
+    .isr-table th{font-size:.62rem;text-transform:uppercase;letter-spacing:.08em;color:var(--txt3);padding:.3rem .4rem;border-bottom:1px solid var(--line);text-align:left}
+    .isr-table td{font-size:.76rem;color:var(--txt2);padding:.38rem .4rem;border-bottom:1px solid rgba(200,200,200,0.03)}
+    .isr-table tr:last-child td{border-bottom:none}
+    .isr-table td:first-child{color:var(--txt)}
+
+    /* incidencias timeline */
+    .incident-list{display:flex;flex-direction:column;gap:.5rem}
+    .incident-item{background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:.75rem 1rem;display:flex;align-items:center;gap:.8rem}
+    .ii-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+    .ii-info{flex:1}
+    .ii-name{font-size:.82rem;color:var(--txt);font-weight:500}
+    .ii-detail{font-size:.72rem;color:var(--txt3);margin-top:.1rem}
+    .ii-status{font-size:.7rem}
+  </style>
+</head>
+<body>
+
+<div class="banner">
+  <div><strong>MonTech Nómina</strong> — Demo Interactiva · Vista de demostración</div>
+  <a class="bcta" href="https://wa.me/18293430288?text=Quiero%20ver%20el%20sistema%20de%20Nómina%20de%20MonTech" target="_blank">📲 Solicitar Demo Real</a>
+</div>
+
+<div class="app">
+  <div class="sidebar">
+    <div class="sb-logo">MonTech Nómina</div>
+    <div class="sb-sec">
+      <div class="sb-lbl">Principal</div>
+      <button class="sb-btn active" onclick="nav('dashboard',this)"><span class="sb-ico">📊</span> Dashboard</button>
+      <button class="sb-btn" onclick="nav('empleados',this)"><span class="sb-ico">👥</span> Empleados</button>
+      <button class="sb-btn" onclick="nav('nomina',this)"><span class="sb-ico">💵</span> Calcular Nómina</button>
+    </div>
+    <div class="sb-sec">
+      <div class="sb-lbl">Reportes</div>
+      <button class="sb-btn" onclick="nav('reportes',this)"><span class="sb-ico">📑</span> Reportes DGT</button>
+      <button class="sb-btn" onclick="nav('incidencias',this)"><span class="sb-ico">📅</span> Incidencias</button>
+    </div>
+    <div class="sb-footer">
+      <div class="sb-user">
+        <div class="sb-av">RH</div>
+        <div><div class="sb-un">RRHH Admin</div><div class="sb-ur">Recursos Humanos</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <div class="tb-t" id="page-title">Dashboard</div>
+      <div class="tb-date" id="top-date"></div>
+    </div>
+    <div class="pa">
+
+      <!-- DASHBOARD -->
+      <div class="page active" id="pg-dashboard">
+        <div class="krow">
+          <div class="kpi b"><div class="kl">Empleados Activos</div><div class="kv">48</div><div class="ks">3 en período de prueba</div></div>
+          <div class="kpi g"><div class="kl">Nómina del Mes</div><div class="kv">RD$2.38M</div><div class="ks">Mayo 2026</div></div>
+          <div class="kpi y"><div class="kl">ISR Retenido</div><div class="kv">RD$189,420</div><div class="ks">Para pagar a DGII</div></div>
+          <div class="kpi s"><div class="kl">TSS Empleador</div><div class="kv">RD$194,880</div><div class="ks">Seguridad Social</div></div>
+        </div>
+        <div class="g2">
+          <div class="card">
+            <div class="card-h"><div class="card-t">Distribución por Departamento</div></div>
+            <div>
+              <div class="prog-row"><div class="prog-lbl">Ventas</div><div class="prog-track"><div class="prog-fill" style="width:33%;background:var(--blue)"></div></div><div class="prog-val">16 empleados</div></div>
+              <div class="prog-row"><div class="prog-lbl">Operaciones</div><div class="prog-track"><div class="prog-fill" style="width:25%;background:var(--green)"></div></div><div class="prog-val">12 empleados</div></div>
+              <div class="prog-row"><div class="prog-lbl">Administración</div><div class="prog-track"><div class="prog-fill" style="width:17%;background:var(--yellow)"></div></div><div class="prog-val">8 empleados</div></div>
+              <div class="prog-row"><div class="prog-lbl">Tecnología</div><div class="prog-track"><div class="prog-fill" style="width:13%;background:var(--silver)"></div></div><div class="prog-val">6 empleados</div></div>
+              <div class="prog-row"><div class="prog-lbl">Almacén</div><div class="prog-track"><div class="prog-fill" style="width:13%;background:rgba(200,200,200,0.3)"></div></div><div class="prog-val">6 empleados</div></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-h"><div class="card-t">Próximas Fechas</div></div>
+            <div style="display:flex;flex-direction:column;gap:.6rem">
+              <div class="incident-item" style="padding:.6rem .8rem">
+                <div class="ii-icon" style="background:rgba(76,175,80,0.12)">💵</div>
+                <div class="ii-info"><div class="ii-name">Pago Nómina Quincenal</div><div class="ii-detail">30 de mayo · 48 empleados</div></div>
+                <span class="badge bg">6 días</span>
+              </div>
+              <div class="incident-item" style="padding:.6rem .8rem">
+                <div class="ii-icon" style="background:rgba(66,165,245,0.12)">📋</div>
+                <div class="ii-info"><div class="ii-name">Declaración ISR (DGII)</div><div class="ii-detail">Vence 10 de junio</div></div>
+                <span class="badge bb">17 días</span>
+              </div>
+              <div class="incident-item" style="padding:.6rem .8rem">
+                <div class="ii-icon" style="background:rgba(255,193,7,0.12)">🎁</div>
+                <div class="ii-info"><div class="ii-name">Regalía Pascual</div><div class="ii-detail">Diciembre · 1 sueldo por ley</div></div>
+                <span class="badge by">Diciembre</span>
+              </div>
+              <div class="incident-item" style="padding:.6rem .8rem">
+                <div class="ii-icon" style="background:rgba(239,83,80,0.12)">📑</div>
+                <div class="ii-info"><div class="ii-name">Informe DGT-3</div><div class="ii-detail">Reporte mensual TSS</div></div>
+                <span class="badge br">31 mayo</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- EMPLEADOS -->
+      <div class="page" id="pg-empleados">
+        <div class="ph">
+          <h1>Empleados</h1>
+          <button class="btn btn-p" onclick="document.getElementById('modal-emp').classList.add('open')">+ Nuevo Empleado</button>
+        </div>
+        <div class="card">
+          <table class="tbl">
+            <tr><th>Empleado</th><th>Cargo</th><th>Depto.</th><th>Salario Bruto</th><th>Tipo</th><th>Ingreso</th><th>Estado</th></tr>
+            <tr><td><div class="tw">María García</div><div class="ts">RD-001</div></td><td>Gerente de Ventas</td><td>Ventas</td><td class="amt">RD$85,000</td><td>Fijo</td><td class="ts">Jan 2021</td><td><span class="badge bg">Activo</span></td></tr>
+            <tr><td><div class="tw">Juan Martínez</div><div class="ts">RD-002</div></td><td>Desarrollador Senior</td><td>Tecnología</td><td class="amt">RD$110,000</td><td>Fijo</td><td class="ts">Mar 2020</td><td><span class="badge bg">Activo</span></td></tr>
+            <tr><td><div class="tw">Ana Rodríguez</div><div class="ts">RD-003</div></td><td>Contadora</td><td>Administración</td><td class="amt">RD$65,000</td><td>Fijo</td><td class="ts">Jun 2022</td><td><span class="badge bg">Activo</span></td></tr>
+            <tr><td><div class="tw">Carlos López</div><div class="ts">RD-004</div></td><td>Vendedor</td><td>Ventas</td><td class="amt">RD$40,000</td><td>Fijo + Comis.</td><td class="ts">Sep 2023</td><td><span class="badge bg">Activo</span></td></tr>
+            <tr><td><div class="tw">Laura Pérez</div><div class="ts">RD-005</div></td><td>Asistente Admin.</td><td>Administración</td><td class="amt">RD$32,000</td><td>Fijo</td><td class="ts">Feb 2024</td><td><span class="badge by">Prueba</span></td></tr>
+            <tr><td><div class="tw">Roberto Sánchez</div><div class="ts">RD-006</div></td><td>Almacenista</td><td>Almacén</td><td class="amt">RD$28,500</td><td>Fijo</td><td class="ts">Nov 2021</td><td><span class="badge bg">Activo</span></td></tr>
+            <tr><td><div class="tw">Patricia Díaz</div><div class="ts">RD-007</div></td><td>Diseñadora Gráfica</td><td>Tecnología</td><td class="amt">RD$55,000</td><td>Fijo</td><td class="ts">Aug 2023</td><td><span class="badge bg">Activo</span></td></tr>
+            <tr><td><div class="tw">Miguel Torres</div><div class="ts">RD-008</div></td><td>Supervisor Operac.</td><td>Operaciones</td><td class="amt">RD$72,000</td><td>Fijo</td><td class="ts">Apr 2019</td><td><span class="badge bg">Activo</span></td></tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- NÓMINA -->
+      <div class="page" id="pg-nomina">
+        <div class="ph">
+          <h1>Cálculo de Nómina — Mayo 2026</h1>
+          <div style="display:flex;gap:.6rem">
+            <button class="btn btn-s" onclick="document.getElementById('modal-calc').classList.add('open')">🧮 Calculadora ISR</button>
+            <button class="btn btn-p">📤 Generar DGT-3</button>
+          </div>
+        </div>
+        <div class="card" style="margin-bottom:.9rem">
+          <table class="tbl">
+            <tr><th>Empleado</th><th>Salario Bruto</th><th>ISR (mensual)</th><th>TSS Emp. (2.87%)</th><th>AFP Emp. (2.87%)</th><th>Otros Ded.</th><th>Salario Neto</th></tr>
+            <tr>
+              <td class="tw">María García</td>
+              <td class="amt">RD$85,000</td>
+              <td class="ded">RD$12,825</td>
+              <td class="ded">RD$2,440</td>
+              <td class="ded">RD$2,440</td>
+              <td class="ded">RD$0</td>
+              <td class="net">RD$67,295</td>
+            </tr>
+            <tr>
+              <td class="tw">Juan Martínez</td>
+              <td class="amt">RD$110,000</td>
+              <td class="ded">RD$22,000</td>
+              <td class="ded">RD$3,157</td>
+              <td class="ded">RD$3,157</td>
+              <td class="ded">RD$2,000</td>
+              <td class="net">RD$79,686</td>
+            </tr>
+            <tr>
+              <td class="tw">Ana Rodríguez</td>
+              <td class="amt">RD$65,000</td>
+              <td class="ded">RD$6,250</td>
+              <td class="ded">RD$1,866</td>
+              <td class="ded">RD$1,866</td>
+              <td class="ded">RD$0</td>
+              <td class="net">RD$55,018</td>
+            </tr>
+            <tr>
+              <td class="tw">Carlos López</td>
+              <td class="amt">RD$40,000</td>
+              <td class="ded">RD$0</td>
+              <td class="ded">RD$1,148</td>
+              <td class="ded">RD$1,148</td>
+              <td class="ded">RD$0</td>
+              <td class="net">RD$37,704</td>
+            </tr>
+            <tr>
+              <td class="tw">Laura Pérez</td>
+              <td class="amt">RD$32,000</td>
+              <td class="ded">RD$0</td>
+              <td class="ded">RD$919</td>
+              <td class="ded">RD$919</td>
+              <td class="ded">RD$0</td>
+              <td class="net">RD$30,162</td>
+            </tr>
+            <tr>
+              <td class="tw">Roberto Sánchez</td>
+              <td class="amt">RD$28,500</td>
+              <td class="ded">RD$0</td>
+              <td class="ded">RD$818</td>
+              <td class="ded">RD$818</td>
+              <td class="ded">RD$0</td>
+              <td class="net">RD$26,864</td>
+            </tr>
+            <tr>
+              <td class="tw">Patricia Díaz</td>
+              <td class="amt">RD$55,000</td>
+              <td class="ded">RD$3,125</td>
+              <td class="ded">RD$1,579</td>
+              <td class="ded">RD$1,579</td>
+              <td class="ded">RD$1,500</td>
+              <td class="net">RD$47,217</td>
+            </tr>
+            <tr>
+              <td class="tw">Miguel Torres</td>
+              <td class="amt">RD$72,000</td>
+              <td class="ded">RD$9,900</td>
+              <td class="ded">RD$2,066</td>
+              <td class="ded">RD$2,066</td>
+              <td class="ded">RD$0</td>
+              <td class="net">RD$57,968</td>
+            </tr>
+          </table>
+        </div>
+        <div class="card" style="background:rgba(76,175,80,0.04);border-color:rgba(76,175,80,0.15)">
+          <div class="card-h"><div class="card-t">ℹ️ Escalas ISR — Ley 11-92 (Actualizado 2026)</div></div>
+          <table class="isr-table">
+            <tr><th>Salario Anual</th><th>Tasa</th><th>Excedente</th><th>Aplica cuando...</th></tr>
+            <tr><td>Hasta RD$416,220</td><td><span class="badge bg">Exento</span></td><td>—</td><td>Salario ≤ RD$34,685/mes</td></tr>
+            <tr><td>RD$416,220 – RD$624,329</td><td><span class="badge by">15%</span></td><td>Sobre el excedente</td><td>RD$34,685 – RD$52,027/mes</td></tr>
+            <tr><td>RD$624,329 – RD$867,123</td><td><span class="badge bb">20%</span></td><td>RD$31,216 + 20%</td><td>RD$52,027 – RD$72,260/mes</td></tr>
+            <tr><td>Más de RD$867,123</td><td><span class="badge br">25%</span></td><td>RD$79,776 + 25%</td><td>Salario &gt; RD$72,260/mes</td></tr>
+          </table>
+          <div style="margin-top:.7rem;font-size:.72rem;color:var(--txt3)">TSS empleado: 2.87% · AFP empleado: 2.87% · TSS empleador: 7.09% · AFP empleador: 7.10%</div>
+        </div>
+      </div>
+
+      <!-- REPORTES DGT -->
+      <div class="page" id="pg-reportes">
+        <div class="ph">
+          <h1>Reportes DGT — Mayo 2026</h1>
+          <button class="btn btn-s">📥 Descargar Todos</button>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.9rem;margin-bottom:1.2rem">
+          <div class="card" style="cursor:pointer;transition:border-color .2s" onmouseenter="this.style.borderColor='rgba(200,200,200,0.3)'" onmouseleave="this.style.borderColor=''">
+            <div style="font-size:2rem;margin-bottom:.6rem">📋</div>
+            <div style="font-family:var(--fd);font-size:.9rem;font-weight:700;margin-bottom:.3rem">DGT-3</div>
+            <div style="font-size:.74rem;color:var(--txt2);margin-bottom:.8rem">Reporte mensual de nómina para la TSS. Detalla salarios, descuentos y cotizaciones de cada empleado.</div>
+            <button class="btn btn-p" style="width:100%;padding:.4rem">Generar DGT-3</button>
+          </div>
+          <div class="card" style="cursor:pointer;transition:border-color .2s" onmouseenter="this.style.borderColor='rgba(200,200,200,0.3)'" onmouseleave="this.style.borderColor=''">
+            <div style="font-size:2rem;margin-bottom:.6rem">📄</div>
+            <div style="font-family:var(--fd);font-size:.9rem;font-weight:700;margin-bottom:.3rem">DGT-5</div>
+            <div style="font-size:.74rem;color:var(--txt2);margin-bottom:.8rem">Reporte de novedades: ingresos, egresos, cambios de salario y ausentismos del período reportado.</div>
+            <button class="btn btn-p" style="width:100%;padding:.4rem">Generar DGT-5</button>
+          </div>
+          <div class="card" style="cursor:pointer;transition:border-color .2s" onmouseenter="this.style.borderColor='rgba(200,200,200,0.3)'" onmouseleave="this.style.borderColor=''">
+            <div style="font-size:2rem;margin-bottom:.6rem">📑</div>
+            <div style="font-family:var(--fd);font-size:.9rem;font-weight:700;margin-bottom:.3rem">DGT-11</div>
+            <div style="font-size:.74rem;color:var(--txt2);margin-bottom:.8rem">Reporte de retención del ISR. Se envía a la DGII con el pago de retenciones de asalariados.</div>
+            <button class="btn btn-p" style="width:100%;padding:.4rem">Generar DGT-11</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-h"><div class="card-t">Historial de Reportes Generados</div></div>
+          <table class="tbl">
+            <tr><th>Reporte</th><th>Período</th><th>Generado</th><th>Estado</th><th>Acciones</th></tr>
+            <tr><td class="tw">DGT-3</td><td>Abril 2026</td><td class="ts">02/05/2026</td><td><span class="badge bg">Enviado</span></td><td><span class="card-a">Descargar</span></td></tr>
+            <tr><td class="tw">DGT-5</td><td>Abril 2026</td><td class="ts">02/05/2026</td><td><span class="badge bg">Enviado</span></td><td><span class="card-a">Descargar</span></td></tr>
+            <tr><td class="tw">DGT-11</td><td>Abril 2026</td><td class="ts">10/05/2026</td><td><span class="badge bg">Enviado</span></td><td><span class="card-a">Descargar</span></td></tr>
+            <tr><td class="tw">DGT-3</td><td>Marzo 2026</td><td class="ts">01/04/2026</td><td><span class="badge bg">Enviado</span></td><td><span class="card-a">Descargar</span></td></tr>
+            <tr><td class="tw">DGT-3</td><td>Mayo 2026</td><td class="ts">Pendiente</td><td><span class="badge by">Por Generar</span></td><td><span class="card-a">Generar →</span></td></tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- INCIDENCIAS -->
+      <div class="page" id="pg-incidencias">
+        <div class="ph">
+          <h1>Incidencias y Ausencias</h1>
+          <button class="btn btn-p" onclick="document.getElementById('modal-inc').classList.add('open')">+ Nueva Incidencia</button>
+        </div>
+        <div class="g2">
+          <div class="card">
+            <div class="card-h"><div class="card-t">Solicitudes Pendientes</div></div>
+            <div class="incident-list">
+              <div class="incident-item">
+                <div class="ii-icon" style="background:rgba(255,193,7,0.12)">🏖️</div>
+                <div class="ii-info">
+                  <div class="ii-name">Vacaciones — Carlos López</div>
+                  <div class="ii-detail">10–20 junio 2026 · 10 días hábiles</div>
+                </div>
+                <div style="display:flex;gap:.4rem">
+                  <button class="btn btn-g" style="padding:.25rem .6rem;font-size:.7rem">✓</button>
+                  <button class="btn btn-r" style="padding:.25rem .6rem;font-size:.7rem">✕</button>
+                </div>
+              </div>
+              <div class="incident-item">
+                <div class="ii-icon" style="background:rgba(239,83,80,0.12)">🏥</div>
+                <div class="ii-info">
+                  <div class="ii-name">Licencia Médica — Roberto Sánchez</div>
+                  <div class="ii-detail">25–27 mayo 2026 · 3 días</div>
+                </div>
+                <div style="display:flex;gap:.4rem">
+                  <button class="btn btn-g" style="padding:.25rem .6rem;font-size:.7rem">✓</button>
+                  <button class="btn btn-r" style="padding:.25rem .6rem;font-size:.7rem">✕</button>
+                </div>
+              </div>
+              <div class="incident-item">
+                <div class="ii-icon" style="background:rgba(66,165,245,0.12)">⏰</div>
+                <div class="ii-info">
+                  <div class="ii-name">Horas Extra — Miguel Torres</div>
+                  <div class="ii-detail">18 mayo · 6 horas extra (RD$2,700)</div>
+                </div>
+                <div style="display:flex;gap:.4rem">
+                  <button class="btn btn-g" style="padding:.25rem .6rem;font-size:.7rem">✓</button>
+                  <button class="btn btn-r" style="padding:.25rem .6rem;font-size:.7rem">✕</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-h"><div class="card-t">Historial del Mes</div></div>
+            <table class="tbl">
+              <tr><th>Empleado</th><th>Tipo</th><th>Días</th><th>Estado</th></tr>
+              <tr><td class="tw">María García</td><td>Vacaciones</td><td>5</td><td><span class="badge bg">Aprobado</span></td></tr>
+              <tr><td class="tw">Ana Rodríguez</td><td>Permiso</td><td>1</td><td><span class="badge bg">Aprobado</span></td></tr>
+              <tr><td class="tw">Patricia Díaz</td><td>H. Extra</td><td>—</td><td><span class="badge bg">Pagado</span></td></tr>
+              <tr><td class="tw">Juan Martínez</td><td>Licencia Méd.</td><td>2</td><td><span class="badge bg">Aprobado</span></td></tr>
+              <tr><td class="tw">Laura Pérez</td><td>Ausencia</td><td>1</td><td><span class="badge br">Descontado</span></td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- MODAL EMPLEADO -->
+<div class="modal-bg" id="modal-emp">
+  <div class="modal">
+    <button class="modal-close" onclick="document.getElementById('modal-emp').classList.remove('open')">✕</button>
+    <h3>Nuevo Empleado</h3>
+    <label>Nombre Completo</label><input type="text" placeholder="Ej: Pedro Jiménez"/>
+    <label>Cargo</label><input type="text" placeholder="Ej: Vendedor"/>
+    <label>Departamento</label>
+    <select><option>Ventas</option><option>Operaciones</option><option>Administración</option><option>Tecnología</option><option>Almacén</option></select>
+    <label>Salario Bruto (RD$)</label><input type="number" placeholder="0.00"/>
+    <label>Tipo de Contrato</label>
+    <select><option>Fijo</option><option>Por Hora</option><option>Comisión</option><option>Temporal</option></select>
+    <label>Fecha de Ingreso</label><input type="date"/>
+    <label>Número de Cédula</label><input type="text" placeholder="000-0000000-0"/>
+    <div class="modal-footer">
+      <button class="btn btn-s" onclick="document.getElementById('modal-emp').classList.remove('open')">Cancelar</button>
+      <button class="btn btn-p" onclick="document.getElementById('modal-emp').classList.remove('open')">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL CALCULADORA ISR -->
+<div class="modal-bg" id="modal-calc">
+  <div class="modal">
+    <button class="modal-close" onclick="document.getElementById('modal-calc').classList.remove('open')">✕</button>
+    <h3>🧮 Calculadora ISR / TSS</h3>
+    <label>Salario Bruto Mensual (RD$)</label>
+    <input type="number" id="calc-salario" placeholder="Ej: 65000" oninput="calcISR()"/>
+    <label>Otros Descuentos (RD$)</label>
+    <input type="number" id="calc-otros" placeholder="0" oninput="calcISR()"/>
+    <div class="calc-result" id="calc-result">
+      <div style="font-size:.72rem;color:var(--txt3);text-align:center">Ingresa un salario para calcular</div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-p" onclick="document.getElementById('modal-calc').classList.remove('open')">Listo</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL INCIDENCIA -->
+<div class="modal-bg" id="modal-inc">
+  <div class="modal">
+    <button class="modal-close" onclick="document.getElementById('modal-inc').classList.remove('open')">✕</button>
+    <h3>Nueva Incidencia</h3>
+    <label>Empleado</label>
+    <select><option>María García</option><option>Juan Martínez</option><option>Ana Rodríguez</option><option>Carlos López</option><option>Laura Pérez</option><option>Roberto Sánchez</option></select>
+    <label>Tipo</label>
+    <select><option>Vacaciones</option><option>Licencia Médica</option><option>Permiso Personal</option><option>Horas Extra</option><option>Ausencia</option><option>Regalía Pascual</option></select>
+    <label>Fecha Inicio</label><input type="date"/>
+    <label>Fecha Fin</label><input type="date"/>
+    <label>Observaciones</label><input type="text" placeholder="Notas adicionales..."/>
+    <div class="modal-footer">
+      <button class="btn btn-s" onclick="document.getElementById('modal-inc').classList.remove('open')">Cancelar</button>
+      <button class="btn btn-p" onclick="document.getElementById('modal-inc').classList.remove('open')">Registrar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function nav(page, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sb-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('pg-' + page).classList.add('active');
+  if (btn) btn.classList.add('active');
+  const titles = {dashboard:'Dashboard',empleados:'Empleados',nomina:'Cálculo de Nómina',reportes:'Reportes DGT',incidencias:'Incidencias'};
+  document.getElementById('page-title').textContent = titles[page] || page;
+}
+
+function calcISR() {
+  const bruto = parseFloat(document.getElementById('calc-salario').value) || 0;
+  const otros  = parseFloat(document.getElementById('calc-otros').value) || 0;
+  const anual = bruto * 12;
+  const tss = Math.round(bruto * 0.0287);
+  const afp = Math.round(bruto * 0.0287);
+  let isr = 0;
+  if (anual <= 416220) isr = 0;
+  else if (anual <= 624329) isr = Math.round((anual - 416220) * 0.15 / 12);
+  else if (anual <= 867123) isr = Math.round((31216 + (anual - 624329) * 0.20) / 12);
+  else isr = Math.round((79776 + (anual - 867123) * 0.25) / 12);
+  const total_ded = isr + tss + afp + otros;
+  const neto = bruto - total_ded;
+  document.getElementById('calc-result').innerHTML = `
+    <div class="calc-row"><span>Salario Bruto</span><span>RD$${bruto.toLocaleString()}</span></div>
+    <div class="calc-row"><span>ISR Mensual</span><span class="ded">− RD$${isr.toLocaleString()}</span></div>
+    <div class="calc-row"><span>TSS Empleado (2.87%)</span><span class="ded">− RD$${tss.toLocaleString()}</span></div>
+    <div class="calc-row"><span>AFP Empleado (2.87%)</span><span class="ded">− RD$${afp.toLocaleString()}</span></div>
+    ${otros > 0 ? `<div class="calc-row"><span>Otros Descuentos</span><span class="ded">− RD$${otros.toLocaleString()}</span></div>` : ''}
+    <div class="calc-row total"><span>Salario Neto</span><span class="net">RD$${neto.toLocaleString()}</span></div>
+  `;
+}
+
+const d = new Date();
+document.getElementById('top-date').textContent = d.toLocaleDateString('es-DO',{weekday:'long',day:'numeric',month:'long'});
+document.addEventListener('keydown', e => { if (e.key==='Escape') document.querySelectorAll('.modal-bg.open').forEach(m=>m.classList.remove('open')); });
+document.querySelectorAll('.modal-bg').forEach(bg => bg.addEventListener('click', e => { if (e.target===bg) bg.classList.remove('open'); }));
+</script>
+</body>
+</html>

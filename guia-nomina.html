@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MonTech Nómina — Guía de Presentación</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    @page{margin:0;size:A4}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#070707;--card:#111;--line:rgba(200,200,200,0.1);--silver:#c8c8c8;--white:#f0f0f0;--dim:#888;--fd:'Syne',sans-serif;--fb:'DM Sans',sans-serif}
+    body{background:var(--bg);color:var(--white);font-family:var(--fb);font-weight:300;font-size:13px;line-height:1.65;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .cover{width:100%;min-height:100vh;background:#070707;display:flex;flex-direction:column;padding:56px 64px;position:relative;overflow:hidden;page-break-after:always}
+    .cover-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(200,200,200,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(200,200,200,0.025) 1px,transparent 1px);background-size:48px 48px}
+    .cover-glow{position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:600px;height:600px;background:radial-gradient(ellipse,rgba(180,180,180,0.06) 0%,transparent 70%)}
+    .cover-logo{font-family:var(--fd);font-size:1.4rem;font-weight:800;background:linear-gradient(135deg,#fff 0%,#888 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;z-index:1}
+    .cover-body{flex:1;display:flex;flex-direction:column;justify-content:center;z-index:1}
+    .cover-tag{display:inline-flex;align-items:center;gap:.5rem;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);border:1px solid rgba(200,200,200,0.15);padding:.35rem 1rem;border-radius:40px;width:fit-content;margin-bottom:2.5rem}
+    .cover-dot{width:6px;height:6px;background:var(--silver);border-radius:50%}
+    .cover-title{font-family:var(--fd);font-size:4rem;font-weight:800;letter-spacing:-.04em;line-height:1.0;margin-bottom:2rem}
+    .cover-title .dim{color:#3a3a3a}
+    .cover-title .bright{background:linear-gradient(135deg,#fff 0%,#c8c8c8 50%,#888 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .cover-sub{font-size:1.05rem;color:var(--dim);max-width:480px;line-height:1.7}
+    .cover-stats{display:flex;gap:3.5rem;margin-top:4rem;padding-top:2.5rem;border-top:1px solid var(--line)}
+    .cstat-num{font-family:var(--fd);font-size:2rem;font-weight:700;background:linear-gradient(135deg,#fff,#888);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .cstat-lbl{font-size:.72rem;color:#555;letter-spacing:.08em;text-transform:uppercase;margin-top:.2rem}
+    .cover-footer{display:flex;justify-content:space-between;align-items:center;z-index:1;font-size:.75rem;color:#444}
+    .page{width:100%;min-height:100vh;background:var(--bg);padding:52px 64px;page-break-after:always}
+    .page:last-child{page-break-after:auto}
+    .sec-label{font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:#555;margin-bottom:.6rem}
+    .sec-title{font-family:var(--fd);font-size:2rem;font-weight:700;letter-spacing:-.03em;line-height:1.1;margin-bottom:1.8rem}
+    .sec-title em{font-style:normal;background:linear-gradient(135deg,#fff,var(--silver));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .quote{background:rgba(200,200,200,0.04);border-left:3px solid var(--silver);border-radius:0 10px 10px 0;padding:1rem 1.2rem;font-size:.95rem;color:var(--silver);font-style:italic;line-height:1.7;margin-bottom:1.5rem}
+    .module-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1.3rem 1.5rem;margin-bottom:1rem}
+    .module-header{display:flex;align-items:center;gap:.8rem;margin-bottom:.7rem}
+    .module-icon{font-size:1.2rem}
+    .module-name{font-family:var(--fd);font-size:1rem;font-weight:700;color:var(--white)}
+    .module-body{font-size:.88rem;color:#888;line-height:1.65;margin-bottom:.7rem}
+    .module-tip{font-size:.8rem;color:var(--silver);background:rgba(200,200,200,0.05);border-radius:8px;padding:.5rem .8rem}
+    .module-tip strong{color:var(--white)}
+    .obj-table{width:100%;border-collapse:collapse;margin-bottom:1rem}
+    .obj-table th{text-align:left;font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;color:#555;padding:.5rem .8rem;border-bottom:1px solid var(--line);font-weight:500}
+    .obj-table td{padding:.9rem .8rem;font-size:.85rem;border-bottom:1px solid rgba(200,200,200,0.04);vertical-align:top;line-height:1.6}
+    .obj-table td:first-child{color:var(--silver);font-style:italic;width:38%}
+    .obj-table td:last-child{color:#888}
+    .obj-table tr:last-child td{border-bottom:none}
+    .tip-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.2rem}
+    .tip-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:1.1rem}
+    .tip-card-title{font-family:var(--fd);font-size:.82rem;font-weight:700;color:var(--silver);margin-bottom:.5rem}
+    .tip-card-body{font-size:.8rem;color:#777;line-height:1.6}
+    .cta-box{background:rgba(200,200,200,0.04);border:1px solid rgba(200,200,200,0.12);border-radius:20px;padding:2.5rem;text-align:center;margin-top:1.5rem;position:relative;overflow:hidden}
+    .cta-box::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:60%;height:1px;background:linear-gradient(90deg,transparent,var(--silver),transparent)}
+    .cta-title{font-family:var(--fd);font-size:1.6rem;font-weight:800;letter-spacing:-.03em;margin-bottom:.7rem}
+    .cta-sub{color:#666;font-size:.9rem;margin-bottom:1.5rem}
+    .cta-info{display:flex;justify-content:center;gap:3rem;flex-wrap:wrap}
+    .cta-item{text-align:center}
+    .cta-item-val{font-family:var(--fd);font-size:1.1rem;font-weight:700;color:var(--white)}
+    .cta-item-lbl{font-size:.72rem;color:#555;margin-top:.2rem;text-transform:uppercase;letter-spacing:.06em}
+    .divider{width:100%;height:1px;background:linear-gradient(90deg,transparent,var(--line),transparent);margin:1.5rem 0}
+    .step-list{list-style:none;margin:1rem 0 1.5rem}
+    .step-list li{display:flex;gap:1rem;margin-bottom:1rem;font-size:.88rem;color:#888;line-height:1.55}
+    .step-num{width:26px;height:26px;border-radius:50%;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:.72rem;font-weight:700;color:var(--silver);flex-shrink:0;margin-top:.05rem}
+    .step-content strong{color:var(--white);display:block;margin-bottom:.15rem;font-size:.9rem;font-weight:500}
+    .page-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:2.5rem;padding-bottom:1rem;border-bottom:1px solid var(--line)}
+    .ph-logo{font-family:var(--fd);font-size:.9rem;font-weight:800;background:linear-gradient(135deg,#fff,#888);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .ph-pg{font-size:.7rem;color:#444}
+    .law-box{background:rgba(76,175,80,0.06);border:1px solid rgba(76,175,80,0.2);border-radius:12px;padding:1rem 1.2rem;margin-bottom:1rem}
+    .law-box-title{font-family:var(--fd);font-size:.82rem;font-weight:700;color:#81c784;margin-bottom:.5rem}
+    .law-box-body{font-size:.82rem;color:#888;line-height:1.65}
+  </style>
+</head>
+<body>
+
+<!-- PORTADA -->
+<div class="cover">
+  <div class="cover-grid"></div><div class="cover-glow"></div>
+  <div class="cover-logo">MonTech</div>
+  <div class="cover-body">
+    <div class="cover-tag"><div class="cover-dot"></div> Guía de Ventas · Nómina y RRHH</div>
+    <div class="cover-title">
+      <div class="dim">Paga bien,</div>
+      <div class="bright">cumple</div>
+      <div class="dim">con la ley</div>
+    </div>
+    <div class="cover-sub">Guía para presentar el sistema de Nómina de MonTech a empresas con empleados formales que necesitan calcular ISR, TSS y generar reportes DGT sin errores.</div>
+    <div class="cover-stats">
+      <div><div class="cstat-num">20 min</div><div class="cstat-lbl">Presentación</div></div>
+      <div><div class="cstat-num">5</div><div class="cstat-lbl">Módulos Demo</div></div>
+      <div><div class="cstat-num">5 días</div><div class="cstat-lbl">Implementación</div></div>
+    </div>
+  </div>
+  <div class="cover-footer"><div>📲 829-343-0288 · montech.do</div><div>Uso interno del equipo de ventas</div></div>
+</div>
+
+<!-- PÁGINA 2 -->
+<div class="page">
+  <div class="page-header"><div class="ph-logo">MonTech Nómina</div><div class="ph-pg">Página 2 de 4</div></div>
+  <div class="sec-label">Preparación</div>
+  <div class="sec-title">Cómo abrir la<br/><em>presentación</em></div>
+  <div class="quote">"¿Cuánto tiempo le toma calcular la nómina cada quincena? ¿Y si hay un error en el ISR o la TSS? El sistema de Nómina de MonTech lo hace en segundos y sin errores."</div>
+  <ul class="step-list">
+    <li><div class="step-num">1</div><div class="step-content"><strong>Abre demo-nomina.html en Chrome</strong>Empieza en el Dashboard. Muestra los KPIs: nómina del mes, ISR retenido y TSS. Estos números llaman la atención del dueño o gerente de RRHH.</div></li>
+    <li><div class="step-num">2</div><div class="step-content"><strong>Pregunta sobre su proceso actual</strong>"¿Cómo calculan la nómina hoy — en Excel, con un contador externo? ¿Les ha dado problemas con la DGII o la TSS?" Eso abre la conversación.</div></li>
+    <li><div class="step-num">3</div><div class="step-content"><strong>Flujo recomendado (20 min)</strong>Dashboard → Empleados → Cálculo de Nómina → Calculadora ISR → Reportes DGT.</div></li>
+    <li><div class="step-num">4</div><div class="step-content"><strong>El gancho es la Calculadora ISR</strong>Abre la calculadora, ingresa el salario del cliente (pregúntale uno de sus empleados como ejemplo) y muéstrale el cálculo al instante. Ese momento siempre impresiona.</div></li>
+  </ul>
+  <div class="divider"></div>
+  <div class="sec-label">Marco legal — República Dominicana 2026</div>
+  <div class="law-box">
+    <div class="law-box-title">✅ Escalas ISR — Ley 11-92</div>
+    <div class="law-box-body">• Exento: hasta RD$416,220 anuales (RD$34,685/mes)<br>• 15%: sobre el excedente de RD$416,220 hasta RD$624,329<br>• 20%: sobre el excedente de RD$624,329 hasta RD$867,123<br>• 25%: sobre el excedente de RD$867,123<br><br>TSS empleado: 2.87% · AFP empleado: 2.87% · TSS empleador: 7.09% · AFP empleador: 7.10%</div>
+  </div>
+  <div class="tip-row">
+    <div class="tip-card"><div class="tip-card-title">🏢 Empresas 20+ empleados</div><div class="tip-card-body">La prioridad es DGT-3 y DGT-11 sin errores. Un error en la TSS genera intereses automáticos. Muestra el módulo de Reportes DGT primero.</div></div>
+    <div class="tip-card"><div class="tip-card-title">🏗️ Constructoras</div><div class="tip-card-body">Tienen obreros por obra y empleados fijos. El sistema maneja ambos tipos de contrato y calcula regalía pascual e INFOTEP automáticamente.</div></div>
+  </div>
+</div>
+
+<!-- PÁGINA 3 -->
+<div class="page">
+  <div class="page-header"><div class="ph-logo">MonTech Nómina</div><div class="ph-pg">Página 3 de 4</div></div>
+  <div class="sec-label">La Demo</div>
+  <div class="sec-title">Qué decir en<br/><em>cada módulo</em></div>
+
+  <div class="module-card">
+    <div class="module-header"><div class="module-icon">📊</div><div class="module-name">Dashboard — Control total de RRHH</div></div>
+    <div class="module-body">Empleados activos, nómina del mes, ISR retenido para la DGII y TSS del período. También muestra las próximas fechas críticas: pago de nómina, DGT-3, DGT-11, regalía pascual.</div>
+    <div class="module-tip"><strong>Di esto:</strong> "Nunca más pagar multas por olvidar una fecha de la TSS o la DGII. El sistema le avisa con días de anticipación."</div>
+  </div>
+
+  <div class="module-card">
+    <div class="module-header"><div class="module-icon">👥</div><div class="module-name">Empleados — Registro completo</div></div>
+    <div class="module-body">Ficha de cada empleado: cargo, departamento, salario bruto, tipo de contrato, fecha de ingreso, cédula. Toda la información en un solo lugar.</div>
+    <div class="module-tip"><strong>Di esto:</strong> "Si un empleado cambia de salario, usted lo actualiza aquí y la nómina del próximo período ya refleja el cambio. No hay que recalcular nada."</div>
+  </div>
+
+  <div class="module-card">
+    <div class="module-header"><div class="module-icon">💵</div><div class="module-name">Cálculo de Nómina — Sin errores, sin multas</div></div>
+    <div class="module-body">Tabla automática con salario bruto, ISR según escala Ley 11-92, TSS empleado (2.87%), AFP (2.87%) y salario neto. Incluye la Calculadora ISR interactiva para simular cualquier salario.</div>
+    <div class="module-tip"><strong>Di esto:</strong> "La escala ISR cambia cada año. El sistema siempre está actualizado — usted no tiene que preocuparse por eso."</div>
+  </div>
+
+  <div class="module-card">
+    <div class="module-header"><div class="module-icon">📑</div><div class="module-name">Reportes DGT — Generados con un clic</div></div>
+    <div class="module-body">DGT-3 (nómina mensual TSS), DGT-5 (novedades del período) y DGT-11 (retención ISR). Se generan en el formato oficial requerido por la TSS y la DGII. Historial de todos los reportes enviados.</div>
+    <div class="module-tip"><strong>Di esto:</strong> "Esto solo le toma 2 minutos al mes. Antes le tomaba un día a su contador."</div>
+  </div>
+
+  <div class="module-card">
+    <div class="module-header"><div class="module-icon">📅</div><div class="module-name">Incidencias — Vacaciones, extras y permisos</div></div>
+    <div class="module-body">Solicitudes de vacaciones, licencias médicas, horas extra y ausencias. El gerente aprueba o rechaza desde el sistema. Todo queda registrado y afecta el cálculo de nómina automáticamente.</div>
+    <div class="module-tip"><strong>Di esto:</strong> "Si un empleado falta sin justificación, el descuento se aplica solo. No hay que hacer cálculos manuales."</div>
+  </div>
+</div>
+
+<!-- PÁGINA 4 -->
+<div class="page">
+  <div class="page-header"><div class="ph-logo">MonTech Nómina</div><div class="ph-pg">Página 4 de 4</div></div>
+  <div class="sec-label">Manejo de Objeciones</div>
+  <div class="sec-title">Las 5 objeciones<br/><em>más comunes</em></div>
+  <table class="obj-table">
+    <tr><th>El cliente dice...</th><th>Tú respondes...</th></tr>
+    <tr><td>"Lo hace mi contador en Excel."</td><td>Su contador también comete errores. Un error en el ISR genera intereses del 10% mensual con la DGII. El sistema calcula según la ley vigente y le elimina ese riesgo.</td></tr>
+    <tr><td>"Tenemos pocos empleados, no justifica."</td><td>Con 5 empleados ya tiene que hacer DGT-3, DGT-11 y calcular regalía pascual. El sistema cuesta menos que el tiempo que pierde su contador cada mes.</td></tr>
+    <tr><td>"¿Está actualizado con la ley dominicana?"</td><td>Sí. Las escalas ISR, los porcentajes de TSS y AFP, la regalía pascual y los informes DGT están actualizados para 2026 y se actualizan automáticamente cuando cambia la ley.</td></tr>
+    <tr><td>"¿Se puede conectar con mi banco para el pago?"</td><td>Genera el archivo de transferencias en el formato del BanReservas, Popular y Banesco. Su equipo de RRHH lo sube al banco y listo — no hay que hacer los pagos uno por uno.</td></tr>
+    <tr><td>"¿Qué pasa si tenemos un tipo de contrato especial?"</td><td>El sistema maneja fijo, por hora, comisión y temporal. Si tiene una situación especial, nuestro equipo lo configura en la implementación.</td></tr>
+  </table>
+  <div class="divider"></div>
+  <div class="cta-box">
+    <div class="cta-title">¿Listo para cerrar?</div>
+    <div class="cta-sub">Pregunta: "¿Cuándo es su próximo cierre de nómina?" Si es pronto, ofrece procesar esa nómina con el sistema gratis como prueba. Ver el ahorro de tiempo en vivo cierra la venta.</div>
+    <div class="cta-info">
+      <div class="cta-item"><div class="cta-item-val">📲 829-343-0288</div><div class="cta-item-lbl">WhatsApp Directo</div></div>
+      <div class="cta-item"><div class="cta-item-val">montech.do</div><div class="cta-item-lbl">Sitio Web</div></div>
+      <div class="cta-item"><div class="cta-item-val">5 días</div><div class="cta-item-lbl">Implementación</div></div>
+      <div class="cta-item"><div class="cta-item-val">DGII Ready</div><div class="cta-item-lbl">Cumplimiento</div></div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

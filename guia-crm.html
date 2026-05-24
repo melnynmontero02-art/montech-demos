@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MonTech CRM — Guía de Presentación</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    @page{margin:0;size:A4}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#070707;--card:#111;--line:rgba(200,200,200,0.1);--silver:#c8c8c8;--white:#f0f0f0;--dim:#888;--green:#4caf50;--fd:'Syne',sans-serif;--fb:'DM Sans',sans-serif}
+    body{background:var(--bg);color:var(--white);font-family:var(--fb);font-weight:300;font-size:13px;line-height:1.65;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .cover{width:100%;min-height:100vh;background:#070707;display:flex;flex-direction:column;padding:56px 64px;position:relative;overflow:hidden;page-break-after:always}
+    .cover-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(200,200,200,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(200,200,200,0.025) 1px,transparent 1px);background-size:48px 48px}
+    .cover-glow{position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:600px;height:600px;background:radial-gradient(ellipse,rgba(180,180,180,0.06) 0%,transparent 70%)}
+    .cover-logo{font-family:var(--fd);font-size:1.4rem;font-weight:800;background:linear-gradient(135deg,#fff 0%,#888 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:-.02em;z-index:1}
+    .cover-body{flex:1;display:flex;flex-direction:column;justify-content:center;z-index:1}
+    .cover-tag{display:inline-flex;align-items:center;gap:.5rem;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);border:1px solid rgba(200,200,200,0.15);padding:.35rem 1rem;border-radius:40px;width:fit-content;margin-bottom:2.5rem}
+    .cover-dot{width:6px;height:6px;background:var(--silver);border-radius:50%}
+    .cover-title{font-family:var(--fd);font-size:4rem;font-weight:800;letter-spacing:-.04em;line-height:1.0;margin-bottom:2rem}
+    .cover-title .dim{color:#3a3a3a}
+    .cover-title .bright{background:linear-gradient(135deg,#fff 0%,#c8c8c8 50%,#888 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .cover-sub{font-size:1.05rem;color:var(--dim);max-width:480px;line-height:1.7}
+    .cover-stats{display:flex;gap:3.5rem;margin-top:4rem;padding-top:2.5rem;border-top:1px solid var(--line)}
+    .cstat-num{font-family:var(--fd);font-size:2rem;font-weight:700;background:linear-gradient(135deg,#fff,#888);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .cstat-lbl{font-size:.72rem;color:#555;letter-spacing:.08em;text-transform:uppercase;margin-top:.2rem}
+    .cover-footer{display:flex;justify-content:space-between;align-items:center;z-index:1;font-size:.75rem;color:#444}
+    .page{width:100%;min-height:100vh;background:var(--bg);padding:52px 64px;page-break-after:always}
+    .page:last-child{page-break-after:auto}
+    .sec-label{font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:#555;margin-bottom:.6rem}
+    .sec-title{font-family:var(--fd);font-size:2rem;font-weight:700;letter-spacing:-.03em;line-height:1.1;margin-bottom:1.8rem}
+    .sec-title em{font-style:normal;background:linear-gradient(135deg,#fff,var(--silver));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .quote{background:rgba(200,200,200,0.04);border-left:3px solid var(--silver);border-radius:0 10px 10px 0;padding:1rem 1.2rem;font-size:.95rem;color:var(--silver);font-style:italic;line-height:1.7;margin-bottom:1.5rem}
+    .module-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1.3rem 1.5rem;margin-bottom:1rem}
+    .module-header{display:flex;align-items:center;gap:.8rem;margin-bottom:.7rem}
+    .module-icon{font-size:1.2rem}
+    .module-name{font-family:var(--fd);font-size:1rem;font-weight:700;color:var(--white)}
+    .module-body{font-size:.88rem;color:#888;line-height:1.65;margin-bottom:.7rem}
+    .module-tip{font-size:.8rem;color:var(--silver);background:rgba(200,200,200,0.05);border-radius:8px;padding:.5rem .8rem}
+    .module-tip strong{color:var(--white)}
+    .obj-table{width:100%;border-collapse:collapse;margin-bottom:1rem}
+    .obj-table th{text-align:left;font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;color:#555;padding:.5rem .8rem;border-bottom:1px solid var(--line);font-weight:500}
+    .obj-table td{padding:.9rem .8rem;font-size:.85rem;border-bottom:1px solid rgba(200,200,200,0.04);vertical-align:top;line-height:1.6}
+    .obj-table td:first-child{color:var(--silver);font-style:italic;width:38%}
+    .obj-table td:last-child{color:#888}
+    .obj-table tr:last-child td{border-bottom:none}
+    .tip-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.2rem}
+    .tip-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:1.1rem}
+    .tip-card-title{font-family:var(--fd);font-size:.82rem;font-weight:700;color:var(--silver);margin-bottom:.5rem}
+    .tip-card-body{font-size:.8rem;color:#777;line-height:1.6}
+    .cta-box{background:rgba(200,200,200,0.04);border:1px solid rgba(200,200,200,0.12);border-radius:20px;padding:2.5rem;text-align:center;margin-top:1.5rem;position:relative;overflow:hidden}
+    .cta-box::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:60%;height:1px;background:linear-gradient(90deg,transparent,var(--silver),transparent)}
+    .cta-title{font-family:var(--fd);font-size:1.6rem;font-weight:800;letter-spacing:-.03em;margin-bottom:.7rem}
+    .cta-sub{color:#666;font-size:.9rem;margin-bottom:1.5rem}
+    .cta-info{display:flex;justify-content:center;gap:3rem;flex-wrap:wrap}
+    .cta-item{text-align:center}
+    .cta-item-val{font-family:var(--fd);font-size:1.1rem;font-weight:700;color:var(--white)}
+    .cta-item-lbl{font-size:.72rem;color:#555;margin-top:.2rem;text-transform:uppercase;letter-spacing:.06em}
+    .divider{width:100%;height:1px;background:linear-gradient(90deg,transparent,var(--line),transparent);margin:1.5rem 0}
+    .step-list{list-style:none;margin:1rem 0 1.5rem}
+    .step-list li{display:flex;gap:1rem;margin-bottom:1rem;font-size:.88rem;color:#888;line-height:1.55}
+    .step-num{width:26px;height:26px;border-radius:50%;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:.72rem;font-weight:700;color:var(--silver);flex-shrink:0;margin-top:.05rem}
+    .step-content strong{color:var(--white);display:block;margin-bottom:.15rem;font-size:.9rem;font-weight:500}
+    .page-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:2.5rem;padding-bottom:1rem;border-bottom:1px solid var(--line)}
+    .ph-logo{font-family:var(--fd);font-size:.9rem;font-weight:800;background:linear-gradient(135deg,#fff,#888);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .ph-pg{font-size:.7rem;color:#444}
+  </style>
+</head>
+<body>
+
+<!-- ═══ PORTADA ═══ -->
+<div class="cover">
+  <div class="cover-grid"></div>
+  <div class="cover-glow"></div>
+  <div class="cover-logo">MonTech</div>
+  <div class="cover-body">
+    <div class="cover-tag"><div class="cover-dot"></div> Guía de Ventas · CRM</div>
+    <div class="cover-title">
+      <div class="dim">Cierra más</div>
+      <div class="bright">negocios</div>
+      <div class="dim">con el CRM</div>
+    </div>
+    <div class="cover-sub">Guía para presentar el CRM de MonTech a empresas que quieren organizar sus ventas, dar seguimiento a clientes y aumentar su tasa de cierre.</div>
+    <div class="cover-stats">
+      <div><div class="cstat-num">20 min</div><div class="cstat-lbl">Presentación</div></div>
+      <div><div class="cstat-num">5</div><div class="cstat-lbl">Módulos Demo</div></div>
+      <div><div class="cstat-num">5 días</div><div class="cstat-lbl">Implementación</div></div>
+    </div>
+  </div>
+  <div class="cover-footer">
+    <div>📲 829-343-0288 · montech.do</div>
+    <div>Uso interno del equipo de ventas</div>
+  </div>
+</div>
+
+<!-- ═══ PÁGINA 2: FLUJO DE PRESENTACIÓN ═══ -->
+<div class="page">
+  <div class="page-header"><div class="ph-logo">MonTech CRM</div><div class="ph-pg">Página 2 de 4</div></div>
+  <div class="sec-label">Preparación</div>
+  <div class="sec-title">Cómo abrir la<br/><em>presentación</em></div>
+
+  <div class="quote">"¿Cuántos clientes potenciales pierde su equipo porque nadie les da seguimiento? El CRM de MonTech lo hace automáticamente."</div>
+
+  <ul class="step-list">
+    <li><div class="step-num">1</div><div class="step-content"><strong>Abre demo-crm.html en Chrome</strong>Muéstralo en la pantalla del cliente o comparte tu pantalla. El sistema arranca en el Dashboard con números reales de una empresa dominicana.</div></li>
+    <li><div class="step-num">2</div><div class="step-content"><strong>Pregunta antes de mostrar</strong>"¿Cuántos vendedores tiene usted? ¿Cómo les da seguimiento a los prospectos hoy?" Escucha, luego muestra cómo el CRM resuelve exactamente eso.</div></li>
+    <li><div class="step-num">3</div><div class="step-content"><strong>Flujo recomendado (20 minutos)</strong>Dashboard → Pipeline Kanban → Clientes → Cotizaciones → Actividades.</div></li>
+    <li><div class="step-num">4</div><div class="step-content"><strong>Termina en WhatsApp</strong>Siempre cierra apuntando al botón de WhatsApp integrado: "Así su vendedor le puede escribir al cliente desde el mismo sistema."</div></li>
+  </ul>
+
+  <div class="divider"></div>
+  <div class="sec-label" style="margin-top:1rem">Ángulos de venta por industria</div>
+
+  <div class="tip-row">
+    <div class="tip-card">
+      <div class="tip-card-title">🏪 Distribuidoras</div>
+      <div class="tip-card-body">Enfatiza el pipeline Kanban y el registro de cotizaciones. Un distribuidor con 10+ vendedores necesita ver quién está cerrando y quién no.</div>
+    </div>
+    <div class="tip-card">
+      <div class="tip-card-title">🏢 Servicios / Consultoras</div>
+      <div class="tip-card-body">Muestra las Actividades (llamadas, visitas, correos) y el historial del cliente. El valor está en que nada se olvida aunque cambie el vendedor.</div>
+    </div>
+    <div class="tip-card">
+      <div class="tip-card-title">🏗️ Constructoras / Inmobiliarias</div>
+      <div class="tip-card-body">Enfoca el Pipeline en el ciclo de ventas largo: Prospecto → Propuesta → Firma de contrato. Muestra que cada oportunidad tiene su valor en pesos visible.</div>
+    </div>
+    <div class="tip-card">
+      <div class="tip-card-title">🏥 Clínicas / Médicos</div>
+      <div class="tip-card-body">El módulo de Clientes funciona como directorio de pacientes potenciales para cirugías o procedimientos electivos. Ideal para captar pacientes privados.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PÁGINA 3: MÓDULOS ═══ -->
+<div class="page">
+  <div class="page-header"><div class="ph-logo">MonTech CRM</div><div class="ph-pg">Página 3 de 4</div></div>
+  <div class="sec-label">La Demo</div>
+  <div class="sec-title">Qué decir en<br/><em>cada módulo</em></div>
+
+  <div class="module-card">
+    <div class="module-header"><div class="module-icon">📊</div><div class="module-name">Dashboard — Visión General</div></div>
+    <div class="module-body">Muestra el embudo de ventas, el valor de oportunidades abiertas y los cierres del mes. El cliente ve de inmediato cuánto dinero tiene "atascado" en el pipeline.</div>
+    <div class="module-tip"><strong>Di esto:</strong> "Este número —RD$2.4 millones en negociación— son ventas que su equipo tiene a medias. El CRM le ayuda a cerrarlas."</div>
+  </div>
+
+  <div class="module-card">
+    <div class="module-header"><div class="module-icon">🗂️</div><div class="module-name">Pipeline Kanban — El corazón del CRM</div></div>
+    <div class="module-body">Tarjetas visuales en columnas: Prospecto → Contactado → Propuesta → Negociación → Cerrado. Cada tarjeta muestra el cliente, el valor y el vendedor responsable.</div>
+    <div class="module-tip"><strong>Di esto:</strong> "Aquí su gerente de ventas puede ver en 5 segundos en qué etapa está cada negocio. No necesita reuniones para eso."</div>
+  </div>
+
+  <div class="module-card">
+    <div class="module-header"><div class="module-icon">👤</div><div class="module-name">Clientes — Directorio inteligente</div></div>
+    <div class="module-body">Cada cliente tiene su ficha: historial de compras, contactos, notas y oportunidades abiertas. Clic en el cliente y tienes todo su historial.</div>
+    <div class="module-tip"><strong>Di esto:</strong> "Si su vendedor se va mañana, toda la información de los clientes queda aquí. No se va con él."</div>
+  </div>
+
+  <div class="module-card">
+    <div class="module-header"><div class="module-icon">📄</div><div class="module-name">Cotizaciones — Profesionalismo que cierra</div></div>
+    <div class="module-body">Genera cotizaciones en segundos con el logo de la empresa, los precios en pesos y el ITBIS calculado automáticamente. Se envían por WhatsApp o correo.</div>
+    <div class="module-tip"><strong>Di esto:</strong> "¿Cuánto tiempo le toma hacer una cotización hoy? Con el CRM son 2 minutos y salen con su logo."</div>
+  </div>
+
+  <div class="module-card">
+    <div class="module-header"><div class="module-icon">📋</div><div class="module-name">Actividades — Nunca más "se me olvidó"</div></div>
+    <div class="module-body">Registra llamadas, visitas y correos. El sistema manda recordatorios automáticos para el siguiente contacto. Nada cae entre las grietas.</div>
+    <div class="module-tip"><strong>Di esto:</strong> "Este es el módulo que más les gusta a los gerentes. Saben exactamente qué hizo cada vendedor cada día."</div>
+  </div>
+</div>
+
+<!-- ═══ PÁGINA 4: OBJECIONES Y CIERRE ═══ -->
+<div class="page">
+  <div class="page-header"><div class="ph-logo">MonTech CRM</div><div class="ph-pg">Página 4 de 4</div></div>
+  <div class="sec-label">Manejo de Objeciones</div>
+  <div class="sec-title">Las 5 objeciones<br/><em>más comunes</em></div>
+
+  <table class="obj-table">
+    <tr><th>El cliente dice...</th><th>Tú respondes...</th></tr>
+    <tr>
+      <td>"Mis vendedores ya tienen WhatsApp, con eso es suficiente."</td>
+      <td>WhatsApp es para chatear, no para gestionar ventas. Usted no puede ver el historial de todos sus clientes, ni saber cuántas cotizaciones mandó cada vendedor esta semana. El CRM sí le da eso.</td>
+    </tr>
+    <tr>
+      <td>"Eso es muy caro para una empresa como la mía."</td>
+      <td>Si usted pierde una sola venta por falta de seguimiento, ya perdió más que el costo del CRM. Empieza desde RD$5,990/mes y se paga solo con un cliente cerrado.</td>
+    </tr>
+    <tr>
+      <td>"Lo tenemos en Excel."</td>
+      <td>Excel no manda recordatorios, no muestra un pipeline visual, y si su vendedor edita algo mal no hay historial. El CRM es Excel pero que trabaja para usted solo.</td>
+    </tr>
+    <tr>
+      <td>"¿Cuánto tiempo tarda implementarlo?"</td>
+      <td>5 días hábiles. Incluye migración de sus contactos actuales, capacitación del equipo y soporte presencial aquí en Santo Domingo.</td>
+    </tr>
+    <tr>
+      <td>"Déjame pensarlo."</td>
+      <td>"Entiendo. ¿Qué es lo que le genera más duda — el precio, la implementación o el uso? Si me lo dice lo resolvemos ahora mismo."</td>
+    </tr>
+  </table>
+
+  <div class="divider"></div>
+
+  <div class="cta-box">
+    <div class="cta-title">¿Listo para cerrar?</div>
+    <div class="cta-sub">Ofrece siempre una prueba de 15 días sin costo. Es la forma más fácil de que el cliente lo vea funcionando con sus propios datos.</div>
+    <div class="cta-info">
+      <div class="cta-item"><div class="cta-item-val">📲 829-343-0288</div><div class="cta-item-lbl">WhatsApp Directo</div></div>
+      <div class="cta-item"><div class="cta-item-val">montech.do</div><div class="cta-item-lbl">Sitio Web</div></div>
+      <div class="cta-item"><div class="cta-item-val">5 días</div><div class="cta-item-lbl">Implementación</div></div>
+      <div class="cta-item"><div class="cta-item-val">Soporte RD</div><div class="cta-item-lbl">Presencial</div></div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

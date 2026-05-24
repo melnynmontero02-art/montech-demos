@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MonTech POS — Guía de Presentación</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    @page{margin:0;size:A4}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#070707;--card:#111;--line:rgba(200,200,200,0.1);--silver:#c8c8c8;--white:#f0f0f0;--dim:#888;--fd:'Syne',sans-serif;--fb:'DM Sans',sans-serif}
+    body{background:var(--bg);color:var(--white);font-family:var(--fb);font-weight:300;font-size:13px;line-height:1.65;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .cover{width:100%;min-height:100vh;background:#070707;display:flex;flex-direction:column;padding:56px 64px;position:relative;overflow:hidden;page-break-after:always}
+    .cover-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(200,200,200,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(200,200,200,0.025) 1px,transparent 1px);background-size:48px 48px}
+    .cover-glow{position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:600px;height:600px;background:radial-gradient(ellipse,rgba(180,180,180,0.06) 0%,transparent 70%)}
+    .cover-logo{font-family:var(--fd);font-size:1.4rem;font-weight:800;background:linear-gradient(135deg,#fff 0%,#888 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;z-index:1}
+    .cover-body{flex:1;display:flex;flex-direction:column;justify-content:center;z-index:1}
+    .cover-tag{display:inline-flex;align-items:center;gap:.5rem;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);border:1px solid rgba(200,200,200,0.15);padding:.35rem 1rem;border-radius:40px;width:fit-content;margin-bottom:2.5rem}
+    .cover-dot{width:6px;height:6px;background:var(--silver);border-radius:50%}
+    .cover-title{font-family:var(--fd);font-size:4rem;font-weight:800;letter-spacing:-.04em;line-height:1.0;margin-bottom:2rem}
+    .cover-title .dim{color:#3a3a3a}
+    .cover-title .bright{background:linear-gradient(135deg,#fff 0%,#c8c8c8 50%,#888 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .cover-sub{font-size:1.05rem;color:var(--dim);max-width:480px;line-height:1.7}
+    .cover-stats{display:flex;gap:3.5rem;margin-top:4rem;padding-top:2.5rem;border-top:1px solid var(--line)}
+    .cstat-num{font-family:var(--fd);font-size:2rem;font-weight:700;background:linear-gradient(135deg,#fff,#888);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .cstat-lbl{font-size:.72rem;color:#555;letter-spacing:.08em;text-transform:uppercase;margin-top:.2rem}
+    .cover-footer{display:flex;justify-content:space-between;align-items:center;z-index:1;font-size:.75rem;color:#444}
+    .page{width:100%;min-height:100vh;background:var(--bg);padding:52px 64px;page-break-after:always}
+    .page:last-child{page-break-after:auto}
+    .sec-label{font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:#555;margin-bottom:.6rem}
+    .sec-title{font-family:var(--fd);font-size:2rem;font-weight:700;letter-spacing:-.03em;line-height:1.1;margin-bottom:1.8rem}
+    .sec-title em{font-style:normal;background:linear-gradient(135deg,#fff,var(--silver));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .quote{background:rgba(200,200,200,0.04);border-left:3px solid var(--silver);border-radius:0 10px 10px 0;padding:1rem 1.2rem;font-size:.95rem;color:var(--silver);font-style:italic;line-height:1.7;margin-bottom:1.5rem}
+    .module-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1.3rem 1.5rem;margin-bottom:1rem}
+    .module-header{display:flex;align-items:center;gap:.8rem;margin-bottom:.7rem}
+    .module-icon{font-size:1.2rem}
+    .module-name{font-family:var(--fd);font-size:1rem;font-weight:700;color:var(--white)}
+    .module-body{font-size:.88rem;color:#888;line-height:1.65;margin-bottom:.7rem}
+    .module-tip{font-size:.8rem;color:var(--silver);background:rgba(200,200,200,0.05);border-radius:8px;padding:.5rem .8rem}
+    .module-tip strong{color:var(--white)}
+    .obj-table{width:100%;border-collapse:collapse;margin-bottom:1rem}
+    .obj-table th{text-align:left;font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;color:#555;padding:.5rem .8rem;border-bottom:1px solid var(--line);font-weight:500}
+    .obj-table td{padding:.9rem .8rem;font-size:.85rem;border-bottom:1px solid rgba(200,200,200,0.04);vertical-align:top;line-height:1.6}
+    .obj-table td:first-child{color:var(--silver);font-style:italic;width:38%}
+    .obj-table td:last-child{color:#888}
+    .obj-table tr:last-child td{border-bottom:none}
+    .tip-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.2rem}
+    .tip-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:1.1rem}
+    .tip-card-title{font-family:var(--fd);font-size:.82rem;font-weight:700;color:var(--silver);margin-bottom:.5rem}
+    .tip-card-body{font-size:.8rem;color:#777;line-height:1.6}
+    .cta-box{background:rgba(200,200,200,0.04);border:1px solid rgba(200,200,200,0.12);border-radius:20px;padding:2.5rem;text-align:center;margin-top:1.5rem;position:relative;overflow:hidden}
+    .cta-box::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:60%;height:1px;background:linear-gradient(90deg,transparent,var(--silver),transparent)}
+    .cta-title{font-family:var(--fd);font-size:1.6rem;font-weight:800;letter-spacing:-.03em;margin-bottom:.7rem}
+    .cta-sub{color:#666;font-size:.9rem;margin-bottom:1.5rem}
+    .cta-info{display:flex;justify-content:center;gap:3rem;flex-wrap:wrap}
+    .cta-item{text-align:center}
+    .cta-item-val{font-family:var(--fd);font-size:1.1rem;font-weight:700;color:var(--white)}
+    .cta-item-lbl{font-size:.72rem;color:#555;margin-top:.2rem;text-transform:uppercase;letter-spacing:.06em}
+    .divider{width:100%;height:1px;background:linear-gradient(90deg,transparent,var(--line),transparent);margin:1.5rem 0}
+    .step-list{list-style:none;margin:1rem 0 1.5rem}
+    .step-list li{display:flex;gap:1rem;margin-bottom:1rem;font-size:.88rem;color:#888;line-height:1.55}
+    .step-num{width:26px;height:26px;border-radius:50%;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:.72rem;font-weight:700;color:var(--silver);flex-shrink:0;margin-top:.05rem}
+    .step-content strong{color:var(--white);display:block;margin-bottom:.15rem;font-size:.9rem;font-weight:500}
+    .page-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:2.5rem;padding-bottom:1rem;border-bottom:1px solid var(--line)}
+    .ph-logo{font-family:var(--fd);font-size:.9rem;font-weight:800;background:linear-gradient(135deg,#fff,#888);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .ph-pg{font-size:.7rem;color:#444}
+  </style>
+</head>
+<body>
+
+<!-- PORTADA -->
+<div class="cover">
+  <div class="cover-grid"></div><div class="cover-glow"></div>
+  <div class="cover-logo">MonTech</div>
+  <div class="cover-body">
+    <div class="cover-tag"><div class="cover-dot"></div> Guía de Ventas · Punto de Venta</div>
+    <div class="cover-title">
+      <div class="dim">Cobra más</div>
+      <div class="bright">rápido</div>
+      <div class="dim">con el POS</div>
+    </div>
+    <div class="cover-sub">Guía para presentar el POS de MonTech a tiendas, farmacias, ferreterías, distribuidoras y cualquier negocio que venda mostrador.</div>
+    <div class="cover-stats">
+      <div><div class="cstat-num">20 min</div><div class="cstat-lbl">Presentación</div></div>
+      <div><div class="cstat-num">5</div><div class="cstat-lbl">Módulos Demo</div></div>
+      <div><div class="cstat-num">3 días</div><div class="cstat-lbl">Implementación</div></div>
+    </div>
+  </div>
+  <div class="cover-footer"><div>📲 829-343-0288 · montech.do</div><div>Uso interno del equipo de ventas</div></div>
+</div>
+
+<!-- PÁGINA 2 -->
+<div class="page">
+  <div class="page-header"><div class="ph-logo">MonTech POS</div><div class="ph-pg">Página 2 de 4</div></div>
+  <div class="sec-label">Preparación</div>
+  <div class="sec-title">Cómo abrir la<br/><em>presentación</em></div>
+  <div class="quote">"¿Cuánto tiempo pierde su cajero buscando el precio de cada producto? Con el POS de MonTech lo tiene en pantalla y cobra en segundos."</div>
+  <ul class="step-list">
+    <li><div class="step-num">1</div><div class="step-content"><strong>Abre demo-pos.html en Chrome</strong>Ve directo al módulo "Punto de Venta". Toca varios productos del grid para agregar al carrito. Muestra cómo se calcula el ITBIS automáticamente.</div></li>
+    <li><div class="step-num">2</div><div class="step-content"><strong>Pregunta sobre su operación</strong>"¿Cuántos productos tiene en catálogo? ¿Cómo maneja el inventario hoy?" Eso te permite adaptar lo que muestras.</div></li>
+    <li><div class="step-num">3</div><div class="step-content"><strong>Flujo recomendado (20 min)</strong>Caja → cobrar una venta completa → Dashboard → Historial → Reportes.</div></li>
+    <li><div class="step-num">4</div><div class="step-content"><strong>Haz que el cliente cobre</strong>Entrega el teclado o el ratón. Que él mismo toque los productos y cobre la venta. Cuando lo usa, lo entiende.</div></li>
+  </ul>
+  <div class="divider"></div>
+  <div class="sec-label">¿A quién le vendes esto?</div>
+  <div class="tip-row">
+    <div class="tip-card"><div class="tip-card-title">🛒 Colmados y Minisupers</div><div class="tip-card-body">Énfasis en velocidad de cobro y facturas con NCF. El colmadero no quiere complicaciones — muestra que en 3 toques ya cobró.</div></div>
+    <div class="tip-card"><div class="tip-card-title">💊 Farmacias</div><div class="tip-card-body">Stock en tiempo real es clave. El farmacéutico necesita saber si tiene el medicamento antes de decirle al cliente que sí. Muestra el módulo de Productos.</div></div>
+    <div class="tip-card"><div class="tip-card-title">🔧 Ferreterías</div><div class="tip-card-body">Muchos productos, muchos precios. El grid de búsqueda rápida y las categorías filtradas son el gancho. También el reporte de top productos del mes.</div></div>
+    <div class="tip-card"><div class="tip-card-title">👗 Boutiques / Moda</div><div class="tip-card-body">Múltiples formas de pago (efectivo, tarjeta, transferencia) y el recibo imprimible. Las clientas de moda piden su recibo para devoluciones.</div></div>
+  </div>
+</div>
+
+<!-- PÁGINA 3 -->
+<div class="page">
+  <div class="page-header"><div class="ph-logo">MonTech POS</div><div class="ph-pg">Página 3 de 4</div></div>
+  <div class="sec-label">La Demo</div>
+  <div class="sec-title">Qué decir en<br/><em>cada módulo</em></div>
+
+  <div class="module-card">
+    <div class="module-header"><div class="module-icon">📊</div><div class="module-name">Dashboard — El pulso del negocio</div></div>
+    <div class="module-body">Ventas del día, número de transacciones, ticket promedio y el total en caja. El dueño del negocio ve de un vistazo si el día va bien o mal, sin preguntarle al cajero.</div>
+    <div class="module-tip"><strong>Di esto:</strong> "¿Usted sabe exactamente cuánto vendió ayer a las 3 de la tarde? Con el POS lo puede ver desde su celular."</div>
+  </div>
+
+  <div class="module-card">
+    <div class="module-header"><div class="module-icon">🖥️</div><div class="module-name">Punto de Venta — La caja inteligente</div></div>
+    <div class="module-body">Grid de productos con imágenes, búsqueda por nombre, filtro por categoría. Clic para agregar al carrito. ITBIS calculado automáticamente. Tres formas de pago. Recibo en segundos con NCF.</div>
+    <div class="module-tip"><strong>Di esto:</strong> "Un cajero nuevo aprende a usar esto en media hora. No necesita saber de computadoras."</div>
+  </div>
+
+  <div class="module-card">
+    <div class="module-header"><div class="module-icon">📦</div><div class="module-name">Productos — Inventario en tiempo real</div></div>
+    <div class="module-body">Cada vez que se hace una venta, el stock baja automáticamente. El sistema alerta cuando un producto llega al mínimo. Nunca más vender algo que no tienes.</div>
+    <div class="module-tip"><strong>Di esto:</strong> "¿Le ha pasado que un cliente pide algo y usted no sabe si lo tiene? Esto lo elimina completamente."</div>
+  </div>
+
+  <div class="module-card">
+    <div class="module-header"><div class="module-icon">📋</div><div class="module-name">Historial — Todo queda registrado</div></div>
+    <div class="module-body">Cada transacción queda guardada con NCF, cajero, productos y forma de pago. Si el cliente pide un duplicado de factura, se imprime en 10 segundos.</div>
+    <div class="module-tip"><strong>Di esto:</strong> "Si la DGII le pide una auditoría, usted tiene todo aquí: cada factura, con su NCF y su ITBIS."</div>
+  </div>
+
+  <div class="module-card">
+    <div class="module-header"><div class="module-icon">📑</div><div class="module-name">Reportes — Decisiones basadas en datos</div></div>
+    <div class="module-body">Top productos del mes, ventas por semana, ITBIS generado, formas de pago. Exporta en PDF para la contadora. El reporte de ITBIS va directo a la declaración 606 del ERP.</div>
+    <div class="module-tip"><strong>Di esto:</strong> "Su contadora va a agradecer esto. El ITBIS del mes está calculado y listo para declarar."</div>
+  </div>
+</div>
+
+<!-- PÁGINA 4 -->
+<div class="page">
+  <div class="page-header"><div class="ph-logo">MonTech POS</div><div class="ph-pg">Página 4 de 4</div></div>
+  <div class="sec-label">Manejo de Objeciones</div>
+  <div class="sec-title">Las 5 objeciones<br/><em>más comunes</em></div>
+  <table class="obj-table">
+    <tr><th>El cliente dice...</th><th>Tú respondes...</th></tr>
+    <tr><td>"Tengo una caja registradora y funciona bien."</td><td>Una caja registradora no te dice cuánto vendiste esta semana, cuáles son tus productos más vendidos ni cuánto ITBIS debes declarar. El POS sí, y se conecta con la contabilidad.</td></tr>
+    <tr><td>"¿Y si se va la luz?"</td><td>El POS funciona en tablet o laptop con batería. Además guardamos todo en la nube — cuando vuelve la luz, los datos están intactos.</td></tr>
+    <tr><td>"Mi negocio es pequeño, eso es para empresas grandes."</td><td>El POS de MonTech empieza desde RD$3,990/mes. Un colmado, una boutique o una farmacia pequeña lo puede pagar sin problemas y lo recupera con mejor control del inventario.</td></tr>
+    <tr><td>"¿Mis empleados van a saber usarlo?"</td><td>Un empleado nuevo aprende en media hora. La pantalla es táctil, como un celular. Si tienen dudas, nuestro soporte en Santo Domingo responde el mismo día.</td></tr>
+    <tr><td>"¿Cómo migro mis productos?"</td><td>Nosotros lo hacemos por usted. Nos da el listado en Excel o en papel y lo subimos. Parte de los 3 días de implementación.</td></tr>
+  </table>
+  <div class="divider"></div>
+  <div class="cta-box">
+    <div class="cta-title">¿Listo para cerrar?</div>
+    <div class="cta-sub">Ofrece instalar el POS en una caja durante una semana sin costo. Ver el dinero que controla en tiempo real convence mejor que cualquier presentación.</div>
+    <div class="cta-info">
+      <div class="cta-item"><div class="cta-item-val">📲 829-343-0288</div><div class="cta-item-lbl">WhatsApp Directo</div></div>
+      <div class="cta-item"><div class="cta-item-val">montech.do</div><div class="cta-item-lbl">Sitio Web</div></div>
+      <div class="cta-item"><div class="cta-item-val">3 días</div><div class="cta-item-lbl">Implementación</div></div>
+      <div class="cta-item"><div class="cta-item-val">Soporte RD</div><div class="cta-item-lbl">Presencial</div></div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

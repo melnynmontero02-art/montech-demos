@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MonTech CRM — Demo Interactiva</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#070707;--sb:#0a0a0a;--card:#0e0e0e;--card2:#131313;--line:rgba(200,200,200,0.07);--line-b:rgba(200,200,200,0.14);--txt:#e0e0e0;--txt2:#8a8a8a;--txt3:#4a4a4a;--silver:#c8c8c8;--green:#4caf50;--yellow:#ffc107;--red:#ef5350;--blue:#42a5f5;--fd:'Syne',sans-serif;--fb:'DM Sans',sans-serif}
+    html,body{height:100%;overflow:hidden}
+    body{background:var(--bg);color:var(--txt);font-family:var(--fb);font-size:13px;display:flex;flex-direction:column}
+    .banner{background:rgba(200,200,200,0.04);border-bottom:1px solid var(--line-b);padding:.45rem 1.5rem;display:flex;align-items:center;justify-content:space-between;font-size:.76rem;color:var(--txt2);flex-shrink:0;gap:1rem}
+    .banner strong{color:var(--silver)}
+    .bcta{background:#fff;color:#000;font-weight:700;padding:.3rem 1rem;border-radius:20px;text-decoration:none;font-family:var(--fd);font-size:.73rem;white-space:nowrap;transition:background .2s}
+    .bcta:hover{background:var(--silver)}
+    .app{display:flex;flex:1;overflow:hidden}
+    .sidebar{width:210px;background:var(--sb);border-right:1px solid var(--line);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto}
+    .sb-logo{padding:1.1rem;border-bottom:1px solid var(--line);font-family:var(--fd);font-size:1rem;font-weight:800;letter-spacing:-.02em;background:linear-gradient(135deg,#fff,#888);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .sb-sec{padding:.7rem .7rem .2rem}
+    .sb-lbl{font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--txt3);padding:0 .45rem;margin-bottom:.35rem}
+    .sb-btn{display:flex;align-items:center;gap:.65rem;padding:.5rem .75rem;border-radius:8px;color:var(--txt2);font-size:.82rem;cursor:pointer;border:none;background:transparent;width:100%;text-align:left;transition:background .18s,color .18s}
+    .sb-btn:hover{background:rgba(200,200,200,0.05);color:var(--txt)}
+    .sb-btn.active{background:rgba(200,200,200,0.1);color:#fff}
+    .sb-ico{font-size:.95rem;width:17px;text-align:center;flex-shrink:0}
+    .sb-badge{margin-left:auto;background:var(--blue);color:#fff;font-size:.58rem;font-weight:700;padding:.1rem .38rem;border-radius:20px;min-width:17px;text-align:center}
+    .sb-footer{margin-top:auto;padding:.9rem;border-top:1px solid var(--line)}
+    .sb-user{display:flex;align-items:center;gap:.6rem}
+    .sb-av{width:28px;height:28px;border-radius:50%;background:rgba(200,200,200,0.08);border:1px solid var(--line-b);display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:.65rem;font-weight:700;color:var(--silver)}
+    .sb-un{font-size:.8rem;color:var(--txt);font-weight:500;line-height:1.2}
+    .sb-ur{font-size:.68rem;color:var(--txt3)}
+    .main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+    .topbar{height:54px;border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 1.3rem;gap:.8rem;flex-shrink:0}
+    .tb-t{font-family:var(--fd);font-size:.9rem;font-weight:700;flex:1}
+    .tb-s{display:flex;align-items:center;gap:.45rem;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:.38rem .7rem;max-width:220px;flex:1}
+    .tb-s input{background:transparent;border:none;outline:none;color:var(--txt);font-size:.8rem;font-family:var(--fb);width:100%}
+    .tb-s input::placeholder{color:var(--txt3)}
+    .tb-ico{width:32px;height:32px;background:var(--card);border:1px solid var(--line);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--txt2);font-size:.85rem;position:relative;transition:background .2s}
+    .tb-ico:hover{background:var(--card2)}
+    .ndot{position:absolute;top:5px;right:5px;width:6px;height:6px;background:var(--blue);border-radius:50%;border:1.5px solid var(--bg)}
+    .tb-date{font-size:.74rem;color:var(--txt3);white-space:nowrap}
+    .pa{flex:1;overflow-y:auto;padding:1.3rem}
+    .page{display:none}
+    .page.active{display:block}
+    .krow{display:grid;grid-template-columns:repeat(4,1fr);gap:.9rem;margin-bottom:1.2rem}
+    .kpi{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1.1rem;position:relative;overflow:hidden}
+    .kpi::after{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+    .kpi.b::after{background:var(--blue)}
+    .kpi.g::after{background:var(--green)}
+    .kpi.y::after{background:var(--yellow)}
+    .kpi.s::after{background:var(--silver)}
+    .kl{font-size:.68rem;color:var(--txt3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.45rem}
+    .kv{font-family:var(--fd);font-size:1.5rem;font-weight:700;color:var(--txt);line-height:1;margin-bottom:.35rem}
+    .ks{font-size:.7rem;color:var(--txt2)}
+    .kd{font-size:.7rem;margin-top:.25rem}
+    .up{color:var(--green)}.dn{color:var(--red)}
+    .g2{display:grid;grid-template-columns:1fr 300px;gap:.9rem}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1.1rem}
+    .card-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:.9rem}
+    .card-t{font-family:var(--fd);font-size:.82rem;font-weight:700}
+    .card-a{font-size:.72rem;color:var(--txt3);cursor:pointer;transition:color .2s}
+    .card-a:hover{color:var(--silver)}
+    .tbl{width:100%;border-collapse:collapse}
+    .tbl th{text-align:left;font-size:.64rem;text-transform:uppercase;letter-spacing:.09em;color:var(--txt3);padding:.35rem .55rem;border-bottom:1px solid var(--line);font-weight:500}
+    .tbl td{padding:.55rem .55rem;font-size:.8rem;color:var(--txt2);border-bottom:1px solid rgba(200,200,200,0.03);vertical-align:middle}
+    .tbl tr:last-child td{border-bottom:none}
+    .tbl tr:hover td{background:rgba(200,200,200,0.015)}
+    .tw{color:var(--txt);font-weight:500}
+    .ts{font-size:.68rem;color:var(--txt3)}
+    .badge{display:inline-flex;align-items:center;font-size:.64rem;padding:.15rem .5rem;border-radius:20px;font-weight:600;white-space:nowrap}
+    .bg{background:rgba(76,175,80,.12);color:#81c784}
+    .by{background:rgba(255,193,7,.12);color:#ffd54f}
+    .br{background:rgba(239,83,80,.12);color:#ef9a9a}
+    .bb{background:rgba(66,165,245,.12);color:#90caf9}
+    .bgr{background:rgba(200,200,200,.07);color:var(--txt3)}
+    .ph{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.1rem}
+    .ph h1{font-family:var(--fd);font-size:1rem;font-weight:700}
+    .btn{padding:.48rem 1rem;border-radius:8px;font-family:var(--fb);font-size:.8rem;cursor:pointer;transition:all .18s;border:none}
+    .btn-p{background:#fff;color:#000;font-weight:600}
+    .btn-p:hover{background:var(--silver)}
+    .btn-g{background:transparent;color:var(--txt2);border:1px solid var(--line-b)}
+    .btn-g:hover{color:var(--txt);border-color:var(--silver)}
+    .fbar{display:flex;gap:.55rem;margin-bottom:.9rem;flex-wrap:wrap}
+    .fi{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:.42rem .7rem;color:var(--txt);font-family:var(--fb);font-size:.8rem;outline:none;transition:border-color .2s}
+    .fi:focus{border-color:var(--line-b)}
+    .fi::placeholder{color:var(--txt3)}
+    select.fi{cursor:pointer}
+    /* KANBAN */
+    .kanban{display:grid;grid-template-columns:repeat(5,1fr);gap:.8rem;align-items:start}
+    .k-col{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:.8rem}
+    .k-col-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:.7rem}
+    .k-col-t{font-size:.72rem;font-weight:600;color:var(--txt2);text-transform:uppercase;letter-spacing:.08em}
+    .k-count{background:rgba(200,200,200,0.08);color:var(--txt3);font-size:.6rem;font-weight:700;padding:.1rem .38rem;border-radius:20px}
+    .k-card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:.75rem;margin-bottom:.55rem;cursor:pointer;transition:border-color .2s,transform .18s}
+    .k-card:hover{border-color:var(--line-b);transform:translateY(-1px)}
+    .k-name{font-size:.82rem;font-weight:500;color:var(--txt);margin-bottom:.3rem}
+    .k-amt{font-family:var(--fd);font-size:.9rem;font-weight:700;color:var(--silver);margin-bottom:.3rem}
+    .k-date{font-size:.68rem;color:var(--txt3)}
+    .k-card.hot{border-left:2px solid var(--green)}
+    /* ACTIVIDADES */
+    .act-list{display:flex;flex-direction:column;gap:.55rem}
+    .act{display:flex;gap:.65rem;align-items:flex-start;background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:.65rem}
+    .act-ico{font-size:.95rem;flex-shrink:0;margin-top:.05rem}
+    .act-t{font-size:.78rem;color:var(--txt);margin-bottom:.07rem}
+    .act-s{font-size:.7rem;color:var(--txt3)}
+    /* FUNNEL */
+    .funnel{display:flex;flex-direction:column;gap:.4rem}
+    .f-row{display:flex;align-items:center;gap:.7rem}
+    .f-lbl{font-size:.7rem;color:var(--txt2);width:90px;flex-shrink:0;text-align:right}
+    .f-bar-wrap{flex:1;background:#111;border-radius:4px;height:20px;overflow:hidden}
+    .f-bar{height:100%;border-radius:4px;display:flex;align-items:center;padding-left:.5rem;font-size:.65rem;font-weight:600;color:rgba(255,255,255,0.7)}
+    .f-val{font-size:.7rem;color:var(--txt2);width:50px;text-align:right}
+    /* MODAL */
+    .moverlay{position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(8px);z-index:100;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .22s}
+    .moverlay.open{opacity:1;pointer-events:all}
+    .mbox{background:#0d0d0d;border:1px solid var(--line-b);border-radius:16px;padding:1.6rem;width:520px;max-width:95vw;max-height:90vh;overflow-y:auto;transform:scale(.95);transition:transform .22s}
+    .moverlay.open .mbox{transform:scale(1)}
+    .mh{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.3rem}
+    .mt{font-family:var(--fd);font-size:.95rem;font-weight:700}
+    .mc{background:none;border:none;color:var(--txt3);font-size:1.1rem;cursor:pointer;transition:color .18s}
+    .mc:hover{color:var(--txt)}
+    .frow{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;margin-bottom:.7rem}
+    .fg{display:flex;flex-direction:column;gap:.35rem}
+    .fl{font-size:.66rem;color:var(--txt3);text-transform:uppercase;letter-spacing:.08em}
+    .fin{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:.45rem .7rem;color:var(--txt);font-family:var(--fb);font-size:.82rem;outline:none;transition:border-color .2s;width:100%}
+    .fin:focus{border-color:var(--line-b)}
+    .mfoot{display:flex;gap:.55rem;justify-content:flex-end;margin-top:1.1rem}
+    @media(max-width:860px){.sidebar{display:none}.krow{grid-template-columns:repeat(2,1fr)}.g2{grid-template-columns:1fr}.kanban{grid-template-columns:repeat(2,1fr)}}
+  </style>
+</head>
+<body>
+  <div class="banner">
+    <span>🟢 <strong>MonTech CRM — Demo interactiva</strong> · Datos de ejemplo · Navega los módulos</span>
+    <a class="bcta" href="https://wa.me/18293430288?text=Vi%20la%20demo%20del%20CRM%20y%20quiero%20m%C3%A1s%20informaci%C3%B3n" target="_blank">Quiero MonTech CRM →</a>
+  </div>
+  <div class="app">
+    <nav class="sidebar">
+      <div class="sb-logo">MonTech CRM</div>
+      <div class="sb-sec">
+        <div class="sb-lbl">Principal</div>
+        <button class="sb-btn active" onclick="nav('dashboard')"><span class="sb-ico">📊</span>Dashboard</button>
+        <button class="sb-btn" onclick="nav('pipeline')"><span class="sb-ico">🎯</span>Pipeline<span class="sb-badge">12</span></button>
+        <button class="sb-btn" onclick="nav('clientes')"><span class="sb-ico">👔</span>Clientes</button>
+        <button class="sb-btn" onclick="nav('cotizaciones')"><span class="sb-ico">📄</span>Cotizaciones</button>
+        <button class="sb-btn" onclick="nav('actividades')"><span class="sb-ico">📅</span>Actividades</button>
+      </div>
+      <div class="sb-sec">
+        <div class="sb-lbl">Herramientas</div>
+        <button class="sb-btn" onclick="tip('WhatsApp Business integrado disponible en versión completa')"><span class="sb-ico">💬</span>WhatsApp</button>
+        <button class="sb-btn" onclick="tip('Informes avanzados disponibles en versión completa')"><span class="sb-ico">📈</span>Informes</button>
+      </div>
+      <div class="sb-footer">
+        <div class="sb-user"><div class="sb-av">VC</div><div><div class="sb-un">Ventas CRM</div><div class="sb-ur">Empresa Demo S.R.L.</div></div></div>
+      </div>
+    </nav>
+    <main class="main">
+      <div class="topbar">
+        <div class="tb-t" id="tb-title">Dashboard</div>
+        <div class="tb-s"><span style="color:var(--txt3);font-size:.85rem">🔍</span><input type="text" placeholder="Buscar clientes, oportunidades..."/></div>
+        <div class="tb-ico">🔔<div class="ndot"></div></div>
+        <div class="tb-ico">👤</div>
+        <div class="tb-date" id="clock"></div>
+      </div>
+      <div class="pa">
+
+        <!-- DASHBOARD -->
+        <div id="page-dashboard" class="page active">
+          <div class="krow">
+            <div class="kpi b"><div class="kl">Oportunidades abiertas</div><div class="kv">24</div><div class="ks">RD$4.2M en pipeline</div><div class="kd up">↑ 3 nuevas esta semana</div></div>
+            <div class="kpi g"><div class="kl">Ventas este mes</div><div class="kv">RD$1.8M</div><div class="ks">9 negocios cerrados</div><div class="kd up">↑ 22% vs mes anterior</div></div>
+            <div class="kpi y"><div class="kl">Tasa de cierre</div><div class="kv">38%</div><div class="ks">Promedio industria: 25%</div><div class="kd up">↑ 5pts este mes</div></div>
+            <div class="kpi s"><div class="kl">Clientes activos</div><div class="kv">147</div><div class="ks">18 contactados hoy</div><div class="kd up">↑ 12 nuevos este mes</div></div>
+          </div>
+          <div class="g2">
+            <div>
+              <div class="card" style="margin-bottom:.9rem">
+                <div class="card-h"><span class="card-t">Embudo de ventas</span><span class="card-a" onclick="nav('pipeline')">Ver pipeline →</span></div>
+                <div class="funnel">
+                  <div class="f-row"><span class="f-lbl">Prospecto</span><div class="f-bar-wrap"><div class="f-bar" style="width:100%;background:#1e1e1e">48 oportunidades</div></div><span class="f-val">RD$8.1M</span></div>
+                  <div class="f-row"><span class="f-lbl">Contactado</span><div class="f-bar-wrap"><div class="f-bar" style="width:75%;background:#252525">36</div></div><span class="f-val">RD$5.8M</span></div>
+                  <div class="f-row"><span class="f-lbl">Propuesta</span><div class="f-bar-wrap"><div class="f-bar" style="width:50%;background:#2a2a2a">24</div></div><span class="f-val">RD$4.2M</span></div>
+                  <div class="f-row"><span class="f-lbl">Negociación</span><div class="f-bar-wrap"><div class="f-bar" style="width:30%;background:#303030">14</div></div><span class="f-val">RD$2.4M</span></div>
+                  <div class="f-row"><span class="f-lbl">Cerrado ✓</span><div class="f-bar-wrap"><div class="f-bar" style="width:18%;background:#3a3a3a">9</div></div><span class="f-val">RD$1.8M</span></div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-h"><span class="card-t">Mejores clientes este mes</span></div>
+                <table class="tbl">
+                  <thead><tr><th>Cliente</th><th>Industria</th><th>Total compras</th><th>Último contacto</th><th>Estado</th></tr></thead>
+                  <tbody>
+                    <tr><td class="tw">Constructora Mena & Asoc.</td><td>Construcción</td><td class="tw">RD$560K</td><td>Hoy</td><td><span class="badge bg">Activo</span></td></tr>
+                    <tr><td class="tw">Import. Global RD</td><td>Importación</td><td class="tw">RD$440K</td><td>Ayer</td><td><span class="badge bg">Activo</span></td></tr>
+                    <tr><td class="tw">Grupo Herrera e Hijos</td><td>Distribución</td><td class="tw">RD$320K</td><td>22/05</td><td><span class="badge by">Seguimiento</span></td></tr>
+                    <tr><td class="tw">Supermercado El Éxito</td><td>Retail</td><td class="tw">RD$280K</td><td>21/05</td><td><span class="badge bg">Activo</span></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div>
+              <div class="card">
+                <div class="card-h"><span class="card-t">Actividades de hoy</span><span class="badge bb">6</span></div>
+                <div class="act-list">
+                  <div class="act"><span class="act-ico">📞</span><div><div class="act-t">Llamada: Ferretería Ramírez</div><div class="act-s">9:00 AM · Seguimiento cotización</div></div></div>
+                  <div class="act"><span class="act-ico">🤝</span><div><div class="act-t">Reunión: Clínica Dr. Pérez</div><div class="act-s">11:00 AM · Demo del sistema</div></div></div>
+                  <div class="act"><span class="act-ico">📧</span><div><div class="act-t">Email: Distribuidora Norte</div><div class="act-s">2:00 PM · Enviar propuesta</div></div></div>
+                  <div class="act"><span class="act-ico">💬</span><div><div class="act-t">WhatsApp: Grupo Herrera</div><div class="act-s">4:00 PM · Confirmar precio</div></div></div>
+                  <div class="act"><span class="act-ico">📋</span><div><div class="act-t">Cotización: Import. Global</div><div class="act-s">5:00 PM · Vence hoy</div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PIPELINE -->
+        <div id="page-pipeline" class="page">
+          <div class="ph"><h1>Pipeline de Ventas</h1><button class="btn btn-p" onclick="openM('m-op')">+ Nueva Oportunidad</button></div>
+          <div class="kanban" id="kanban-board">
+            <div class="k-col">
+              <div class="k-col-h"><span class="k-col-t">Prospecto</span><span class="k-count">8</span></div>
+              <div class="k-card"><div class="k-name">Farmacia La Salud</div><div class="k-amt">RD$180,000</div><div class="k-date">Cierre est.: Jun 10</div></div>
+              <div class="k-card"><div class="k-name">Colmado Simón</div><div class="k-amt">RD$65,000</div><div class="k-date">Cierre est.: Jun 20</div></div>
+              <div class="k-card"><div class="k-name">Panadería El Buen Pan</div><div class="k-amt">RD$90,000</div><div class="k-date">Cierre est.: Jul 5</div></div>
+            </div>
+            <div class="k-col">
+              <div class="k-col-h"><span class="k-col-t">Contactado</span><span class="k-count">6</span></div>
+              <div class="k-card"><div class="k-name">Ferretería Ramírez</div><div class="k-amt">RD$320,000</div><div class="k-date">Cierre est.: May 30</div></div>
+              <div class="k-card"><div class="k-name">Auto Centro Norte</div><div class="k-amt">RD$240,000</div><div class="k-date">Cierre est.: Jun 8</div></div>
+            </div>
+            <div class="k-col">
+              <div class="k-col-h"><span class="k-col-t">Propuesta</span><span class="k-count">5</span></div>
+              <div class="k-card hot"><div class="k-name">Clínica Dr. Pérez</div><div class="k-amt">RD$480,000</div><div class="k-date">Cierre est.: May 28 🔥</div></div>
+              <div class="k-card"><div class="k-name">Constructora Mena</div><div class="k-amt">RD$850,000</div><div class="k-date">Cierre est.: Jun 2</div></div>
+            </div>
+            <div class="k-col">
+              <div class="k-col-h"><span class="k-col-t">Negociación</span><span class="k-count">4</span></div>
+              <div class="k-card hot"><div class="k-name">Import. Global RD</div><div class="k-amt">RD$1,200,000</div><div class="k-date">Cierre est.: May 26 🔥</div></div>
+              <div class="k-card"><div class="k-name">Distribuidora Norte</div><div class="k-amt">RD$560,000</div><div class="k-date">Cierre est.: May 31</div></div>
+            </div>
+            <div class="k-col">
+              <div class="k-col-h"><span class="k-col-t">Cerrado ✓</span><span class="k-count">9</span></div>
+              <div class="k-card" style="border-color:rgba(76,175,80,.25)"><div class="k-name">Grupo Herrera</div><div class="k-amt" style="color:#81c784">RD$320,000 ✓</div><div class="k-date">Cerrado 22/05</div></div>
+              <div class="k-card" style="border-color:rgba(76,175,80,.25)"><div class="k-name">Supermercado El Éxito</div><div class="k-amt" style="color:#81c784">RD$440,000 ✓</div><div class="k-date">Cerrado 20/05</div></div>
+              <div class="k-card" style="border-color:rgba(76,175,80,.25)"><div class="k-name">Farmacorp RD</div><div class="k-amt" style="color:#81c784">RD$180,000 ✓</div><div class="k-date">Cerrado 18/05</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CLIENTES -->
+        <div id="page-clientes" class="page">
+          <div class="ph"><h1>Clientes</h1><button class="btn btn-p" onclick="openM('m-cli')">+ Nuevo Cliente</button></div>
+          <div class="fbar">
+            <input class="fi" type="text" placeholder="🔍 Buscar cliente..." id="c-search" oninput="filtC()"/>
+            <select class="fi" id="c-ind" onchange="filtC()"><option value="">Todas las industrias</option><option value="Construcción">Construcción</option><option value="Retail">Retail</option><option value="Salud">Salud</option><option value="Importación">Importación</option></select>
+          </div>
+          <div class="card">
+            <table class="tbl">
+              <thead><tr><th>Empresa</th><th>Contacto</th><th>Industria</th><th>RNC</th><th>Total compras</th><th>Último contacto</th><th>Estado</th></tr></thead>
+              <tbody id="c-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- COTIZACIONES -->
+        <div id="page-cotizaciones" class="page">
+          <div class="ph"><h1>Cotizaciones</h1><button class="btn btn-p" onclick="openM('m-cot')">+ Nueva Cotización</button></div>
+          <div class="card">
+            <table class="tbl">
+              <thead><tr><th>Nº</th><th>Cliente</th><th>Descripción</th><th>Fecha</th><th>Validez</th><th>Monto</th><th>Estado</th></tr></thead>
+              <tbody>
+                <tr><td class="ts">COT-2026-045</td><td class="tw">Clínica Dr. Pérez</td><td>Software Clínica + implementación</td><td>22/05/2026</td><td>30 días</td><td class="tw">RD$480,000</td><td><span class="badge by">Enviada</span></td></tr>
+                <tr><td class="ts">COT-2026-044</td><td class="tw">Constructora Mena</td><td>ERP Completo + módulo obras</td><td>20/05/2026</td><td>15 días</td><td class="tw">RD$850,000</td><td><span class="badge bb">En revisión</span></td></tr>
+                <tr><td class="ts">COT-2026-043</td><td class="tw">Ferretería Ramírez</td><td>POS + inventario + capacitación</td><td>18/05/2026</td><td>30 días</td><td class="tw">RD$320,000</td><td><span class="badge by">Enviada</span></td></tr>
+                <tr><td class="ts">COT-2026-042</td><td class="tw">Grupo Herrera</td><td>CRM + integración WhatsApp</td><td>15/05/2026</td><td>15 días</td><td class="tw">RD$210,000</td><td><span class="badge bg">Aceptada ✓</span></td></tr>
+                <tr><td class="ts">COT-2026-041</td><td class="tw">Import. Global RD</td><td>ERP Empresarial completo</td><td>12/05/2026</td><td>30 días</td><td class="tw">RD$1,200,000</td><td><span class="badge bb">Negociando</span></td></tr>
+                <tr><td class="ts">COT-2026-040</td><td class="tw">Farmacorp RD</td><td>Nómina + RRHH</td><td>10/05/2026</td><td>30 días</td><td class="tw">RD$180,000</td><td><span class="badge bg">Aceptada ✓</span></td></tr>
+                <tr><td class="ts">COT-2026-039</td><td class="tw">Auto Centro Norte</td><td>POS multi-caja + inventario</td><td>08/05/2026</td><td>15 días</td><td class="tw">RD$240,000</td><td><span class="badge br">Vencida</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ACTIVIDADES -->
+        <div id="page-actividades" class="page">
+          <div class="ph"><h1>Actividades y Seguimiento</h1><button class="btn btn-p" onclick="tip('Actividad registrada exitosamente')">+ Nueva Actividad</button></div>
+          <div class="card">
+            <table class="tbl">
+              <thead><tr><th>Tipo</th><th>Cliente</th><th>Descripción</th><th>Fecha/Hora</th><th>Responsable</th><th>Estado</th></tr></thead>
+              <tbody>
+                <tr><td>📞 Llamada</td><td class="tw">Ferretería Ramírez</td><td>Seguimiento cotización POS</td><td>Hoy 9:00 AM</td><td>Juan R.</td><td><span class="badge by">Pendiente</span></td></tr>
+                <tr><td>🤝 Reunión</td><td class="tw">Clínica Dr. Pérez</td><td>Demo software clínica</td><td>Hoy 11:00 AM</td><td>María S.</td><td><span class="badge by">Pendiente</span></td></tr>
+                <tr><td>📧 Email</td><td class="tw">Distribuidora Norte</td><td>Enviar propuesta actualizada</td><td>Hoy 2:00 PM</td><td>Juan R.</td><td><span class="badge by">Pendiente</span></td></tr>
+                <tr><td>💬 WhatsApp</td><td class="tw">Import. Global RD</td><td>Confirmar precio final ERP</td><td>Ayer 3:15 PM</td><td>Carmen M.</td><td><span class="badge bg">Completada</span></td></tr>
+                <tr><td>🤝 Reunión</td><td class="tw">Grupo Herrera</td><td>Firma de contrato</td><td>22/05 10:00 AM</td><td>Carmen M.</td><td><span class="badge bg">Completada</span></td></tr>
+                <tr><td>📞 Llamada</td><td class="tw">Supermercado El Éxito</td><td>Renovación contrato anual</td><td>20/05 4:30 PM</td><td>María S.</td><td><span class="badge bg">Completada</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- MODAL: NUEVA OPORTUNIDAD -->
+  <div class="moverlay" id="m-op">
+    <div class="mbox">
+      <div class="mh"><span class="mt">Nueva Oportunidad</span><button class="mc" onclick="closeM('m-op')">✕</button></div>
+      <div class="frow"><div class="fg"><label class="fl">Cliente</label><input class="fin" type="text" placeholder="Nombre del cliente"/></div><div class="fg"><label class="fl">Valor estimado</label><input class="fin" type="number" placeholder="RD$ 0"/></div></div>
+      <div class="frow"><div class="fg"><label class="fl">Etapa</label><select class="fin"><option>Prospecto</option><option>Contactado</option><option>Propuesta</option><option>Negociación</option></select></div><div class="fg"><label class="fl">Fecha cierre estimada</label><input class="fin" type="date" value="2026-06-30"/></div></div>
+      <div class="fg" style="margin-bottom:.7rem"><label class="fl">Responsable</label><select class="fin"><option>Juan Rodríguez</option><option>María Santos</option><option>Carmen Mejía</option></select></div>
+      <div class="mfoot"><button class="btn btn-g" onclick="closeM('m-op')">Cancelar</button><button class="btn btn-p" onclick="tip('✓ Oportunidad agregada al pipeline');closeM('m-op')">Guardar</button></div>
+    </div>
+  </div>
+
+  <!-- MODAL: NUEVO CLIENTE -->
+  <div class="moverlay" id="m-cli">
+    <div class="mbox">
+      <div class="mh"><span class="mt">Nuevo Cliente</span><button class="mc" onclick="closeM('m-cli')">✕</button></div>
+      <div class="frow"><div class="fg"><label class="fl">Empresa</label><input class="fin" type="text" placeholder="Nombre de la empresa"/></div><div class="fg"><label class="fl">RNC</label><input class="fin" type="text" placeholder="xxx-xxxxx-x"/></div></div>
+      <div class="frow"><div class="fg"><label class="fl">Contacto principal</label><input class="fin" type="text" placeholder="Nombre completo"/></div><div class="fg"><label class="fl">WhatsApp</label><input class="fin" type="tel" placeholder="809-xxx-xxxx"/></div></div>
+      <div class="frow"><div class="fg"><label class="fl">Industria</label><select class="fin"><option>Construcción</option><option>Retail</option><option>Salud</option><option>Importación</option><option>Distribución</option><option>Otro</option></select></div><div class="fg"><label class="fl">Ciudad</label><select class="fin"><option>Santo Domingo</option><option>Santiago</option><option>La Romana</option><option>San Pedro</option></select></div></div>
+      <div class="mfoot"><button class="btn btn-g" onclick="closeM('m-cli')">Cancelar</button><button class="btn btn-p" onclick="tip('✓ Cliente registrado exitosamente');closeM('m-cli')">Guardar</button></div>
+    </div>
+  </div>
+
+  <!-- MODAL: NUEVA COTIZACIÓN -->
+  <div class="moverlay" id="m-cot">
+    <div class="mbox">
+      <div class="mh"><span class="mt">Nueva Cotización</span><button class="mc" onclick="closeM('m-cot')">✕</button></div>
+      <div class="frow"><div class="fg"><label class="fl">Cliente</label><input class="fin" type="text" placeholder="Nombre o RNC"/></div><div class="fg"><label class="fl">Validez</label><select class="fin"><option>15 días</option><option>30 días</option><option>60 días</option></select></div></div>
+      <div class="fg" style="margin-bottom:.7rem"><label class="fl">Descripción del servicio</label><input class="fin" type="text" placeholder="Ej: ERP Completo + implementación"/></div>
+      <div class="frow"><div class="fg"><label class="fl">Monto (sin ITBIS)</label><input class="fin" type="number" placeholder="0.00"/></div><div class="fg"><label class="fl">Descuento (%)</label><input class="fin" type="number" placeholder="0"/></div></div>
+      <div class="mfoot"><button class="btn btn-g" onclick="closeM('m-cot')">Cancelar</button><button class="btn btn-p" onclick="tip('✓ Cotización COT-2026-046 generada. PDF listo para enviar.');closeM('m-cot')">Generar Cotización</button></div>
+    </div>
+  </div>
+
+  <script>
+  (function(){
+    var clientes=[
+      {emp:'Constructora Mena & Asoc.',cont:'Ing. Pedro Mena',ind:'Construcción',rnc:'101-89012-5',total:1240000,ult:'Hoy',est:'activo'},
+      {emp:'Import. Global RD',cont:'Lic. Rosa Familia',ind:'Importación',rnc:'130-67890-2',total:980000,ult:'Ayer',est:'activo'},
+      {emp:'Grupo Herrera e Hijos',cont:'Juan Herrera',ind:'Distribución',rnc:'101-99012-6',total:760000,ult:'22/05',est:'activo'},
+      {emp:'Supermercado El Éxito',cont:'María Castillo',ind:'Retail',rnc:'130-22345-7',total:680000,ult:'20/05',est:'activo'},
+      {emp:'Farmacorp RD',cont:'Dr. Ramón Ortiz',ind:'Salud',rnc:'101-34444-8',total:420000,ult:'18/05',est:'activo'},
+      {emp:'Ferretería Ramírez',cont:'Carlos Ramírez',ind:'Retail',rnc:'101-45678-3',total:380000,ult:'15/05',est:'seguimiento'},
+      {emp:'Auto Centro Norte',cont:'Luis Mercedes',ind:'Automotriz',rnc:'101-77889-2',total:240000,ult:'08/05',est:'inactivo'},
+      {emp:'Clínica Dr. Pérez',cont:'Dr. Antonio Pérez',ind:'Salud',rnc:'101-34567-1',total:0,ult:'24/05',est:'prospecto'},
+    ];
+    var pages=['dashboard','pipeline','clientes','cotizaciones','actividades'];
+    var titles={dashboard:'Dashboard',pipeline:'Pipeline de Ventas',clientes:'Clientes',cotizaciones:'Cotizaciones',actividades:'Actividades'};
+    window.nav=function(p){
+      pages.forEach(function(id){document.getElementById('page-'+id).classList.toggle('active',id===p);});
+      document.querySelectorAll('.sb-btn').forEach(function(b){b.classList.toggle('active',b.getAttribute('onclick')==="nav('"+p+"')");});
+      document.getElementById('tb-title').textContent=titles[p]||p;
+    };
+    function f(n){return 'RD$'+n.toLocaleString('es-DO');}
+    function estBadge(e){var m={activo:'bg Activo',seguimiento:'by Seguimiento',inactivo:'br Inactivo',prospecto:'bb Prospecto'};var p=(m[e]||'bgr '+e).split(' ');return '<span class="badge '+p[0]+'">'+p[1]+'</span>';}
+    function rendC(data){
+      document.getElementById('c-tbody').innerHTML=data.map(function(c){
+        return '<tr><td class="tw">'+c.emp+'</td><td>'+c.cont+'</td><td>'+c.ind+'</td><td class="ts">'+c.rnc+'</td><td class="tw">'+(c.total?f(c.total):'—')+'</td><td>'+c.ult+'</td><td>'+estBadge(c.est)+'</td></tr>';
+      }).join('');
+    }
+    window.filtC=function(){
+      var q=document.getElementById('c-search').value.toLowerCase();
+      var ind=document.getElementById('c-ind').value;
+      rendC(clientes.filter(function(c){return(!q||c.emp.toLowerCase().includes(q)||c.cont.toLowerCase().includes(q))&&(!ind||c.ind===ind);}));
+    };
+    rendC(clientes);
+    window.tip=function(m){alert(m);};
+    window.openM=function(id){document.getElementById(id).classList.add('open');};
+    window.closeM=function(id){document.getElementById(id).classList.remove('open');};
+    document.querySelectorAll('.moverlay').forEach(function(o){o.addEventListener('click',function(e){if(e.target===o)o.classList.remove('open');});});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')document.querySelectorAll('.moverlay.open').forEach(function(o){o.classList.remove('open');});});
+    function tick(){var d=new Date(),h=d.getHours(),m=d.getMinutes(),ap=h>=12?'PM':'AM';h=h%12||12;document.getElementById('clock').textContent=h+':'+(m<10?'0':'')+m+' '+ap+' · 24 May 2026';}
+    tick();setInterval(tick,60000);
+  })();
+  </script>
+</body>
+</html>

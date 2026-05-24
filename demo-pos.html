@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MonTech POS — Demo Interactiva</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#070707;--sb:#0a0a0a;--card:#0e0e0e;--card2:#131313;--line:rgba(200,200,200,0.07);--line-b:rgba(200,200,200,0.14);--txt:#e0e0e0;--txt2:#8a8a8a;--txt3:#4a4a4a;--silver:#c8c8c8;--green:#4caf50;--yellow:#ffc107;--red:#ef5350;--blue:#42a5f5;--fd:'Syne',sans-serif;--fb:'DM Sans',sans-serif}
+    html,body{height:100%;overflow:hidden}
+    body{background:var(--bg);color:var(--txt);font-family:var(--fb);font-size:13px;display:flex;flex-direction:column}
+    .banner{background:rgba(200,200,200,0.04);border-bottom:1px solid var(--line-b);padding:.45rem 1.5rem;display:flex;align-items:center;justify-content:space-between;font-size:.76rem;color:var(--txt2);flex-shrink:0;gap:1rem}
+    .banner strong{color:var(--silver)}
+    .bcta{background:#fff;color:#000;font-weight:700;padding:.3rem 1rem;border-radius:20px;text-decoration:none;font-family:var(--fd);font-size:.73rem;white-space:nowrap;transition:background .2s}
+    .bcta:hover{background:var(--silver)}
+    .app{display:flex;flex:1;overflow:hidden}
+    .sidebar{width:200px;background:var(--sb);border-right:1px solid var(--line);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto}
+    .sb-logo{padding:1.1rem;border-bottom:1px solid var(--line);font-family:var(--fd);font-size:1rem;font-weight:800;letter-spacing:-.02em;background:linear-gradient(135deg,#fff,#888);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .sb-sec{padding:.7rem .7rem .2rem}
+    .sb-lbl{font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--txt3);padding:0 .45rem;margin-bottom:.35rem}
+    .sb-btn{display:flex;align-items:center;gap:.65rem;padding:.5rem .75rem;border-radius:8px;color:var(--txt2);font-size:.82rem;cursor:pointer;border:none;background:transparent;width:100%;text-align:left;transition:background .18s,color .18s}
+    .sb-btn:hover{background:rgba(200,200,200,0.05);color:var(--txt)}
+    .sb-btn.active{background:rgba(200,200,200,0.1);color:#fff}
+    .sb-ico{font-size:.95rem;width:17px;text-align:center;flex-shrink:0}
+    .sb-footer{margin-top:auto;padding:.9rem;border-top:1px solid var(--line)}
+    .sb-user{display:flex;align-items:center;gap:.6rem}
+    .sb-av{width:28px;height:28px;border-radius:50%;background:rgba(200,200,200,0.08);border:1px solid var(--line-b);display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:.65rem;font-weight:700;color:var(--silver)}
+    .sb-un{font-size:.8rem;color:var(--txt);font-weight:500;line-height:1.2}
+    .sb-ur{font-size:.68rem;color:var(--txt3)}
+    .main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+    .topbar{height:54px;border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 1.3rem;gap:.8rem;flex-shrink:0}
+    .tb-t{font-family:var(--fd);font-size:.9rem;font-weight:700;flex:1}
+    .tb-date{font-size:.74rem;color:var(--txt3);white-space:nowrap}
+    .pa{flex:1;overflow-y:auto;padding:1.3rem}
+    .page{display:none}
+    .page.active{display:block}
+    .krow{display:grid;grid-template-columns:repeat(4,1fr);gap:.9rem;margin-bottom:1.2rem}
+    .kpi{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1.1rem;position:relative;overflow:hidden}
+    .kpi::after{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+    .kpi.b::after{background:var(--blue)}.kpi.g::after{background:var(--green)}.kpi.y::after{background:var(--yellow)}.kpi.s::after{background:var(--silver)}
+    .kl{font-size:.68rem;color:var(--txt3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.45rem}
+    .kv{font-family:var(--fd);font-size:1.5rem;font-weight:700;color:var(--txt);line-height:1;margin-bottom:.35rem}
+    .ks{font-size:.7rem;color:var(--txt2)}
+    .up{color:var(--green)}.dn{color:var(--red)}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1.1rem}
+    .card-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:.9rem}
+    .card-t{font-family:var(--fd);font-size:.82rem;font-weight:700}
+    .card-a{font-size:.72rem;color:var(--txt3);cursor:pointer;transition:color .2s}
+    .card-a:hover{color:var(--silver)}
+    .tbl{width:100%;border-collapse:collapse}
+    .tbl th{text-align:left;font-size:.64rem;text-transform:uppercase;letter-spacing:.09em;color:var(--txt3);padding:.35rem .55rem;border-bottom:1px solid var(--line);font-weight:500}
+    .tbl td{padding:.55rem .55rem;font-size:.8rem;color:var(--txt2);border-bottom:1px solid rgba(200,200,200,0.03);vertical-align:middle}
+    .tbl tr:last-child td{border-bottom:none}
+    .tbl tr:hover td{background:rgba(200,200,200,0.015)}
+    .tw{color:var(--txt);font-weight:500}
+    .ts{font-size:.68rem;color:var(--txt3)}
+    .badge{display:inline-flex;align-items:center;font-size:.64rem;padding:.15rem .5rem;border-radius:20px;font-weight:600;white-space:nowrap}
+    .bg{background:rgba(76,175,80,.12);color:#81c784}.by{background:rgba(255,193,7,.12);color:#ffd54f}.br{background:rgba(239,83,80,.12);color:#ef9a9a}.bb{background:rgba(66,165,245,.12);color:#90caf9}.bgr{background:rgba(200,200,200,.07);color:var(--txt3)}
+    .ph{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.1rem}
+    .ph h1{font-family:var(--fd);font-size:1rem;font-weight:700}
+    .btn{padding:.48rem 1rem;border-radius:8px;font-family:var(--fb);font-size:.8rem;cursor:pointer;transition:all .18s;border:none}
+    .btn-p{background:#fff;color:#000;font-weight:600}
+    .btn-p:hover{background:var(--silver)}
+    .btn-s{background:rgba(200,200,200,0.07);color:var(--txt);font-weight:500}
+    .btn-s:hover{background:rgba(200,200,200,0.12)}
+    .btn-r{background:rgba(239,83,80,0.15);color:#ef9a9a;font-weight:600}
+    .btn-r:hover{background:rgba(239,83,80,0.25)}
+    .btn-g{background:rgba(76,175,80,0.15);color:#81c784;font-weight:600}
+    .btn-g:hover{background:rgba(76,175,80,0.25)}
+    .g2{display:grid;grid-template-columns:1fr 300px;gap:.9rem}
+
+    /* ─── POS CAJA ─── */
+    .pos-layout{display:grid;grid-template-columns:1fr 320px;gap:.9rem;height:calc(100vh - 140px)}
+    .pos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:.7rem;align-content:start;overflow-y:auto;padding-right:.3rem}
+    .pos-product{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:.85rem .7rem;cursor:pointer;transition:all .18s;text-align:center;user-select:none}
+    .pos-product:hover{border-color:rgba(200,200,200,0.3);background:var(--card2);transform:translateY(-1px)}
+    .pos-product:active{transform:translateY(0);background:rgba(200,200,200,0.06)}
+    .pp-ico{font-size:1.6rem;margin-bottom:.45rem}
+    .pp-name{font-size:.76rem;color:var(--txt);font-weight:500;line-height:1.3;margin-bottom:.3rem}
+    .pp-price{font-size:.82rem;color:var(--silver);font-weight:600;font-family:var(--fd)}
+    .pp-stock{font-size:.62rem;color:var(--txt3);margin-top:.2rem}
+    .cart-panel{background:var(--sb);border:1px solid var(--line);border-radius:14px;display:flex;flex-direction:column;overflow:hidden}
+    .cart-header{padding:.9rem 1rem;border-bottom:1px solid var(--line)}
+    .cart-header h3{font-family:var(--fd);font-size:.85rem;font-weight:700}
+    .cart-items{flex:1;overflow-y:auto;padding:.5rem}
+    .cart-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:var(--txt3);font-size:.78rem;gap:.5rem}
+    .cart-item{display:flex;align-items:center;gap:.5rem;padding:.5rem .4rem;border-radius:8px;transition:background .15s}
+    .cart-item:hover{background:rgba(200,200,200,0.03)}
+    .ci-name{flex:1;font-size:.79rem;color:var(--txt);line-height:1.3}
+    .ci-qty{display:flex;align-items:center;gap:.25rem}
+    .ci-qty-btn{width:20px;height:20px;border-radius:5px;border:1px solid var(--line-b);background:transparent;color:var(--txt2);font-size:.8rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s}
+    .ci-qty-btn:hover{background:rgba(200,200,200,0.08);color:var(--txt)}
+    .ci-n{font-size:.8rem;color:var(--txt);font-weight:600;min-width:18px;text-align:center}
+    .ci-sub{font-size:.78rem;color:var(--silver);font-weight:600;min-width:65px;text-align:right}
+    .ci-del{width:18px;height:18px;border-radius:4px;border:none;background:transparent;color:var(--txt3);cursor:pointer;font-size:.75rem;display:flex;align-items:center;justify-content:center;transition:color .15s}
+    .ci-del:hover{color:var(--red)}
+    .cart-footer{padding:.9rem;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:.55rem}
+    .cart-line{display:flex;justify-content:space-between;font-size:.8rem;color:var(--txt2)}
+    .cart-line.total{font-family:var(--fd);font-size:1.1rem;color:var(--txt);font-weight:700}
+    .cart-line.total span:last-child{color:#fff}
+    .pay-methods{display:grid;grid-template-columns:repeat(3,1fr);gap:.4rem}
+    .pm-btn{background:rgba(200,200,200,0.06);border:1px solid var(--line);border-radius:8px;padding:.4rem .3rem;font-size:.69rem;color:var(--txt2);cursor:pointer;text-align:center;transition:all .18s;font-family:var(--fb)}
+    .pm-btn:hover{background:rgba(200,200,200,0.12);color:var(--txt);border-color:rgba(200,200,200,0.25)}
+    .pm-btn.selected{background:rgba(200,200,200,0.15);color:#fff;border-color:rgba(200,200,200,0.4)}
+    .cat-bar{display:flex;gap:.5rem;margin-bottom:.9rem;flex-wrap:wrap}
+    .cat-chip{background:rgba(200,200,200,0.06);border:1px solid var(--line);border-radius:20px;padding:.28rem .75rem;font-size:.72rem;color:var(--txt2);cursor:pointer;transition:all .18s}
+    .cat-chip:hover{background:rgba(200,200,200,0.1);color:var(--txt)}
+    .cat-chip.active{background:rgba(200,200,200,0.15);color:#fff;border-color:rgba(200,200,200,0.35)}
+
+    /* hourly bars */
+    .hour-bars{display:flex;align-items:flex-end;gap:6px;height:100px}
+    .hb{flex:1;background:rgba(66,165,245,0.15);border-radius:4px 4px 0 0;position:relative;transition:background .2s;cursor:default}
+    .hb:hover{background:rgba(66,165,245,0.28)}
+    .hb-lbl{font-size:.55rem;color:var(--txt3);text-align:center;margin-top:.3rem}
+    .hb-val{position:absolute;top:-1.1rem;left:50%;transform:translateX(-50%);font-size:.6rem;color:var(--txt2);white-space:nowrap}
+
+    /* modal */
+    .modal-bg{position:fixed;inset:0;z-index:999;background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center}
+    .modal-bg.open{display:flex}
+    .modal{background:#111;border:1px solid var(--line-b);border-radius:18px;padding:2rem;width:380px;position:relative}
+    .modal h3{font-family:var(--fd);font-size:1rem;font-weight:700;margin-bottom:1.2rem}
+    .modal label{font-size:.72rem;color:var(--txt3);display:block;margin-bottom:.25rem;margin-top:.7rem}
+    .modal input,.modal select{width:100%;background:var(--card2);border:1px solid var(--line-b);border-radius:8px;padding:.5rem .75rem;color:var(--txt);font-family:var(--fb);font-size:.82rem;outline:none}
+    .modal input:focus,.modal select:focus{border-color:rgba(200,200,200,0.4)}
+    .modal-close{position:absolute;top:1rem;right:1rem;background:rgba(200,200,200,0.08);border:none;border-radius:50%;width:28px;height:28px;cursor:pointer;color:var(--txt2);font-size:.9rem;display:flex;align-items:center;justify-content:center}
+    .modal-close:hover{background:rgba(200,200,200,0.15);color:var(--txt)}
+    .modal-footer{display:flex;gap:.6rem;justify-content:flex-end;margin-top:1.2rem}
+
+    /* receipt */
+    .receipt{background:#fff;color:#000;border-radius:10px;padding:1.2rem;font-family:monospace;font-size:.75rem;line-height:1.8;text-align:center}
+    .receipt-div{border-top:1px dashed #aaa;margin:.6rem 0}
+
+    /* mini chart bar */
+    .mini-bar-row{display:flex;align-items:center;gap:.6rem;margin-bottom:.45rem}
+    .mini-bar-lbl{font-size:.72rem;color:var(--txt2);min-width:80px}
+    .mini-bar-track{flex:1;height:6px;background:rgba(200,200,200,0.06);border-radius:3px;overflow:hidden}
+    .mini-bar-fill{height:100%;border-radius:3px}
+    .mini-bar-val{font-size:.72rem;color:var(--silver);min-width:55px;text-align:right}
+  </style>
+</head>
+<body>
+
+<!-- BANNER -->
+<div class="banner">
+  <div><strong>MonTech POS</strong> — Demo Interactiva · Esta es una vista de demostración</div>
+  <a class="bcta" href="https://wa.me/18293430288?text=Quiero%20ver%20el%20POS%20de%20MonTech" target="_blank">📲 Solicitar Demo Real</a>
+</div>
+
+<div class="app">
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sb-logo">MonTech POS</div>
+    <div class="sb-sec">
+      <div class="sb-lbl">Principal</div>
+      <button class="sb-btn active" onclick="nav('dashboard',this)"><span class="sb-ico">📊</span> Dashboard</button>
+      <button class="sb-btn" onclick="nav('caja',this)"><span class="sb-ico">🖥️</span> Punto de Venta</button>
+      <button class="sb-btn" onclick="nav('historial',this)"><span class="sb-ico">📋</span> Historial</button>
+    </div>
+    <div class="sb-sec">
+      <div class="sb-lbl">Gestión</div>
+      <button class="sb-btn" onclick="nav('productos',this)"><span class="sb-ico">📦</span> Productos</button>
+      <button class="sb-btn" onclick="nav('reportes',this)"><span class="sb-ico">📑</span> Reportes</button>
+    </div>
+    <div class="sb-footer">
+      <div class="sb-user">
+        <div class="sb-av">CA</div>
+        <div><div class="sb-un">Cajero Ana</div><div class="sb-ur">Caja #1 · Activa</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="topbar">
+      <div class="tb-t" id="page-title">Dashboard</div>
+      <div class="tb-date" id="top-date"></div>
+    </div>
+
+    <div class="pa">
+
+      <!-- DASHBOARD -->
+      <div class="page active" id="pg-dashboard">
+        <div class="krow">
+          <div class="kpi g">
+            <div class="kl">Ventas Hoy</div>
+            <div class="kv">RD$48,350</div>
+            <div class="ks"><span class="up">↑ 12%</span> vs ayer</div>
+          </div>
+          <div class="kpi b">
+            <div class="kl">Transacciones</div>
+            <div class="kv">67</div>
+            <div class="ks">Ticket prom. RD$721</div>
+          </div>
+          <div class="kpi y">
+            <div class="kl">Caja Actual</div>
+            <div class="kv">RD$23,180</div>
+            <div class="ks">Efectivo + Tarjeta</div>
+          </div>
+          <div class="kpi s">
+            <div class="kl">Productos Vendidos</div>
+            <div class="kv">184</div>
+            <div class="ks">Unidades hoy</div>
+          </div>
+        </div>
+
+        <div class="g2">
+          <div class="card">
+            <div class="card-h">
+              <div class="card-t">Ventas por Hora</div>
+              <div class="card-a">Hoy, 24 may</div>
+            </div>
+            <div class="hour-bars" id="hour-chart"></div>
+            <div style="display:flex;gap:6px;margin-top:.3rem" id="hour-labels"></div>
+          </div>
+          <div class="card">
+            <div class="card-h"><div class="card-t">Formas de Pago</div></div>
+            <div style="margin-bottom:1rem">
+              <div class="mini-bar-row"><div class="mini-bar-lbl">Efectivo</div><div class="mini-bar-track"><div class="mini-bar-fill" style="width:58%;background:var(--green)"></div></div><div class="mini-bar-val">RD$28,043</div></div>
+              <div class="mini-bar-row"><div class="mini-bar-lbl">Tarjeta</div><div class="mini-bar-track"><div class="mini-bar-fill" style="width:32%;background:var(--blue)"></div></div><div class="mini-bar-val">RD$15,472</div></div>
+              <div class="mini-bar-row"><div class="mini-bar-lbl">Transferencia</div><div class="mini-bar-track"><div class="mini-bar-fill" style="width:10%;background:var(--yellow)"></div></div><div class="mini-bar-val">RD$4,835</div></div>
+            </div>
+            <div class="card-h" style="margin-bottom:.6rem"><div class="card-t">Top Productos Hoy</div></div>
+            <table class="tbl">
+              <tr><th>Producto</th><th>Cant.</th><th>Total</th></tr>
+              <tr><td class="tw">Aceite de Motor</td><td>24</td><td>RD$7,200</td></tr>
+              <tr><td class="tw">Filtro de Aire</td><td>18</td><td>RD$4,500</td></tr>
+              <tr><td class="tw">Pastillas de Freno</td><td>12</td><td>RD$9,600</td></tr>
+              <tr><td class="tw">Líquido de Freno</td><td>31</td><td>RD$3,100</td></tr>
+            </table>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:.9rem">
+          <div class="card-h"><div class="card-t">Últimas Transacciones</div><div class="card-a" onclick="nav('historial',null)">Ver todas →</div></div>
+          <table class="tbl">
+            <tr><th>#</th><th>Cliente</th><th>Productos</th><th>Subtotal</th><th>ITBIS</th><th>Total</th><th>Pago</th><th>Hora</th></tr>
+            <tr><td>POS-0067</td><td class="tw">Consumidor Final</td><td>3</td><td>RD$1,200</td><td>RD$216</td><td>RD$1,416</td><td><span class="badge bg">Efectivo</span></td><td class="ts">4:42 PM</td></tr>
+            <tr><td>POS-0066</td><td class="tw">Auto Piezas Pérez</td><td>5</td><td>RD$4,500</td><td>RD$810</td><td>RD$5,310</td><td><span class="badge bb">Tarjeta</span></td><td class="ts">4:28 PM</td></tr>
+            <tr><td>POS-0065</td><td class="tw">Taller Hernández</td><td>2</td><td>RD$800</td><td>RD$144</td><td>RD$944</td><td><span class="badge by">Transfer.</span></td><td class="ts">4:15 PM</td></tr>
+            <tr><td>POS-0064</td><td class="tw">Consumidor Final</td><td>1</td><td>RD$350</td><td>RD$63</td><td>RD$413</td><td><span class="badge bg">Efectivo</span></td><td class="ts">3:58 PM</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- CAJA -->
+      <div class="page" id="pg-caja">
+        <div class="cat-bar" id="cat-bar">
+          <div class="cat-chip active" onclick="filterCat('all',this)">Todos</div>
+          <div class="cat-chip" onclick="filterCat('lubricantes',this)">Lubricantes</div>
+          <div class="cat-chip" onclick="filterCat('filtros',this)">Filtros</div>
+          <div class="cat-chip" onclick="filterCat('frenos',this)">Frenos</div>
+          <div class="cat-chip" onclick="filterCat('electricos',this)">Eléctricos</div>
+          <div class="cat-chip" onclick="filterCat('accesorios',this)">Accesorios</div>
+        </div>
+        <div class="pos-layout">
+          <div class="pos-grid" id="product-grid"></div>
+          <div class="cart-panel">
+            <div class="cart-header">
+              <h3>🛒 Carrito de Venta</h3>
+            </div>
+            <div class="cart-items" id="cart-items">
+              <div class="cart-empty">
+                <div style="font-size:2rem">🛒</div>
+                <div>Toca un producto para agregar</div>
+              </div>
+            </div>
+            <div class="cart-footer">
+              <div class="cart-line"><span>Subtotal</span><span id="cart-sub">RD$0</span></div>
+              <div class="cart-line"><span>ITBIS (18%)</span><span id="cart-itbis">RD$0</span></div>
+              <div class="cart-line total"><span>Total</span><span id="cart-total">RD$0</span></div>
+              <div class="pay-methods">
+                <div class="pm-btn selected" onclick="selectPay(this)">💵 Efectivo</div>
+                <div class="pm-btn" onclick="selectPay(this)">💳 Tarjeta</div>
+                <div class="pm-btn" onclick="selectPay(this)">📲 Transfer.</div>
+              </div>
+              <button class="btn btn-p" style="width:100%;padding:.65rem" onclick="cobrar()">Cobrar →</button>
+              <button class="btn btn-r" style="width:100%;padding:.45rem;font-size:.74rem" onclick="clearCart()">✕ Cancelar Venta</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- HISTORIAL -->
+      <div class="page" id="pg-historial">
+        <div class="ph">
+          <h1>Historial de Transacciones</h1>
+          <div style="display:flex;gap:.6rem">
+            <button class="btn btn-s">Exportar CSV</button>
+            <button class="btn btn-s">Imprimir Reporte</button>
+          </div>
+        </div>
+        <div class="card">
+          <table class="tbl">
+            <tr><th>#</th><th>Fecha/Hora</th><th>Cliente</th><th>NCF</th><th>Items</th><th>Subtotal</th><th>ITBIS</th><th>Total</th><th>Pago</th><th>Cajero</th></tr>
+            <tr><td>POS-0067</td><td class="ts">24/05 4:42p</td><td class="tw">Consumidor Final</td><td class="ts">B02-00000145</td><td>3</td><td>RD$1,200</td><td>RD$216</td><td class="tw">RD$1,416</td><td><span class="badge bg">Efectivo</span></td><td>Ana R.</td></tr>
+            <tr><td>POS-0066</td><td class="ts">24/05 4:28p</td><td class="tw">Auto Piezas Pérez</td><td class="ts">B01-00000311</td><td>5</td><td>RD$4,500</td><td>RD$810</td><td class="tw">RD$5,310</td><td><span class="badge bb">Tarjeta</span></td><td>Ana R.</td></tr>
+            <tr><td>POS-0065</td><td class="ts">24/05 4:15p</td><td class="tw">Taller Hernández</td><td class="ts">B01-00000310</td><td>2</td><td>RD$800</td><td>RD$144</td><td class="tw">RD$944</td><td><span class="badge by">Transfer.</span></td><td>Ana R.</td></tr>
+            <tr><td>POS-0064</td><td class="ts">24/05 3:58p</td><td class="tw">Consumidor Final</td><td class="ts">B02-00000144</td><td>1</td><td>RD$350</td><td>RD$63</td><td class="tw">RD$413</td><td><span class="badge bg">Efectivo</span></td><td>Carlos M.</td></tr>
+            <tr><td>POS-0063</td><td class="ts">24/05 3:44p</td><td class="tw">Distribuidora García</td><td class="ts">B01-00000309</td><td>8</td><td>RD$12,000</td><td>RD$2,160</td><td class="tw">RD$14,160</td><td><span class="badge bb">Tarjeta</span></td><td>Carlos M.</td></tr>
+            <tr><td>POS-0062</td><td class="ts">24/05 3:21p</td><td class="tw">Consumidor Final</td><td class="ts">B02-00000143</td><td>2</td><td>RD$650</td><td>RD$117</td><td class="tw">RD$767</td><td><span class="badge bg">Efectivo</span></td><td>Carlos M.</td></tr>
+            <tr><td>POS-0061</td><td class="ts">24/05 2:58p</td><td class="tw">Taller Los Mina</td><td class="ts">B01-00000308</td><td>4</td><td>RD$3,200</td><td>RD$576</td><td class="tw">RD$3,776</td><td><span class="badge by">Transfer.</span></td><td>Ana R.</td></tr>
+            <tr><td>POS-0060</td><td class="ts">24/05 2:33p</td><td class="tw">Consumidor Final</td><td class="ts">B02-00000142</td><td>1</td><td>RD$480</td><td>RD$86</td><td class="tw">RD$566</td><td><span class="badge bg">Efectivo</span></td><td>Ana R.</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- PRODUCTOS -->
+      <div class="page" id="pg-productos">
+        <div class="ph">
+          <h1>Catálogo de Productos</h1>
+          <button class="btn btn-p" onclick="document.getElementById('modal-prod').classList.add('open')">+ Nuevo Producto</button>
+        </div>
+        <div class="card">
+          <div class="card-h">
+            <div style="display:flex;gap:.6rem;align-items:center;width:100%">
+              <input style="background:var(--card2);border:1px solid var(--line-b);border-radius:8px;padding:.4rem .75rem;color:var(--txt);font-family:var(--fb);font-size:.8rem;outline:none;flex:1" placeholder="🔍 Buscar producto..."/>
+              <select style="background:var(--card2);border:1px solid var(--line-b);border-radius:8px;padding:.4rem .75rem;color:var(--txt);font-family:var(--fb);font-size:.8rem;outline:none">
+                <option>Todas las categorías</option>
+                <option>Lubricantes</option><option>Filtros</option><option>Frenos</option><option>Eléctricos</option><option>Accesorios</option>
+              </select>
+            </div>
+          </div>
+          <table class="tbl">
+            <tr><th>Código</th><th>Producto</th><th>Categoría</th><th>Precio</th><th>ITBIS</th><th>Stock</th><th>Estado</th></tr>
+            <tr><td class="ts">LUB-001</td><td class="tw">Aceite Motor 20W-50 (1L)</td><td>Lubricantes</td><td>RD$300</td><td>18%</td><td>142</td><td><span class="badge bg">Disponible</span></td></tr>
+            <tr><td class="ts">LUB-002</td><td class="tw">Aceite Transmisión ATF</td><td>Lubricantes</td><td>RD$450</td><td>18%</td><td>67</td><td><span class="badge bg">Disponible</span></td></tr>
+            <tr><td class="ts">FIL-001</td><td class="tw">Filtro de Aire Universal</td><td>Filtros</td><td>RD$250</td><td>18%</td><td>89</td><td><span class="badge bg">Disponible</span></td></tr>
+            <tr><td class="ts">FIL-002</td><td class="tw">Filtro de Aceite</td><td>Filtros</td><td>RD$180</td><td>18%</td><td>8</td><td><span class="badge by">Stock Bajo</span></td></tr>
+            <tr><td class="ts">FRE-001</td><td class="tw">Pastillas Freno Delant.</td><td>Frenos</td><td>RD$800</td><td>18%</td><td>34</td><td><span class="badge bg">Disponible</span></td></tr>
+            <tr><td class="ts">FRE-002</td><td class="tw">Líquido de Freno DOT4</td><td>Frenos</td><td>RD$100</td><td>18%</td><td>0</td><td><span class="badge br">Agotado</span></td></tr>
+            <tr><td class="ts">ELE-001</td><td class="tw">Batería 12V 70Ah</td><td>Eléctricos</td><td>RD$4,200</td><td>18%</td><td>12</td><td><span class="badge bg">Disponible</span></td></tr>
+            <tr><td class="ts">ELE-002</td><td class="tw">Alternador Universal</td><td>Eléctricos</td><td>RD$6,500</td><td>18%</td><td>5</td><td><span class="badge by">Stock Bajo</span></td></tr>
+            <tr><td class="ts">ACC-001</td><td class="tw">Limpiaparabrisas 21"</td><td>Accesorios</td><td>RD$220</td><td>18%</td><td>45</td><td><span class="badge bg">Disponible</span></td></tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- REPORTES -->
+      <div class="page" id="pg-reportes">
+        <div class="ph">
+          <h1>Reportes</h1>
+          <div style="display:flex;gap:.6rem">
+            <button class="btn btn-s">Mayo 2026</button>
+            <button class="btn btn-p">Exportar PDF</button>
+          </div>
+        </div>
+        <div class="krow" style="grid-template-columns:repeat(3,1fr)">
+          <div class="kpi g"><div class="kl">Ventas del Mes</div><div class="kv">RD$1,284,500</div><div class="ks"><span class="up">↑ 8%</span> vs abril</div></div>
+          <div class="kpi b"><div class="kl">Transacciones</div><div class="kv">1,847</div><div class="ks">Ticket prom. RD$695</div></div>
+          <div class="kpi y"><div class="kl">ITBIS Generado</div><div class="kv">RD$231,210</div><div class="ks">Para declarar en DGII</div></div>
+        </div>
+        <div class="g2">
+          <div class="card">
+            <div class="card-h"><div class="card-t">Ventas por Semana</div></div>
+            <div style="display:flex;flex-direction:column;gap:.6rem">
+              <div class="mini-bar-row"><div class="mini-bar-lbl">Semana 1</div><div class="mini-bar-track"><div class="mini-bar-fill" style="width:65%;background:var(--blue)"></div></div><div class="mini-bar-val">RD$285,400</div></div>
+              <div class="mini-bar-row"><div class="mini-bar-lbl">Semana 2</div><div class="mini-bar-track"><div class="mini-bar-fill" style="width:78%;background:var(--blue)"></div></div><div class="mini-bar-val">RD$342,100</div></div>
+              <div class="mini-bar-row"><div class="mini-bar-lbl">Semana 3</div><div class="mini-bar-track"><div class="mini-bar-fill" style="width:90%;background:var(--blue)"></div></div><div class="mini-bar-val">RD$398,700</div></div>
+              <div class="mini-bar-row"><div class="mini-bar-lbl">Semana 4</div><div class="mini-bar-track"><div class="mini-bar-fill" style="width:59%;background:var(--blue)"></div></div><div class="mini-bar-val">RD$258,300</div></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-h"><div class="card-t">Top 5 Productos del Mes</div></div>
+            <table class="tbl">
+              <tr><th>Producto</th><th>Unid.</th><th>Total</th></tr>
+              <tr><td class="tw">Aceite Motor 20W-50</td><td>680</td><td>RD$204,000</td></tr>
+              <tr><td class="tw">Pastillas de Freno</td><td>312</td><td>RD$249,600</td></tr>
+              <tr><td class="tw">Filtro de Aire</td><td>445</td><td>RD$111,250</td></tr>
+              <tr><td class="tw">Batería 12V</td><td>58</td><td>RD$243,600</td></tr>
+              <tr><td class="tw">Alternador</td><td>34</td><td>RD$221,000</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- MODAL PRODUCTO -->
+<div class="modal-bg" id="modal-prod">
+  <div class="modal">
+    <button class="modal-close" onclick="document.getElementById('modal-prod').classList.remove('open')">✕</button>
+    <h3>Nuevo Producto</h3>
+    <label>Nombre del Producto</label>
+    <input type="text" placeholder="Ej: Aceite Motor 5W-30"/>
+    <label>Categoría</label>
+    <select><option>Lubricantes</option><option>Filtros</option><option>Frenos</option><option>Eléctricos</option><option>Accesorios</option></select>
+    <label>Precio (RD$)</label>
+    <input type="number" placeholder="0.00"/>
+    <label>Stock Inicial</label>
+    <input type="number" placeholder="0"/>
+    <label>Código de Barra / SKU</label>
+    <input type="text" placeholder="Ej: LUB-003"/>
+    <div class="modal-footer">
+      <button class="btn btn-s" onclick="document.getElementById('modal-prod').classList.remove('open')">Cancelar</button>
+      <button class="btn btn-p" onclick="document.getElementById('modal-prod').classList.remove('open')">Guardar Producto</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL RECIBO -->
+<div class="modal-bg" id="modal-recibo">
+  <div class="modal" style="width:340px">
+    <button class="modal-close" onclick="document.getElementById('modal-recibo').classList.remove('open')">✕</button>
+    <h3>✅ Venta Completada</h3>
+    <div class="receipt" id="receipt-content"></div>
+    <div class="modal-footer">
+      <button class="btn btn-s" onclick="document.getElementById('modal-recibo').classList.remove('open')">Cerrar</button>
+      <button class="btn btn-p" onclick="printReceipt()">Imprimir Recibo</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const PRODUCTS = [
+  {id:'LUB-001',name:'Aceite 20W-50 (1L)',price:300,cat:'lubricantes',ico:'🛢️',stock:142},
+  {id:'LUB-002',name:'Aceite ATF',price:450,cat:'lubricantes',ico:'🛢️',stock:67},
+  {id:'LUB-003',name:'Aceite Diff. 85W-140',price:380,cat:'lubricantes',ico:'🛢️',stock:23},
+  {id:'FIL-001',name:'Filtro de Aire',price:250,cat:'filtros',ico:'🔵',stock:89},
+  {id:'FIL-002',name:'Filtro de Aceite',price:180,cat:'filtros',ico:'🔵',stock:8},
+  {id:'FIL-003',name:'Filtro de Gasolina',price:210,cat:'filtros',ico:'🔵',stock:41},
+  {id:'FRE-001',name:'Pastillas Delant.',price:800,cat:'frenos',ico:'🔴',stock:34},
+  {id:'FRE-002',name:'Pastillas Trasei.',price:650,cat:'frenos',ico:'🔴',stock:27},
+  {id:'FRE-003',name:'Líquido DOT4',price:100,cat:'frenos',ico:'🔴',stock:0},
+  {id:'ELE-001',name:'Batería 70Ah',price:4200,cat:'electricos',ico:'⚡',stock:12},
+  {id:'ELE-002',name:'Alternador Univ.',price:6500,cat:'electricos',ico:'⚡',stock:5},
+  {id:'ACC-001',name:'Limpiaparabrisas',price:220,cat:'accesorios',ico:'🚿',stock:45},
+  {id:'ACC-002',name:'Ambientador',price:85,cat:'accesorios',ico:'🌿',stock:78},
+];
+
+let cart = [];
+let activeCat = 'all';
+let payMethod = '💵 Efectivo';
+
+function nav(page, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sb-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('pg-' + page).classList.add('active');
+  if (btn) btn.classList.add('active');
+  const titles = {dashboard:'Dashboard',caja:'Punto de Venta',historial:'Historial',productos:'Productos',reportes:'Reportes'};
+  document.getElementById('page-title').textContent = titles[page] || page;
+}
+
+function filterCat(cat, el) {
+  activeCat = cat;
+  document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  renderGrid();
+}
+
+function renderGrid() {
+  const grid = document.getElementById('product-grid');
+  const filtered = activeCat === 'all' ? PRODUCTS : PRODUCTS.filter(p => p.cat === activeCat);
+  grid.innerHTML = filtered.map(p => `
+    <div class="pos-product" onclick="addToCart('${p.id}')">
+      <div class="pp-ico">${p.ico}</div>
+      <div class="pp-name">${p.name}</div>
+      <div class="pp-price">RD$${p.price.toLocaleString()}</div>
+      <div class="pp-stock ${p.stock === 0 ? 'dn' : p.stock < 10 ? '' : ''}">${p.stock === 0 ? '✕ Agotado' : `Stock: ${p.stock}`}</div>
+    </div>
+  `).join('');
+}
+
+function addToCart(id) {
+  const prod = PRODUCTS.find(p => p.id === id);
+  if (!prod || prod.stock === 0) return;
+  const existing = cart.find(i => i.id === id);
+  if (existing) { existing.qty++; }
+  else { cart.push({...prod, qty: 1}); }
+  renderCart();
+}
+
+function changeQty(id, delta) {
+  const item = cart.find(i => i.id === id);
+  if (!item) return;
+  item.qty += delta;
+  if (item.qty <= 0) cart = cart.filter(i => i.id !== id);
+  renderCart();
+}
+
+function removeItem(id) {
+  cart = cart.filter(i => i.id !== id);
+  renderCart();
+}
+
+function renderCart() {
+  const el = document.getElementById('cart-items');
+  if (cart.length === 0) {
+    el.innerHTML = '<div class="cart-empty"><div style="font-size:2rem">🛒</div><div>Toca un producto para agregar</div></div>';
+    document.getElementById('cart-sub').textContent = 'RD$0';
+    document.getElementById('cart-itbis').textContent = 'RD$0';
+    document.getElementById('cart-total').textContent = 'RD$0';
+    return;
+  }
+  el.innerHTML = cart.map(i => `
+    <div class="cart-item">
+      <div class="ci-name">${i.name}</div>
+      <div class="ci-qty">
+        <button class="ci-qty-btn" onclick="changeQty('${i.id}',-1)">−</button>
+        <div class="ci-n">${i.qty}</div>
+        <button class="ci-qty-btn" onclick="changeQty('${i.id}',1)">+</button>
+      </div>
+      <div class="ci-sub">RD$${(i.price * i.qty).toLocaleString()}</div>
+      <button class="ci-del" onclick="removeItem('${i.id}')">✕</button>
+    </div>
+  `).join('');
+  const sub = cart.reduce((s, i) => s + i.price * i.qty, 0);
+  const itbis = Math.round(sub * 0.18);
+  const total = sub + itbis;
+  document.getElementById('cart-sub').textContent = 'RD$' + sub.toLocaleString();
+  document.getElementById('cart-itbis').textContent = 'RD$' + itbis.toLocaleString();
+  document.getElementById('cart-total').textContent = 'RD$' + total.toLocaleString();
+}
+
+function selectPay(el) {
+  document.querySelectorAll('.pm-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  payMethod = el.textContent;
+}
+
+function cobrar() {
+  if (cart.length === 0) return;
+  const sub = cart.reduce((s, i) => s + i.price * i.qty, 0);
+  const itbis = Math.round(sub * 0.18);
+  const total = sub + itbis;
+  const ncf = 'B02-00000' + Math.floor(Math.random() * 900 + 100);
+  const now = new Date();
+  document.getElementById('receipt-content').innerHTML = `
+    <div style="font-size:1.1rem;font-weight:bold">MonTech POS</div>
+    <div style="font-size:.7rem;color:#555">Punto de Venta · Santo Domingo</div>
+    <div class="receipt-div"></div>
+    <div>Fecha: ${now.toLocaleDateString('es-DO')} ${now.toLocaleTimeString('es-DO',{hour:'2-digit',minute:'2-digit'})}</div>
+    <div>NCF: ${ncf}</div>
+    <div class="receipt-div"></div>
+    ${cart.map(i => `<div style="display:flex;justify-content:space-between;text-align:left"><span>${i.qty}x ${i.name}</span><span>RD$${(i.price*i.qty).toLocaleString()}</span></div>`).join('')}
+    <div class="receipt-div"></div>
+    <div style="display:flex;justify-content:space-between"><span>Subtotal</span><span>RD$${sub.toLocaleString()}</span></div>
+    <div style="display:flex;justify-content:space-between"><span>ITBIS 18%</span><span>RD$${itbis.toLocaleString()}</span></div>
+    <div class="receipt-div"></div>
+    <div style="display:flex;justify-content:space-between;font-weight:bold;font-size:.9rem"><span>TOTAL</span><span>RD$${total.toLocaleString()}</span></div>
+    <div style="margin-top:.3rem">${payMethod}</div>
+    <div class="receipt-div"></div>
+    <div style="font-size:.65rem;color:#777">¡Gracias por su compra!</div>
+  `;
+  document.getElementById('modal-recibo').classList.add('open');
+  cart = [];
+  renderCart();
+}
+
+function clearCart() { cart = []; renderCart(); }
+function printReceipt() { window.print(); }
+
+// Hour chart
+const hours = [8,9,10,11,12,13,14,15,16];
+const vals  = [2400,3800,5200,7100,6800,5500,8200,9400,5700];
+const maxV  = Math.max(...vals);
+const chartEl = document.getElementById('hour-chart');
+const lblEl   = document.getElementById('hour-labels');
+hours.forEach((h, i) => {
+  const bar = document.createElement('div');
+  bar.className = 'hb';
+  bar.style.height = (vals[i] / maxV * 100) + '%';
+  const valEl = document.createElement('div');
+  valEl.className = 'hb-val';
+  valEl.textContent = (vals[i]/1000).toFixed(1)+'k';
+  bar.appendChild(valEl);
+  chartEl.appendChild(bar);
+  const lbl = document.createElement('div');
+  lbl.className = 'hb-lbl';
+  lbl.style.flex = '1';
+  lbl.textContent = h + 'h';
+  lblEl.appendChild(lbl);
+});
+
+// Date
+const d = new Date();
+document.getElementById('top-date').textContent = d.toLocaleDateString('es-DO', {weekday:'long',day:'numeric',month:'long'});
+
+// Init
+renderGrid();
+
+// ESC close modals
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') document.querySelectorAll('.modal-bg.open').forEach(m => m.classList.remove('open'));
+});
+document.querySelectorAll('.modal-bg').forEach(bg => bg.addEventListener('click', e => { if (e.target === bg) bg.classList.remove('open'); }));
+</script>
+</body>
+</html>

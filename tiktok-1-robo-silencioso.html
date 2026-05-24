@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=390,initial-scale=1"/>
+<title>MonTech TikTok 1</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#000;width:390px;height:844px;overflow:hidden;font-family:'DM Sans',sans-serif;position:relative}
+  .scene{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+
+  /* SCENE 1 */
+  #s1{z-index:10}
+  .noise{position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none}
+  .grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(200,200,200,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(200,200,200,0.04) 1px,transparent 1px);background-size:40px 40px}
+
+  .s1-content{text-align:center;padding:2rem;position:relative;z-index:2}
+  .s1-eyebrow{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#666;margin-bottom:2rem;opacity:0;animation:fadeUp .6s .3s forwards}
+  .s1-question{font-family:'Syne',sans-serif;font-size:2.4rem;font-weight:800;line-height:1.05;letter-spacing:-.03em;color:#fff;opacity:0;animation:fadeUp .8s .6s forwards}
+  .s1-question span{background:linear-gradient(135deg,#fff,#888);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .s1-sub{font-size:.95rem;color:#666;margin-top:1.5rem;line-height:1.6;opacity:0;animation:fadeUp .7s 1.2s forwards}
+  .s1-glow{position:absolute;top:30%;left:50%;transform:translateX(-50%);width:300px;height:300px;background:radial-gradient(ellipse,rgba(255,80,80,0.08) 0%,transparent 70%);pointer-events:none}
+
+  /* SCENE 2 */
+  #s2{z-index:5;opacity:0}
+  .problems{padding:3rem 2rem;width:100%}
+  .prob-title{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;color:#888;letter-spacing:.08em;text-transform:uppercase;margin-bottom:2rem;text-align:center}
+  .prob-item{display:flex;align-items:flex-start;gap:1rem;margin-bottom:1.5rem;opacity:0;transform:translateX(-20px)}
+  .prob-icon{font-size:1.4rem;flex-shrink:0;margin-top:.1rem}
+  .prob-text{font-size:1rem;color:#ccc;line-height:1.5}
+  .prob-text strong{color:#ff4444;font-weight:500}
+
+  /* SCENE 3 */
+  #s3{z-index:5;opacity:0}
+  .solution{padding:3rem 2rem;width:100%;text-align:center}
+  .sol-line{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#666;margin-bottom:1rem}
+  .sol-title{font-family:'Syne',sans-serif;font-size:2.8rem;font-weight:800;letter-spacing:-.04em;line-height:1;margin-bottom:1.5rem}
+  .sol-title span{background:linear-gradient(135deg,#fff,#aaa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .sol-items{margin:2rem 0;text-align:left}
+  .sol-item{display:flex;align-items:center;gap:.8rem;margin-bottom:1rem;opacity:0}
+  .sol-check{width:22px;height:22px;border-radius:50%;background:#1a1a1a;border:1px solid #333;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.7rem;color:#aaa}
+  .sol-item-text{font-size:.9rem;color:#bbb}
+  .sol-cta{background:#fff;color:#000;font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;padding:1rem 2.5rem;border-radius:40px;border:none;letter-spacing:.04em;opacity:0;margin-top:1rem;display:inline-block}
+
+  /* SCENE 4 - FINAL */
+  #s4{z-index:5;opacity:0}
+  .final{text-align:center;padding:3rem 2rem}
+  .final-logo{font-family:'Syne',sans-serif;font-size:3.5rem;font-weight:800;letter-spacing:-.04em;background:linear-gradient(135deg,#fff,#888);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.5rem}
+  .final-tagline{font-size:.9rem;color:#555;letter-spacing:.1em;text-transform:uppercase;margin-bottom:3rem}
+  .final-number{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;color:#fff;margin-bottom:.5rem}
+  .final-number-label{font-size:.8rem;color:#555;letter-spacing:.1em;text-transform:uppercase;margin-bottom:2rem}
+  .final-demo{font-size:.85rem;color:#444;letter-spacing:.06em;text-transform:uppercase;border:1px solid #222;padding:.6rem 1.5rem;border-radius:30px;display:inline-block}
+  .final-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:280px;height:280px;background:radial-gradient(ellipse,rgba(200,200,200,0.05) 0%,transparent 70%)}
+
+  /* PROGRESS BAR */
+  .progress{position:absolute;bottom:0;left:0;height:3px;background:linear-gradient(90deg,#fff,#666);width:0;z-index:100;animation:progress 20s linear forwards}
+
+  /* BRAND TAG */
+  .brand-tag{position:absolute;top:2rem;left:50%;transform:translateX(-50%);font-family:'Syne',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#333;z-index:50}
+
+  @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+  @keyframes progress{from{width:0}to{width:100%}}
+  @keyframes slideIn{from{opacity:0;transform:translateX(-20px)}to{opacity:1;transform:translateX(0)}}
+</style>
+</head>
+<body>
+
+<div class="brand-tag">MonTech · RD</div>
+<div class="progress"></div>
+
+<!-- SCENE 1: HOOK -->
+<div class="scene" id="s1">
+  <div class="noise"></div>
+  <div class="grid-bg"></div>
+  <div class="s1-glow"></div>
+  <div class="s1-content">
+    <p class="s1-eyebrow">MonTech pregunta</p>
+    <h1 class="s1-question">
+      ¿Sabes cuánto<br>
+      <span>dinero sale</span><br>
+      de tu negocio<br>
+      sin que te enteres?
+    </h1>
+    <p class="s1-sub">La mayoría de dueños de negocios en RD<br>no tienen la respuesta.</p>
+  </div>
+</div>
+
+<!-- SCENE 2: PROBLEMS -->
+<div class="scene" id="s2">
+  <div class="noise"></div>
+  <div class="problems">
+    <p class="prob-title">Lo que pasa sin sistema</p>
+    <div class="prob-item" id="p1">
+      <span class="prob-icon">📦</span>
+      <p class="prob-text">Inventario descontrolado → <strong>productos que desaparecen</strong></p>
+    </div>
+    <div class="prob-item" id="p2">
+      <span class="prob-icon">👤</span>
+      <p class="prob-text">Empleado que cobra de más → <strong>errores en nómina</strong></p>
+    </div>
+    <div class="prob-item" id="p3">
+      <span class="prob-icon">📋</span>
+      <p class="prob-text">Sin reportes DGII → <strong>multas y cierres</strong></p>
+    </div>
+    <div class="prob-item" id="p4">
+      <span class="prob-icon">📉</span>
+      <p class="prob-text">Decisiones a ciegas → <strong>negocios que quiebran</strong></p>
+    </div>
+  </div>
+</div>
+
+<!-- SCENE 3: SOLUTION -->
+<div class="scene" id="s3">
+  <div class="noise"></div>
+  <div class="solution">
+    <p class="sol-line">La solución</p>
+    <h2 class="sol-title"><span>MonTech</span><br>lo ve todo.</h2>
+    <div class="sol-items">
+      <div class="sol-item" id="si1"><div class="sol-check">✓</div><span class="sol-item-text">Inventario en tiempo real desde tu celular</span></div>
+      <div class="sol-item" id="si2"><div class="sol-check">✓</div><span class="sol-item-text">Nómina automática con DGII integrada</span></div>
+      <div class="sol-item" id="si3"><div class="sol-check">✓</div><span class="sol-item-text">Ventas, caja y reportes en un solo lugar</span></div>
+      <div class="sol-item" id="si4"><div class="sol-check">✓</div><span class="sol-item-text">Soporte presencial en Santo Domingo</span></div>
+    </div>
+    <div class="sol-cta" id="sol-cta">Demo Gratis → 829-343-0288</div>
+  </div>
+</div>
+
+<!-- SCENE 4: FINAL CTA -->
+<div class="scene" id="s4">
+  <div class="noise"></div>
+  <div class="final-glow"></div>
+  <div class="final">
+    <div class="final-logo">MonTech</div>
+    <div class="final-tagline">Software Empresarial · RD</div>
+    <div class="final-number">829-343-0288</div>
+    <div class="final-number-label">WhatsApp · Demo Gratis</div>
+    <div class="final-demo">montech.do</div>
+  </div>
+</div>
+
+<script>
+(function(){
+  function showScene(id, delay){
+    setTimeout(function(){
+      var el = document.getElementById(id);
+      el.style.transition = 'opacity .8s ease';
+      el.style.opacity = '1';
+    }, delay);
+  }
+  function hideScene(id, delay){
+    setTimeout(function(){
+      var el = document.getElementById(id);
+      el.style.transition = 'opacity .5s ease';
+      el.style.opacity = '0';
+    }, delay);
+  }
+  function animItem(id, delay){
+    setTimeout(function(){
+      var el = document.getElementById(id);
+      el.style.animation = 'slideIn .5s ease forwards';
+    }, delay);
+  }
+
+  // Scene 1: 0-5s
+  hideScene('s1', 5000);
+
+  // Scene 2: 5-11s
+  showScene('s2', 5200);
+  animItem('p1', 5600);
+  animItem('p2', 6400);
+  animItem('p3', 7200);
+  animItem('p4', 8000);
+  hideScene('s2', 11000);
+
+  // Scene 3: 11-17s
+  showScene('s3', 11200);
+  setTimeout(function(){
+    ['si1','si2','si3','si4'].forEach(function(id,i){
+      setTimeout(function(){
+        var el = document.getElementById(id);
+        el.style.animation = 'slideIn .5s ease forwards';
+      }, i * 600);
+    });
+    setTimeout(function(){
+      var cta = document.getElementById('sol-cta');
+      cta.style.animation = 'fadeUp .6s ease forwards';
+    }, 2800);
+  }, 11400);
+  hideScene('s3', 17000);
+
+  // Scene 4: 17-20s
+  showScene('s4', 17200);
+})();
+</script>
+</body>
+</html>

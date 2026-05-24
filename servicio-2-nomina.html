@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=390,initial-scale=1"/>
+<title>MonTech — Nómina</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#000;width:390px;height:844px;overflow:hidden;font-family:'DM Sans',sans-serif;position:relative}
+.scene{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0}
+#s1{opacity:1}
+.noise{position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none}
+
+/* S1 */
+.s1-wrap{text-align:center;padding:2.5rem 2rem;z-index:2;position:relative}
+.s1-tag{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:#555;margin-bottom:1.5rem;opacity:0;animation:fu .6s .2s forwards}
+.s1-hook{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;color:#666;letter-spacing:-.02em;opacity:0;animation:fu .7s .4s forwards}
+.s1-title{font-family:'Syne',sans-serif;font-size:2.8rem;font-weight:800;letter-spacing:-.04em;line-height:1.0;background:linear-gradient(135deg,#fff,#999);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;opacity:0;animation:fu .8s .9s forwards}
+.s1-sub{font-size:.92rem;color:#555;margin-top:1.5rem;line-height:1.6;opacity:0;animation:fu .7s 1.5s forwards}
+.glow-green{position:absolute;top:30%;left:50%;transform:translateX(-50%);width:300px;height:300px;background:radial-gradient(ellipse,rgba(80,200,100,0.07) 0%,transparent 70%);pointer-events:none}
+
+/* S2 PAIN */
+.pain-wrap{padding:2.5rem 1.5rem;width:100%}
+.pain-title{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;color:#888;letter-spacing:.06em;text-transform:uppercase;margin-bottom:1.8rem;text-align:center}
+.pain-card{background:#0d0d0d;border:1px solid #1a1a1a;border-radius:14px;padding:1.2rem 1.4rem;margin-bottom:.9rem;display:flex;gap:1rem;align-items:flex-start;opacity:0;transform:translateY(8px)}
+.pain-icon{font-size:1.5rem;flex-shrink:0}
+.pain-text{font-size:.88rem;color:#888;line-height:1.5}
+.pain-text strong{color:#ff6b6b;font-weight:500}
+.pain-time{display:inline-block;margin-top:.5rem;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:#333;border:1px solid #1a1a1a;padding:.2rem .6rem;border-radius:8px}
+
+/* S3 CALC */
+.calc-wrap{padding:2rem 1.5rem;width:100%}
+.calc-title{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#444;margin-bottom:1.5rem;text-align:center}
+.employee-list{margin-bottom:1.2rem}
+.emp-row{display:flex;justify-content:space-between;align-items:center;padding:.7rem 1rem;background:#0d0d0d;border:1px solid #111;border-radius:10px;margin-bottom:.5rem;opacity:0}
+.emp-name{font-size:.88rem;color:#888}
+.emp-salary{font-family:'Syne',sans-serif;font-size:.95rem;font-weight:700;color:#fff}
+.emp-status{font-size:.7rem;color:#4caf50;letter-spacing:.08em}
+.calc-total{background:#111;border-radius:12px;padding:1rem 1.2rem;display:flex;justify-content:space-between;align-items:center;opacity:0}
+.calc-total-label{font-size:.8rem;color:#444;text-transform:uppercase;letter-spacing:.1em}
+.calc-total-num{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;color:#fff}
+.calc-tag{font-size:.68rem;color:#333;margin-top:.2rem;letter-spacing:.08em;text-transform:uppercase}
+.calc-dgii{background:#0d1a0d;border:1px solid #0d2a0d;border-radius:12px;padding:.8rem 1rem;margin-top:.7rem;display:flex;gap:.8rem;align-items:center;opacity:0}
+.dgii-icon{font-size:1.2rem}
+.dgii-text{font-size:.8rem;color:#4caf50;line-height:1.4}
+
+/* S4 FEATURES */
+.features-wrap{padding:2.5rem 1.5rem;width:100%}
+.feat-title{font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;color:#fff;letter-spacing:-.02em;margin-bottom:1.5rem;text-align:center;opacity:0}
+.feat-row{display:flex;gap:.8rem;margin-bottom:.8rem}
+.feat-card{flex:1;background:#0d0d0d;border:1px solid #1a1a1a;border-radius:12px;padding:1rem;text-align:center;opacity:0;transform:translateY(8px)}
+.feat-card-icon{font-size:1.4rem;margin-bottom:.5rem}
+.feat-card-name{font-size:.78rem;color:#ccc;font-weight:500;line-height:1.3}
+.feat-card-sub{font-size:.68rem;color:#444;margin-top:.3rem}
+
+/* S5 PRICING */
+.pricing{padding:2.5rem 1.5rem;width:100%;text-align:center}
+.price-eyebrow{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:#555;margin-bottom:1rem;opacity:0;animation-fill-mode:forwards}
+.price-value{font-family:'Syne',sans-serif;font-size:3rem;font-weight:800;color:#fff;line-height:1;opacity:0;animation-fill-mode:forwards}
+.price-period{font-size:1rem;color:#444;font-family:'DM Sans',sans-serif}
+.price-impl{font-size:.8rem;color:#333;margin-top:.4rem;opacity:0;animation-fill-mode:forwards}
+.price-list{text-align:left;margin:1.5rem 0;background:#0d0d0d;border:1px solid #1a1a1a;border-radius:14px;padding:1rem 1.2rem;opacity:0;animation-fill-mode:forwards}
+.p-item{font-size:.85rem;color:#777;padding:.4rem 0;border-bottom:1px solid #111;display:flex;gap:.6rem}
+.p-item:last-child{border:none}
+.p-item::before{content:'✓';color:#555}
+.price-btn{background:#fff;color:#000;font-family:'Syne',sans-serif;font-size:.95rem;font-weight:800;padding:.9rem 2.5rem;border-radius:40px;display:inline-block;margin-top:.8rem;opacity:0;animation-fill-mode:forwards;letter-spacing:.02em}
+
+.final{text-align:center;padding:3rem 2rem}
+.final-logo{font-family:'Syne',sans-serif;font-size:3.2rem;font-weight:800;letter-spacing:-.04em;background:linear-gradient(135deg,#fff,#888);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.4rem}
+.final-service{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:#444;margin-bottom:2.5rem}
+.final-num{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;color:#fff;margin-bottom:.3rem}
+.final-num-label{font-size:.7rem;color:#444;letter-spacing:.12em;text-transform:uppercase;margin-bottom:2rem}
+.final-pill{display:inline-block;border:1px solid #1a1a1a;color:#555;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;padding:.4rem 1.1rem;border-radius:20px}
+
+.progress{position:absolute;bottom:0;left:0;height:3px;background:linear-gradient(90deg,#4caf50,#aaa);width:0;z-index:100;animation:progress 22s linear forwards}
+.brand{position:absolute;top:1.8rem;left:50%;transform:translateX(-50%);font-family:'Syne',sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#2a2a2a;z-index:50}
+
+@keyframes fu{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fi{from{opacity:0}to{opacity:1}}
+@keyframes progress{from{width:0}to{width:100%}}
+@keyframes cardIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+<div class="brand">MonTech · Nómina</div>
+<div class="progress"></div>
+
+<!-- S1 HOOK -->
+<div class="scene" id="s1">
+  <div class="noise"></div><div class="glow-green"></div>
+  <div class="s1-wrap">
+    <p class="s1-tag">Para empresas con 5+ empleados</p>
+    <p class="s1-hook">¿2 días para procesar</p>
+    <h1 class="s1-title">la nómina?</h1>
+    <p class="s1-sub">Con MonTech se hace<br>en <strong style="color:#ccc">2 horas.</strong><br>Automático. Con DGII integrada.</p>
+  </div>
+</div>
+
+<!-- S2 PAIN -->
+<div class="scene" id="s2">
+  <div class="noise"></div>
+  <div class="pain-wrap">
+    <p class="pain-title">Sin sistema de nómina</p>
+    <div class="pain-card" id="pc1"><span class="pain-icon">⏰</span><div class="pain-text">Calcular ISR, TSS y regalía a mano → <strong>errores que cuestan multas</strong><span class="pain-time">Horas de trabajo manual</span></div></div>
+    <div class="pain-card" id="pc2"><span class="pain-icon">📄</span><div class="pain-text">Reportes DGT-3, DGT-5 para la DGII → <strong>preparados manualmente cada mes</strong><span class="pain-time">Riesgo de sanciones</span></div></div>
+    <div class="pain-card" id="pc3"><span class="pain-icon">😤</span><div class="pain-text">Empleados que reclaman errores en su pago → <strong>conflictos internos y desconfianza</strong><span class="pain-time">Productividad perdida</span></div></div>
+  </div>
+</div>
+
+<!-- S3 CALCULATOR -->
+<div class="scene" id="s3">
+  <div class="noise"></div>
+  <div class="calc-wrap">
+    <p class="calc-title">MonTech calcula solo</p>
+    <div class="employee-list">
+      <div class="emp-row" id="er1"><span class="emp-name">Juan Pérez — Vendedor</span><div style="text-align:right"><div class="emp-salary">RD$28,500</div><div class="emp-status">ISR + TSS calculados</div></div></div>
+      <div class="emp-row" id="er2"><span class="emp-name">María López — Admin</span><div style="text-align:right"><div class="emp-salary">RD$35,000</div><div class="emp-status">ISR + TSS calculados</div></div></div>
+      <div class="emp-row" id="er3"><span class="emp-name">Carlos Marte — Gerente</span><div style="text-align:right"><div class="emp-salary">RD$65,000</div><div class="emp-status">ISR + TSS calculados</div></div></div>
+    </div>
+    <div class="calc-total" id="ct">
+      <div><div class="calc-total-label">Total nómina</div><div class="calc-tag">Generado en 2 horas</div></div>
+      <div class="calc-total-num">RD$128,500</div>
+    </div>
+    <div class="calc-dgii" id="cd">
+      <div class="dgii-icon">✓</div>
+      <div class="dgii-text">Reportes DGT-3, DGT-5 y DGT-11<br>generados automáticamente para la DGII</div>
+    </div>
+  </div>
+</div>
+
+<!-- S4 FEATURES -->
+<div class="scene" id="s4">
+  <div class="noise"></div>
+  <div class="features-wrap">
+    <p class="feat-title" id="ft">Todo en MonTech Nómina</p>
+    <div class="feat-row">
+      <div class="feat-card" id="fc1"><div class="feat-card-icon">💵</div><div class="feat-card-name">ISR automático</div><div class="feat-card-sub">Cálculo exacto</div></div>
+      <div class="feat-card" id="fc2"><div class="feat-card-icon">🏥</div><div class="feat-card-name">TSS integrado</div><div class="feat-card-sub">SENASA, AFP</div></div>
+    </div>
+    <div class="feat-row">
+      <div class="feat-card" id="fc3"><div class="feat-card-icon">🎁</div><div class="feat-card-name">Regalía pascual</div><div class="feat-card-sub">Automática</div></div>
+      <div class="feat-card" id="fc4"><div class="feat-card-icon">🏖️</div><div class="feat-card-name">Vacaciones</div><div class="feat-card-sub">Control exacto</div></div>
+    </div>
+    <div class="feat-row">
+      <div class="feat-card" id="fc5"><div class="feat-card-icon">📊</div><div class="feat-card-name">Reportes DGII</div><div class="feat-card-sub">DGT-3, 5, 11</div></div>
+      <div class="feat-card" id="fc6"><div class="feat-card-icon">📱</div><div class="feat-card-name">App móvil</div><div class="feat-card-sub">Desde tu celular</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- S5 PRICING -->
+<div class="scene" id="s5">
+  <div class="noise"></div>
+  <div class="pricing">
+    <p class="price-eyebrow" id="pe">MonTech Nómina y RRHH</p>
+    <div class="price-value" id="pv">US$100<span class="price-period">/mes</span></div>
+    <div class="price-impl" id="pi">+ US$1,500 implementación única</div>
+    <div class="price-list" id="pl">
+      <div class="p-item">Nómina ilimitada de empleados</div>
+      <div class="p-item">ISR, TSS, regalía automáticos</div>
+      <div class="p-item">Reportes DGT-3, DGT-5, DGT-11</div>
+      <div class="p-item">Control de vacaciones y permisos</div>
+      <div class="p-item">Soporte presencial en RD</div>
+    </div>
+    <div class="price-btn" id="pb">829-343-0288 → Demo gratis</div>
+  </div>
+</div>
+
+<!-- FINAL -->
+<div class="scene" id="sf">
+  <div class="noise"></div>
+  <div class="final">
+    <div class="final-logo">MonTech</div>
+    <div class="final-service">Nómina y RRHH · República Dominicana</div>
+    <div class="final-num">829-343-0288</div>
+    <div class="final-num-label">WhatsApp · Demo Gratis</div>
+    <div class="final-pill">montech.do</div>
+  </div>
+</div>
+
+<script>
+(function(){
+  function show(id,d){setTimeout(function(){var e=document.getElementById(id);e.style.transition='opacity .8s ease';e.style.opacity='1';},d);}
+  function hide(id,d){setTimeout(function(){var e=document.getElementById(id);e.style.transition='opacity .5s ease';e.style.opacity='0';},d);}
+  function anim(id,d,a){setTimeout(function(){var e=document.getElementById(id);if(e)e.style.animation=(a||'cardIn .5s ease forwards');},d);}
+
+  hide('s1',5000);
+  show('s2',5200);
+  anim('pc1',5600);anim('pc2',6600);anim('pc3',7600);
+  hide('s2',10500);
+
+  show('s3',10700);
+  anim('er1',11100);anim('er2',11700);anim('er3',12300);
+  anim('ct',13000);anim('cd',13600);
+  hide('s3',16000);
+
+  show('s4',16200);
+  anim('ft',16500,'fu .5s ease forwards');
+  ['fc1','fc2','fc3','fc4','fc5','fc6'].forEach(function(id,i){anim(id,16900+i*300);});
+  hide('s4',20000);
+
+  show('s5',20200);
+  anim('pe',20500,'fu .5s ease forwards');
+  anim('pv',20900,'fu .6s ease forwards');
+  anim('pi',21300,'fu .5s ease forwards');
+  anim('pl',21700,'fu .6s ease forwards');
+  anim('pb',22300,'fu .6s ease forwards');
+  hide('s5',25000);
+
+  show('sf',25200);
+})();
+</script>
+</body>
+</html>

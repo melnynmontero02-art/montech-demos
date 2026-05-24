@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MonTech Constructoras — Guía de Presentación</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    @page{margin:0;size:A4}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#070707;--card:#111;--line:rgba(200,200,200,0.1);--silver:#c8c8c8;--white:#f0f0f0;--dim:#888;--fd:'Syne',sans-serif;--fb:'DM Sans',sans-serif}
+    body{background:var(--bg);color:var(--white);font-family:var(--fb);font-weight:300;font-size:13px;line-height:1.65;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .cover{width:100%;min-height:100vh;background:#070707;display:flex;flex-direction:column;padding:56px 64px;position:relative;overflow:hidden;page-break-after:always}
+    .cover-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(200,200,200,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(200,200,200,0.025) 1px,transparent 1px);background-size:48px 48px}
+    .cover-glow{position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:600px;height:600px;background:radial-gradient(ellipse,rgba(180,180,180,0.06) 0%,transparent 70%)}
+    .cover-logo{font-family:var(--fd);font-size:1.4rem;font-weight:800;background:linear-gradient(135deg,#fff 0%,#888 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;z-index:1}
+    .cover-body{flex:1;display:flex;flex-direction:column;justify-content:center;z-index:1}
+    .cover-tag{display:inline-flex;align-items:center;gap:.5rem;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);border:1px solid rgba(200,200,200,0.15);padding:.35rem 1rem;border-radius:40px;width:fit-content;margin-bottom:2.5rem}
+    .cover-dot{width:6px;height:6px;background:var(--silver);border-radius:50%}
+    .cover-title{font-family:var(--fd);font-size:4rem;font-weight:800;letter-spacing:-.04em;line-height:1.0;margin-bottom:2rem}
+    .cover-title .dim{color:#3a3a3a}
+    .cover-title .bright{background:linear-gradient(135deg,#fff 0%,#c8c8c8 50%,#888 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .cover-sub{font-size:1.05rem;color:var(--dim);max-width:480px;line-height:1.7}
+    .cover-stats{display:flex;gap:3.5rem;margin-top:4rem;padding-top:2.5rem;border-top:1px solid var(--line)}
+    .cstat-num{font-family:var(--fd);font-size:2rem;font-weight:700;background:linear-gradient(135deg,#fff,#888);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .cstat-lbl{font-size:.72rem;color:#555;letter-spacing:.08em;text-transform:uppercase;margin-top:.2rem}
+    .cover-footer{display:flex;justify-content:space-between;align-items:center;z-index:1;font-size:.75rem;color:#444}
+    .page{width:100%;min-height:100vh;background:var(--bg);padding:52px 64px;page-break-after:always}
+    .page:last-child{page-break-after:auto}
+    .sec-label{font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:#555;margin-bottom:.6rem}
+    .sec-title{font-family:var(--fd);font-size:2rem;font-weight:700;letter-spacing:-.03em;line-height:1.1;margin-bottom:1.8rem}
+    .sec-title em{font-style:normal;background:linear-gradient(135deg,#fff,var(--silver));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .quote{background:rgba(200,200,200,0.04);border-left:3px solid var(--silver);border-radius:0 10px 10px 0;padding:1rem 1.2rem;font-size:.95rem;color:var(--silver);font-style:italic;line-height:1.7;margin-bottom:1.5rem}
+    .module-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1.3rem 1.5rem;margin-bottom:1rem}
+    .module-header{display:flex;align-items:center;gap:.8rem;margin-bottom:.7rem}
+    .module-icon{font-size:1.2rem}
+    .module-name{font-family:var(--fd);font-size:1rem;font-weight:700;color:var(--white)}
+    .module-body{font-size:.88rem;color:#888;line-height:1.65;margin-bottom:.7rem}
+    .module-tip{font-size:.8rem;color:var(--silver);background:rgba(200,200,200,0.05);border-radius:8px;padding:.5rem .8rem}
+    .module-tip strong{color:var(--white)}
+    .obj-table{width:100%;border-collapse:collapse;margin-bottom:1rem}
+    .obj-table th{text-align:left;font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;color:#555;padding:.5rem .8rem;border-bottom:1px solid var(--line);font-weight:500}
+    .obj-table td{padding:.9rem .8rem;font-size:.85rem;border-bottom:1px solid rgba(200,200,200,0.04);vertical-align:top;line-height:1.6}
+    .obj-table td:first-child{color:var(--silver);font-style:italic;width:38%}
+    .obj-table td:last-child{color:#888}
+    .obj-table tr:last-child td{border-bottom:none}
+    .tip-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.2rem}
+    .tip-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:1.1rem}
+    .tip-card-title{font-family:var(--fd);font-size:.82rem;font-weight:700;color:var(--silver);margin-bottom:.5rem}
+    .tip-card-body{font-size:.8rem;color:#777;line-height:1.6}
+    .cta-box{background:rgba(200,200,200,0.04);border:1px solid rgba(200,200,200,0.12);border-radius:20px;padding:2.5rem;text-align:center;margin-top:1.5rem;position:relative;overflow:hidden}
+    .cta-box::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:60%;height:1px;background:linear-gradient(90deg,transparent,var(--silver),transparent)}
+    .cta-title{font-family:var(--fd);font-size:1.6rem;font-weight:800;letter-spacing:-.03em;margin-bottom:.7rem}
+    .cta-sub{color:#666;font-size:.9rem;margin-bottom:1.5rem}
+    .cta-info{display:flex;justify-content:center;gap:3rem;flex-wrap:wrap}
+    .cta-item{text-align:center}
+    .cta-item-val{font-family:var(--fd);font-size:1.1rem;font-weight:700;color:var(--white)}
+    .cta-item-lbl{font-size:.72rem;color:#555;margin-top:.2rem;text-transform:uppercase;letter-spacing:.06em}
+    .divider{width:100%;height:1px;background:linear-gradient(90deg,transparent,var(--line),transparent);margin:1.5rem 0}
+    .step-list{list-style:none;margin:1rem 0 1.5rem}
+    .step-list li{display:flex;gap:1rem;margin-bottom:1rem;font-size:.88rem;color:#888;line-height:1.55}
+    .step-num{width:26px;height:26px;border-radius:50%;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:.72rem;font-weight:700;color:var(--silver);flex-shrink:0;margin-top:.05rem}
+    .step-content strong{color:var(--white);display:block;margin-bottom:.15rem;font-size:.9rem;font-weight:500}
+    .page-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:2.5rem;padding-bottom:1rem;border-bottom:1px solid var(--line)}
+    .ph-logo{font-family:var(--fd);font-size:.9rem;font-weight:800;background:linear-gradient(135deg,#fff,#888);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .ph-pg{font-size:.7rem;color:#444}
+  </style>
+</head>
+<body>
+
+<!-- PORTADA -->
+<div class="cover">
+  <div class="cover-grid"></div><div class="cover-glow"></div>
+  <div class="cover-logo">MonTech</div>
+  <div class="cover-body">
+    <div class="cover-tag"><div class="cover-dot"></div> Guía de Ventas · Constructoras</div>
+    <div class="cover-title">
+      <div class="dim">Cada proyecto,</div>
+      <div class="bright">bajo</div>
+      <div class="dim">control</div>
+    </div>
+    <div class="cover-sub">Guía para presentar el sistema de Constructoras de MonTech a empresas que manejan proyectos de construcción y necesitan controlar presupuestos, materiales y subcontratistas.</div>
+    <div class="cover-stats">
+      <div><div class="cstat-num">20 min</div><div class="cstat-lbl">Presentación</div></div>
+      <div><div class="cstat-num">6</div><div class="cstat-lbl">Módulos Demo</div></div>
+      <div><div class="cstat-num">7 días</div><div class="cstat-lbl">Implementación</div></div>
+    </div>
+  </div>
+  <div class="cover-footer"><div>📲 829-343-0288 · montech.do</div><div>Uso interno del equipo de ventas</div></div>
+</div>
+
+<!-- PÁGINA 2 -->
+<div class="page">
+  <div class="page-header"><div class="ph-logo">MonTech Constructoras</div><div class="ph-pg">Página 2 de 4</div></div>
+  <div class="sec-label">Preparación</div>
+  <div class="sec-title">Cómo abrir la<br/><em>presentación</em></div>
+  <div class="quote">"¿Cuántas veces ha terminado una obra y el costo real fue 30% más de lo presupuestado? El sistema de MonTech le dice exactamente cuándo se está saliendo del presupuesto, antes de que sea tarde."</div>
+  <ul class="step-list">
+    <li><div class="step-num">1</div><div class="step-content"><strong>Abre demo-construccion.html en Chrome</strong>Empieza en el Dashboard. Las tarjetas de proyectos con % de avance y presupuesto ejecutado dan una imagen poderosa de lo que el sistema puede hacer.</div></li>
+    <li><div class="step-num">2</div><div class="step-content"><strong>Pregunta sobre sus proyectos activos</strong>"¿Cuántos proyectos tiene corriendo ahora? ¿Cómo controla el gasto en materiales y subcontratistas?" Ese es su dolor principal.</div></li>
+    <li><div class="step-num">3</div><div class="step-content"><strong>Flujo recomendado (20 min)</strong>Proyectos → Cronograma Gantt → Presupuesto (partidas) → Materiales → Subcontratistas.</div></li>
+    <li><div class="step-num">4</div><div class="step-content"><strong>El gancho es el Presupuesto por Partidas</strong>Muestra la tabla de partidas con presupuesto vs ejecutado y la variación. Una constructora que se pasa del presupuesto en materiales pierde la ganancia del proyecto.</div></li>
+  </ul>
+  <div class="divider"></div>
+  <div class="sec-label">¿A quién le vendes esto?</div>
+  <div class="tip-row">
+    <div class="tip-card"><div class="tip-card-title">🏗️ Constructoras Medianas</div><div class="tip-card-body">3–10 proyectos simultáneos, equipo de gerentes de obra. El Dashboard multi-proyecto es el gancho: ver el avance de todos desde una pantalla.</div></div>
+    <div class="tip-card"><div class="tip-card-title">🏠 Contratistas Independientes</div><div class="tip-card-body">1–3 proyectos pero con presupuesto ajustado. El control de materiales y el cronograma Gantt les evita pasarse del presupuesto con el cliente.</div></div>
+    <div class="tip-card"><div class="tip-card-title">🏨 Desarrolladores Inmobiliarios</div><div class="tip-card-body">Proyectos grandes con muchos subcontratistas. La trazabilidad de pagos a subcontratistas (qué se pagó, qué queda) es el punto clave.</div></div>
+    <div class="tip-card"><div class="tip-card-title">🔧 Empresas de Mantenimiento</div><div class="tip-card-body">Órdenes de trabajo repetidas, inventario de materiales rotativo. El módulo de Materiales con alertas de stock es el diferenciador.</div></div>
+  </div>
+</div>
+
+<!-- PÁGINA 3 -->
+<div class="page">
+  <div class="page-header"><div class="ph-logo">MonTech Constructoras</div><div class="ph-pg">Página 3 de 4</div></div>
+  <div class="sec-label">La Demo</div>
+  <div class="sec-title">Qué decir en<br/><em>cada módulo</em></div>
+
+  <div class="module-card">
+    <div class="module-header"><div class="module-icon">📊</div><div class="module-name">Dashboard — Todos los proyectos de un vistazo</div></div>
+    <div class="module-body">Proyectos activos, presupuesto total, avance promedio y órdenes de compra pendientes. Las tarjetas de proyecto muestran la barra de avance, presupuesto ejecutado vs total y fecha de entrega.</div>
+    <div class="module-tip"><strong>Di esto:</strong> "¿Puede usted decirme ahora mismo cuánto ha gastado en materiales en todos sus proyectos este mes? Con MonTech lo ve en esta pantalla."</div>
+  </div>
+
+  <div class="module-card">
+    <div class="module-header"><div class="module-icon">🏗️</div><div class="module-name">Proyectos — Control completo por obra</div></div>
+    <div class="module-body">Cada proyecto tiene su ficha: cliente, ubicación, presupuesto, avance físico, costo ejecutado, fecha de inicio y entrega. Clic en el proyecto y entras al detalle completo con todas sus partidas.</div>
+    <div class="module-tip"><strong>Di esto:</strong> "Cuando el cliente le pregunta '¿cómo va mi obra?', usted abre esto y le muestra el avance en tiempo real. Eso genera confianza."</div>
+  </div>
+
+  <div class="module-card">
+    <div class="module-header"><div class="module-icon">📅</div><div class="module-name">Cronograma Gantt — El tiempo es dinero</div></div>
+    <div class="module-body">Vista de barras por fase: cimentación, estructura, mampostería, instalaciones, acabados. Cada barra muestra el % completado. Si una fase se retrasa, se ve de inmediato.</div>
+    <div class="module-tip"><strong>Di esto:</strong> "Un retraso de 2 semanas en instalaciones puede retrasar la entrega del proyecto completo. El Gantt le avisa antes de que el problema escale."</div>
+  </div>
+
+  <div class="module-card">
+    <div class="module-header"><div class="module-icon">💰</div><div class="module-name">Presupuesto — Partida por partida</div></div>
+    <div class="module-body">Desglose del presupuesto por partida (obra civil, mampostería, instalaciones, acabados, urbanización). Compara presupuesto vs ejecutado y muestra la variación en tiempo real. Alerta cuando una partida supera el presupuesto.</div>
+    <div class="module-tip"><strong>Di esto:</strong> "La mayoría de constructoras pierden dinero en 'los extras'. El sistema registra cada gasto por partida — usted sabe exactamente dónde se fue el dinero."</div>
+  </div>
+
+  <div class="module-card">
+    <div class="module-header"><div class="module-icon">📦</div><div class="module-name">Materiales — Stock por obra</div></div>
+    <div class="module-body">Inventario de materiales por proyecto: acero, cemento, bloques, arena, tubería, cable. Alertas cuando el stock llega al mínimo. Genera órdenes de compra automáticas antes de que pare la obra.</div>
+    <div class="module-tip"><strong>Di esto:</strong> "¿Ha tenido que parar una obra porque se quedó sin material? Eso es lo más caro que hay. Este módulo elimina ese problema."</div>
+  </div>
+
+  <div class="module-card">
+    <div class="module-header"><div class="module-icon">👷</div><div class="module-name">Subcontratistas — Pagos claros y trazables</div></div>
+    <div class="module-body">Registro de todos los subcontratistas por proyecto: contrato total, monto pagado, monto pendiente y estado (activo, completado, por cobrar). El gerente sabe exactamente qué debe y a quién.</div>
+    <div class="module-tip"><strong>Di esto:</strong> "¿Le ha pasado que un subcontratista dice que le debe más de lo que usted creía? Aquí todo queda firmado y registrado. Sin sorpresas."</div>
+  </div>
+</div>
+
+<!-- PÁGINA 4 -->
+<div class="page">
+  <div class="page-header"><div class="ph-logo">MonTech Constructoras</div><div class="ph-pg">Página 4 de 4</div></div>
+  <div class="sec-label">Manejo de Objeciones</div>
+  <div class="sec-title">Las 5 objeciones<br/><em>más comunes</em></div>
+  <table class="obj-table">
+    <tr><th>El cliente dice...</th><th>Tú respondes...</th></tr>
+    <tr><td>"Lo manejo en Excel y me funciona."</td><td>Excel no te alerta cuando una partida supera el presupuesto. No genera un cronograma Gantt actualizado automáticamente. Y si un empleado borra algo por error, no hay historial. MonTech sí tiene todo eso.</td></tr>
+    <tr><td>"Cada proyecto es diferente, no creo que un sistema se adapte."</td><td>El sistema es completamente flexible: usted define las partidas, los plazos y los subcontratistas para cada proyecto. No hay dos obras iguales y el sistema lo sabe.</td></tr>
+    <tr><td>"¿Cuánto tiempo toma aprender a usarlo?"</td><td>Un gerente de obra aprende los módulos principales en un día. La capacitación está incluida en los 7 días de implementación. Y nuestro soporte es presencial aquí en Santo Domingo.</td></tr>
+    <tr><td>"¿Mis arquitectos e ingenieros van a usarlo?"</td><td>El sistema no reemplaza AutoCAD ni los planos. Lo que hace es controlar la ejecución financiera y de tiempo de lo que el arquitecto diseñó. Son herramientas complementarias.</td></tr>
+    <tr><td>"El precio es alto para el tamaño de mi empresa."</td><td>Si en una obra de RD$5 millones usted se pasa RD$500K en materiales sin saberlo, eso es el 10% de ganancia que perdió. El sistema cuesta mucho menos que ese error.</td></tr>
+  </table>
+  <div class="divider"></div>
+  <div class="cta-box">
+    <div class="cta-title">¿Listo para cerrar?</div>
+    <div class="cta-sub">Ofrece cargar uno de sus proyectos actuales en el sistema durante la implementación. Cuando el cliente ve sus propias obras y presupuestos adentro, ya no quiere volver a Excel.</div>
+    <div class="cta-info">
+      <div class="cta-item"><div class="cta-item-val">📲 829-343-0288</div><div class="cta-item-lbl">WhatsApp Directo</div></div>
+      <div class="cta-item"><div class="cta-item-val">montech.do</div><div class="cta-item-lbl">Sitio Web</div></div>
+      <div class="cta-item"><div class="cta-item-val">7 días</div><div class="cta-item-lbl">Implementación</div></div>
+      <div class="cta-item"><div class="cta-item-val">Soporte RD</div><div class="cta-item-lbl">Presencial</div></div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

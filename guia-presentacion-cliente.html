@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MonTech — Guía de Presentación al Cliente</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    @page { margin: 0; size: A4; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #070707;
+      --card: #111111;
+      --line: rgba(200,200,200,0.1);
+      --silver: #c8c8c8;
+      --white: #f0f0f0;
+      --dim: #888;
+      --green: #4caf50;
+      --fd: 'Syne', sans-serif;
+      --fb: 'DM Sans', sans-serif;
+    }
+    body {
+      background: var(--bg);
+      color: var(--white);
+      font-family: var(--fb);
+      font-weight: 300;
+      font-size: 13px;
+      line-height: 1.65;
+      padding: 0;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    /* COVER */
+    .cover {
+      width: 100%;
+      min-height: 100vh;
+      background: #070707;
+      display: flex;
+      flex-direction: column;
+      padding: 56px 64px;
+      position: relative;
+      overflow: hidden;
+      page-break-after: always;
+    }
+    .cover-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(200,200,200,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(200,200,200,0.025) 1px, transparent 1px);
+      background-size: 48px 48px;
+    }
+    .cover-glow {
+      position: absolute;
+      top: -100px; left: 50%;
+      transform: translateX(-50%);
+      width: 600px; height: 600px;
+      background: radial-gradient(ellipse, rgba(180,180,180,0.06) 0%, transparent 70%);
+    }
+    .cover-logo {
+      font-family: var(--fd);
+      font-size: 1.4rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #fff 0%, #888 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -.02em;
+      z-index: 1;
+    }
+    .cover-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      z-index: 1;
+    }
+    .cover-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .72rem;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--dim);
+      border: 1px solid rgba(200,200,200,0.15);
+      padding: .35rem 1rem;
+      border-radius: 40px;
+      width: fit-content;
+      margin-bottom: 2.5rem;
+    }
+    .cover-dot { width: 6px; height: 6px; background: var(--silver); border-radius: 50%; }
+    .cover-title {
+      font-family: var(--fd);
+      font-size: 4rem;
+      font-weight: 800;
+      letter-spacing: -.04em;
+      line-height: 1.0;
+      margin-bottom: 2rem;
+    }
+    .cover-title .dim { color: #3a3a3a; }
+    .cover-title .bright {
+      background: linear-gradient(135deg, #fff 0%, #c8c8c8 50%, #888 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .cover-sub {
+      font-size: 1.05rem;
+      color: var(--dim);
+      max-width: 480px;
+      line-height: 1.7;
+    }
+    .cover-stats {
+      display: flex;
+      gap: 3.5rem;
+      margin-top: 4rem;
+      padding-top: 2.5rem;
+      border-top: 1px solid var(--line);
+    }
+    .cstat-num {
+      font-family: var(--fd);
+      font-size: 2rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #fff, #888);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .cstat-lbl { font-size: .72rem; color: #555; letter-spacing: .08em; text-transform: uppercase; margin-top: .2rem; }
+    .cover-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1;
+      font-size: .75rem;
+      color: #444;
+    }
+
+    /* CONTENT PAGES */
+    .page {
+      width: 100%;
+      min-height: 100vh;
+      background: var(--bg);
+      padding: 52px 64px;
+      page-break-after: always;
+    }
+    .page:last-child { page-break-after: auto; }
+
+    /* SECTION HEADER */
+    .sec-label {
+      font-size: .68rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: #555;
+      margin-bottom: .6rem;
+    }
+    .sec-title {
+      font-family: var(--fd);
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -.03em;
+      line-height: 1.1;
+      margin-bottom: 1.8rem;
+    }
+    .sec-title em {
+      font-style: normal;
+      background: linear-gradient(135deg, #fff, var(--silver));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* QUOTE BOX */
+    .quote {
+      background: rgba(200,200,200,0.04);
+      border-left: 3px solid var(--silver);
+      border-radius: 0 10px 10px 0;
+      padding: 1rem 1.2rem;
+      font-size: .95rem;
+      color: var(--silver);
+      font-style: italic;
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+
+    /* MODULE CARDS */
+    .module-card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 1.3rem 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .module-header {
+      display: flex;
+      align-items: center;
+      gap: .8rem;
+      margin-bottom: .7rem;
+    }
+    .module-icon { font-size: 1.2rem; }
+    .module-name {
+      font-family: var(--fd);
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--white);
+    }
+    .module-body { font-size: .88rem; color: #888; line-height: 1.65; margin-bottom: .7rem; }
+    .module-tip {
+      font-size: .8rem;
+      color: var(--silver);
+      background: rgba(200,200,200,0.05);
+      border-radius: 8px;
+      padding: .5rem .8rem;
+    }
+    .module-tip strong { color: var(--white); }
+
+    /* OBJECTIONS TABLE */
+    .obj-table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; }
+    .obj-table th {
+      text-align: left;
+      font-size: .68rem;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: #555;
+      padding: .5rem .8rem;
+      border-bottom: 1px solid var(--line);
+      font-weight: 500;
+    }
+    .obj-table td {
+      padding: .9rem .8rem;
+      font-size: .85rem;
+      border-bottom: 1px solid rgba(200,200,200,0.04);
+      vertical-align: top;
+      line-height: 1.6;
+    }
+    .obj-table td:first-child { color: var(--silver); font-style: italic; width: 38%; }
+    .obj-table td:last-child { color: #888; }
+    .obj-table tr:last-child td { border-bottom: none; }
+
+    /* TIPS */
+    .tip-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 1.2rem;
+    }
+    .tip-card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 1.1rem;
+    }
+    .tip-card-title {
+      font-family: var(--fd);
+      font-size: .82rem;
+      font-weight: 700;
+      color: var(--silver);
+      margin-bottom: .5rem;
+    }
+    .tip-card-body { font-size: .8rem; color: #777; line-height: 1.6; }
+
+    /* CTA SECTION */
+    .cta-box {
+      background: rgba(200,200,200,0.04);
+      border: 1px solid rgba(200,200,200,0.12);
+      border-radius: 20px;
+      padding: 2.5rem;
+      text-align: center;
+      margin-top: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-box::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 60%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--silver), transparent);
+    }
+    .cta-title {
+      font-family: var(--fd);
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: -.03em;
+      margin-bottom: .7rem;
+    }
+    .cta-sub { color: #666; font-size: .9rem; margin-bottom: 1.5rem; }
+    .cta-info {
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
+      flex-wrap: wrap;
+    }
+    .cta-item { text-align: center; }
+    .cta-item-val { font-family: var(--fd); font-size: 1.1rem; font-weight: 700; color: var(--white); }
+    .cta-item-lbl { font-size: .72rem; color: #555; margin-top: .2rem; text-transform: uppercase; letter-spacing: .06em; }
+
+    /* PAGE NUMBER */
+    .pg-num {
+      position: fixed;
+      bottom: 28px;
+      right: 64px;
+      font-size: .7rem;
+      color: #333;
+    }
+
+    /* DIVIDER */
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--line), transparent);
+      margin: 1.5rem 0;
+    }
+
+    /* STEP LIST */
+    .steps { display: flex; flex-direction: column; gap: .8rem; }
+    .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 1rem 1.2rem;
+    }
+    .step-num {
+      font-family: var(--fd);
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: #2a2a2a;
+      line-height: 1;
+      flex-shrink: 0;
+      min-width: 28px;
+    }
+    .step-title { font-size: .9rem; font-weight: 500; color: var(--white); margin-bottom: .25rem; }
+    .step-body { font-size: .82rem; color: #666; line-height: 1.6; }
+  </style>
+</head>
+<body>
+
+  <!-- ── PORTADA ── -->
+  <div class="cover">
+    <div class="cover-grid"></div>
+    <div class="cover-glow"></div>
+
+    <div class="cover-logo">MonTech</div>
+
+    <div class="cover-body">
+      <div class="cover-tag">
+        <div class="cover-dot"></div>
+        Guía interna · Equipo de ventas
+      </div>
+
+      <div class="cover-title">
+        <div class="bright">Cómo presentar</div>
+        <div class="dim">la demo del</div>
+        <div class="bright">ERP al cliente.</div>
+      </div>
+
+      <p class="cover-sub">
+        Guía paso a paso para mostrar MonTech ERP, responder objeciones y cerrar la venta. Usa la demo interactiva en el celular o laptop del cliente.
+      </p>
+
+      <div class="cover-stats">
+        <div>
+          <div class="cstat-num">5</div>
+          <div class="cstat-lbl">módulos a mostrar</div>
+        </div>
+        <div>
+          <div class="cstat-num">3</div>
+          <div class="cstat-lbl">objeciones comunes</div>
+        </div>
+        <div>
+          <div class="cstat-num">20 min</div>
+          <div class="cstat-lbl">duración ideal</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cover-footer">
+      <span>MonTech — Software empresarial para República Dominicana</span>
+      <span>829-343-0288 · montech.do</span>
+    </div>
+  </div>
+
+  <!-- ── PÁGINA 2: APERTURA ── -->
+  <div class="page">
+    <p class="sec-label">Antes de empezar</p>
+    <h2 class="sec-title">Cómo <em>abrir</em> la presentación.</h2>
+
+    <div class="quote">
+      "Mira, en vez de explicarte lo que hace el sistema, déjame mostrártelo funcionando. Esto es exactamente lo que tu empresa vería cada día."
+    </div>
+
+    <p style="color:#666;font-size:.88rem;margin-bottom:1.5rem">
+      Abre <strong style="color:var(--silver)">demo-erp.html</strong> en el celular o laptop del cliente y deja que él lo toque. El sistema está en español, con pesos dominicanos y datos de empresas locales — el cliente se reconocerá enseguida.
+    </p>
+
+    <div class="divider"></div>
+    <p class="sec-label">Flujo recomendado</p>
+    <h3 style="font-family:var(--fd);font-size:1.1rem;font-weight:700;color:var(--white);margin-bottom:1rem">Orden de los módulos (20 minutos)</h3>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div>
+          <div class="step-title">Dashboard (3 min) — El impacto visual</div>
+          <div class="step-body">Aquí el cliente ve KPIs, alertas y la gráfica de ventas. Es el primer "wow". Deja que lo mire 30 segundos antes de hablar.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div>
+          <div class="step-title">Ventas y Facturación (5 min) — La herramienta diaria</div>
+          <div class="step-body">Muestra la búsqueda de facturas, el filtro por estado y crea una factura nueva en vivo. El cálculo automático del ITBIS sorprende siempre.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div>
+          <div class="step-title">Inventario (4 min) — El dolor más común</div>
+          <div class="step-body">Señala los productos en rojo. Pregunta si le ha pasado vender algo que no tenía. Casi siempre dice que sí.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <div>
+          <div class="step-title">Nómina (4 min) — El tiempo que se ahorra</div>
+          <div class="step-body">Muestra el ISR y TSS calculados automáticamente. Pregunta cuánto tiempo le toma hacer la nómina hoy. Luego presiona "Procesar Nómina".</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">05</div>
+        <div>
+          <div class="step-title">Reportes DGII (4 min) — El cierre del argumento</div>
+          <div class="step-body">Muestra los tabs 606, 607, 608. Pregunta cuánto paga para que alguien haga esos reportes. Con MonTech salen automáticos.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PÁGINA 3: MÓDULOS ── -->
+  <div class="page">
+    <p class="sec-label">Argumentos por módulo</p>
+    <h2 class="sec-title">Qué decirle en <em>cada pantalla.</em></h2>
+
+    <div class="module-card">
+      <div class="module-header">
+        <span class="module-icon">📊</span>
+        <span class="module-name">Dashboard</span>
+      </div>
+      <p class="module-body">"Esto es lo primero que ves cuando llegas a tu negocio. De un vistazo sabes cuánto vendiste hoy, qué facturas están pendientes de cobro, si te falta inventario y si la nómina está al día con la DGII. Sin llamar a nadie, sin esperar reportes."</p>
+      <div class="module-tip"><strong>Punto de enganche:</strong> Señala la alerta de la factura vencida. "¿Cuántas veces te ha pasado que un cliente te debe y te enteraste cuando ya era tarde?"</div>
+    </div>
+
+    <div class="module-card">
+      <div class="module-header">
+        <span class="module-icon">📋</span>
+        <span class="module-name">Ventas y Facturación</span>
+      </div>
+      <p class="module-body">"Aquí están todas tus facturas. Puedes buscar por cliente, filtrar las pendientes, las pagadas, las vencidas. Y cuando vas a facturar, el sistema asigna el NCF automáticamente y calcula el ITBIS solo. Nunca más errores con los comprobantes."</p>
+      <div class="module-tip"><strong>Demostración en vivo:</strong> Toca "+ Nueva Factura", escribe un monto y muéstrale cómo el ITBIS aparece solo. Eso cierra la conversación sobre errores de facturación.</div>
+    </div>
+
+    <div class="module-card">
+      <div class="module-header">
+        <span class="module-icon">📦</span>
+        <span class="module-name">Inventario</span>
+      </div>
+      <p class="module-body">"¿Cuántas veces has vendido algo que no tenías en físico? Con MonTech eso no pasa. El inventario se actualiza cada vez que facturas. Y las barras rojas te avisan antes de quedarte sin stock, no después."</p>
+      <div class="module-tip"><strong>Punto de enganche:</strong> Señala el Cemento Portland y la Varilla en rojo. "El sistema te avisa antes de que el cliente llame preguntando dónde está su pedido."</div>
+    </div>
+
+    <div class="module-card">
+      <div class="module-header">
+        <span class="module-icon">👥</span>
+        <span class="module-name">Nómina y RRHH</span>
+      </div>
+      <p class="module-body">"¿Cuánto tiempo te toma hacer la nómina cada mes? Con MonTech presionas un botón y tienes el ISR, el TSS y la regalía de cada empleado calculados según la ley dominicana. Los reportes DGT-3 y DGT-5 para la DGII salen automáticos."</p>
+      <div class="module-tip"><strong>Para empresas con +10 empleados:</strong> "Nómina que antes tomaba 2 días ahora se hace en 10 minutos. Eso son horas de tu contador que puedes usar en otra cosa."</div>
+    </div>
+
+    <div class="module-card">
+      <div class="module-header">
+        <span class="module-icon">📑</span>
+        <span class="module-name">Reportes DGII</span>
+      </div>
+      <p class="module-body">"El 606, el 607, el 608 — el sistema los genera automáticamente. No tienes que hacer Excel ni contratar a alguien solo para eso. Cuando la DGII los pida, ya están listos para descargar."</p>
+      <div class="module-tip"><strong>Pregunta clave:</strong> "¿Cuánto te cobra tu contador solo por armar los reportes de la DGII cada mes? Con MonTech eso está incluido."</div>
+    </div>
+  </div>
+
+  <!-- ── PÁGINA 4: OBJECIONES Y CIERRE ── -->
+  <div class="page">
+    <p class="sec-label">Manejo de objeciones</p>
+    <h2 class="sec-title">Las respuestas <em>que funcionan.</em></h2>
+
+    <table class="obj-table">
+      <thead>
+        <tr>
+          <th>Objeción del cliente</th>
+          <th>Cómo responder</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>"Es caro para mi negocio."</td>
+          <td>"¿Cuánto te cuesta un error de DGII, una factura perdida o pagar de más en nómina? MonTech empieza en US$80/mes — menos que un empleado de medio tiempo, y trabaja las 24 horas."</td>
+        </tr>
+        <tr>
+          <td>"No soy bueno con tecnología."</td>
+          <td>"Por eso te lo instalamos nosotros. En 5 días tu equipo ya está usando el sistema. Y si tienes una duda, nos llamas directamente y venimos a tu negocio — estamos en Santo Domingo."</td>
+        </tr>
+        <tr>
+          <td>"Ya tengo un sistema."</td>
+          <td>"¿Ese sistema te genera el 606 automático? ¿Calcula el ISR de cada empleado? ¿Te avisa cuando el inventario está bajo? Si no, no es un ERP — es un Excel con botones."</td>
+        </tr>
+        <tr>
+          <td>"Déjame pensarlo."</td>
+          <td>"Claro. ¿Qué módulo te pareció más útil para tu operación? [Escucha la respuesta]. Ese es exactamente el punto de partida. Puedo tenerte una cotización hoy mismo."</td>
+        </tr>
+        <tr>
+          <td>"¿Y si algo falla?"</td>
+          <td>"Soporte 24/7 directo por WhatsApp. Y para el plan Business, visitas presenciales incluidas. No eres un ticket de soporte — eres un cliente de MonTech."</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="divider"></div>
+
+    <p class="sec-label">Cómo cerrar</p>
+    <h3 style="font-family:var(--fd);font-size:1.1rem;font-weight:700;color:var(--white);margin-bottom:1rem">La pregunta de cierre</h3>
+
+    <div class="quote">
+      "¿Qué módulo te pareció más útil para tu negocio?"
+    </div>
+
+    <p style="color:#666;font-size:.85rem;margin-bottom:1.2rem">Cuando el cliente responde → <span style="color:var(--silver)">"Ese es exactamente por donde empezamos. Te hacemos la implementación, te capacitamos al equipo y en 5 días estás operando. ¿Te hago una cotización esta semana?"</span></p>
+
+    <div class="tip-row">
+      <div class="tip-card">
+        <div class="tip-card-title">✓ Lo que SÍ funciona</div>
+        <div class="tip-card-body">Dejar que el cliente toque la demo solo. Hacer preguntas sobre sus dolores actuales. Mencionar clientes similares a su industria. Dar precio después del "wow".</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-card-title">✗ Lo que NO funciona</div>
+        <div class="tip-card-body">Hablar de tecnología antes de hablar del problema. Dar precio al inicio. Mostrar todos los módulos sin dejar que el cliente interactúe. Hablar más de 20 minutos sin pausa.</div>
+      </div>
+    </div>
+
+    <div class="cta-box">
+      <div class="cta-title">Datos de contacto MonTech</div>
+      <p class="cta-sub">Para cotizaciones, preguntas técnicas o agendar una visita presencial</p>
+      <div class="cta-info">
+        <div class="cta-item">
+          <div class="cta-item-val">829-343-0288</div>
+          <div class="cta-item-lbl">WhatsApp directo</div>
+        </div>
+        <div class="cta-item">
+          <div class="cta-item-val">montech.do</div>
+          <div class="cta-item-lbl">Sitio web</div>
+        </div>
+        <div class="cta-item">
+          <div class="cta-item-val">Santo Domingo, RD</div>
+          <div class="cta-item-lbl">Soporte presencial</div>
+        </div>
+        <div class="cta-item">
+          <div class="cta-item-val">5 días</div>
+          <div class="cta-item-lbl">Implementación</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

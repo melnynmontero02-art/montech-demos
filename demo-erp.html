@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MonTech ERP — Demo Interactiva</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:     #070707;
+      --sb:     #0a0a0a;
+      --card:   #0e0e0e;
+      --card2:  #131313;
+      --line:   rgba(200,200,200,0.07);
+      --line-b: rgba(200,200,200,0.14);
+      --txt:    #e0e0e0;
+      --txt2:   #8a8a8a;
+      --txt3:   #4a4a4a;
+      --silver: #c8c8c8;
+      --green:  #4caf50;
+      --yellow: #ffc107;
+      --red:    #ef5350;
+      --blue:   #42a5f5;
+      --fd:     'Syne', sans-serif;
+      --fb:     'DM Sans', sans-serif;
+    }
+    html, body { height: 100%; overflow: hidden; }
+    body { background: var(--bg); color: var(--txt); font-family: var(--fb); font-size: 13px; display: flex; flex-direction: column; }
+
+    /* ─── DEMO BANNER ─── */
+    .demo-banner {
+      background: rgba(200,200,200,0.04);
+      border-bottom: 1px solid var(--line-b);
+      padding: .45rem 1.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+      font-size: .76rem; color: var(--txt2); flex-shrink: 0;
+      gap: 1rem;
+    }
+    .demo-banner strong { color: var(--silver); }
+    .demo-cta {
+      background: #fff; color: #000; font-weight: 700;
+      padding: .3rem 1rem; border-radius: 20px; text-decoration: none;
+      font-family: var(--fd); font-size: .73rem; letter-spacing: .03em;
+      white-space: nowrap; transition: background .2s;
+    }
+    .demo-cta:hover { background: var(--silver); }
+
+    /* ─── APP SHELL ─── */
+    .app { display: flex; flex: 1; overflow: hidden; }
+
+    /* ─── SIDEBAR ─── */
+    .sidebar {
+      width: 210px; background: var(--sb);
+      border-right: 1px solid var(--line);
+      display: flex; flex-direction: column; flex-shrink: 0; overflow-y: auto;
+    }
+    .sb-logo {
+      padding: 1.1rem 1.1rem .9rem;
+      border-bottom: 1px solid var(--line);
+      font-family: var(--fd); font-size: 1rem; font-weight: 800;
+      letter-spacing: -.02em;
+      background: linear-gradient(135deg, #fff 0%, #888 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .sb-section { padding: .7rem .7rem .2rem; }
+    .sb-lbl { font-size: .6rem; letter-spacing: .14em; text-transform: uppercase; color: var(--txt3); padding: 0 .45rem; margin-bottom: .35rem; }
+    .sb-btn {
+      display: flex; align-items: center; gap: .65rem;
+      padding: .5rem .75rem; border-radius: 8px;
+      color: var(--txt2); font-size: .82rem;
+      cursor: pointer; border: none; background: transparent;
+      width: 100%; text-align: left;
+      transition: background .18s, color .18s;
+    }
+    .sb-btn:hover { background: rgba(200,200,200,0.05); color: var(--txt); }
+    .sb-btn.active { background: rgba(200,200,200,0.1); color: #fff; }
+    .sb-ico { font-size: .95rem; width: 17px; text-align: center; flex-shrink: 0; }
+    .sb-badge {
+      margin-left: auto; background: var(--red); color: #fff;
+      font-size: .58rem; font-weight: 700; padding: .1rem .38rem;
+      border-radius: 20px; min-width: 17px; text-align: center;
+    }
+    .sb-footer { margin-top: auto; padding: .9rem; border-top: 1px solid var(--line); }
+    .sb-user { display: flex; align-items: center; gap: .6rem; }
+    .sb-av {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: rgba(200,200,200,0.08); border: 1px solid var(--line-b);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--fd); font-size: .65rem; font-weight: 700; color: var(--silver);
+    }
+    .sb-uname { font-size: .8rem; color: var(--txt); font-weight: 500; line-height: 1.2; }
+    .sb-urole { font-size: .68rem; color: var(--txt3); }
+
+    /* ─── MAIN ─── */
+    .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+    /* ─── TOPBAR ─── */
+    .topbar {
+      height: 54px; border-bottom: 1px solid var(--line);
+      display: flex; align-items: center; padding: 0 1.3rem; gap: .8rem; flex-shrink: 0;
+    }
+    .tb-title { font-family: var(--fd); font-size: .9rem; font-weight: 700; flex: 1; }
+    .tb-search {
+      display: flex; align-items: center; gap: .45rem;
+      background: var(--card); border: 1px solid var(--line);
+      border-radius: 8px; padding: .38rem .7rem; max-width: 220px; flex: 1;
+      transition: border-color .2s;
+    }
+    .tb-search:focus-within { border-color: var(--line-b); }
+    .tb-search input {
+      background: transparent; border: none; outline: none;
+      color: var(--txt); font-size: .8rem; font-family: var(--fb); width: 100%;
+    }
+    .tb-search input::placeholder { color: var(--txt3); }
+    .tb-ico {
+      width: 32px; height: 32px; background: var(--card); border: 1px solid var(--line);
+      border-radius: 8px; display: flex; align-items: center; justify-content: center;
+      cursor: pointer; color: var(--txt2); font-size: .85rem; position: relative; transition: background .2s;
+    }
+    .tb-ico:hover { background: var(--card2); }
+    .notif-dot {
+      position: absolute; top: 5px; right: 5px;
+      width: 6px; height: 6px; background: var(--red);
+      border-radius: 50%; border: 1.5px solid var(--bg);
+    }
+    .tb-date { font-size: .74rem; color: var(--txt3); white-space: nowrap; }
+
+    /* ─── PAGE AREA ─── */
+    .page-area { flex: 1; overflow-y: auto; padding: 1.3rem; }
+    .page { display: none; }
+    .page.active { display: block; }
+
+    /* ─── KPI ROW ─── */
+    .kpi-row { display: grid; grid-template-columns: repeat(4,1fr); gap: .9rem; margin-bottom: 1.2rem; }
+    .kpi {
+      background: var(--card); border: 1px solid var(--line);
+      border-radius: 14px; padding: 1.1rem; position: relative; overflow: hidden;
+    }
+    .kpi::after {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    }
+    .kpi.g::after { background: var(--green); }
+    .kpi.y::after { background: var(--yellow); }
+    .kpi.b::after { background: var(--blue); }
+    .kpi.s::after { background: var(--silver); }
+    .kpi-lbl { font-size: .68rem; color: var(--txt3); text-transform: uppercase; letter-spacing: .08em; margin-bottom: .45rem; }
+    .kpi-val { font-family: var(--fd); font-size: 1.5rem; font-weight: 700; color: var(--txt); line-height: 1; margin-bottom: .35rem; }
+    .kpi-sub { font-size: .7rem; color: var(--txt2); }
+    .kpi-delta { font-size: .7rem; margin-top: .25rem; }
+    .up { color: var(--green); }
+    .dn { color: var(--red); }
+
+    /* ─── GRID ─── */
+    .g2 { display: grid; grid-template-columns: 1fr 320px; gap: .9rem; }
+    .g3 { display: grid; grid-template-columns: repeat(3,1fr); gap: .9rem; margin-bottom: 1.1rem; }
+
+    /* ─── CARD ─── */
+    .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 1.1rem; }
+    .card-h { display: flex; align-items: center; justify-content: space-between; margin-bottom: .9rem; }
+    .card-t { font-family: var(--fd); font-size: .82rem; font-weight: 700; }
+    .card-a { font-size: .72rem; color: var(--txt3); cursor: pointer; transition: color .2s; }
+    .card-a:hover { color: var(--silver); }
+
+    /* ─── TABLE ─── */
+    .tbl { width: 100%; border-collapse: collapse; }
+    .tbl th {
+      text-align: left; font-size: .64rem; text-transform: uppercase;
+      letter-spacing: .09em; color: var(--txt3);
+      padding: .35rem .55rem; border-bottom: 1px solid var(--line); font-weight: 500;
+    }
+    .tbl td {
+      padding: .55rem .55rem; font-size: .8rem; color: var(--txt2);
+      border-bottom: 1px solid rgba(200,200,200,0.03); vertical-align: middle;
+    }
+    .tbl tr:last-child td { border-bottom: none; }
+    .tbl tr:hover td { background: rgba(200,200,200,0.015); }
+    .tw { color: var(--txt); font-weight: 500; }
+    .ts { font-size: .68rem; color: var(--txt3); }
+
+    /* ─── BADGES ─── */
+    .badge {
+      display: inline-flex; align-items: center;
+      font-size: .64rem; padding: .15rem .5rem;
+      border-radius: 20px; font-weight: 600; letter-spacing: .02em; white-space: nowrap;
+    }
+    .bg { background: rgba(76,175,80,.12); color: #81c784; }
+    .by { background: rgba(255,193,7,.12); color: #ffd54f; }
+    .br { background: rgba(239,83,80,.12); color: #ef9a9a; }
+    .bb { background: rgba(66,165,245,.12); color: #90caf9; }
+    .bgr { background: rgba(200,200,200,.07); color: var(--txt3); }
+
+    /* ─── ALERTS ─── */
+    .alerts { display: flex; flex-direction: column; gap: .55rem; }
+    .alert-item {
+      display: flex; align-items: flex-start; gap: .65rem;
+      background: var(--card2); border: 1px solid var(--line);
+      border-radius: 10px; padding: .65rem;
+    }
+    .a-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; margin-top: .22rem; }
+    .a-dot-r { background: var(--red); }
+    .a-dot-y { background: var(--yellow); }
+    .a-t { font-size: .78rem; color: var(--txt); margin-bottom: .08rem; }
+    .a-s { font-size: .7rem; color: var(--txt3); }
+
+    /* ─── PAGE HEADER ─── */
+    .ph { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.1rem; }
+    .ph h1 { font-family: var(--fd); font-size: 1rem; font-weight: 700; }
+
+    /* ─── BUTTONS ─── */
+    .btn { padding: .48rem 1rem; border-radius: 8px; font-family: var(--fb); font-size: .8rem; cursor: pointer; transition: all .18s; border: none; }
+    .btn-p { background: #fff; color: #000; font-weight: 600; }
+    .btn-p:hover { background: var(--silver); }
+    .btn-g { background: transparent; color: var(--txt2); border: 1px solid var(--line-b); }
+    .btn-g:hover { color: var(--txt); border-color: var(--silver); }
+
+    /* ─── FILTER BAR ─── */
+    .fbar { display: flex; gap: .55rem; margin-bottom: .9rem; flex-wrap: wrap; }
+    .fi {
+      background: var(--card); border: 1px solid var(--line);
+      border-radius: 8px; padding: .42rem .7rem;
+      color: var(--txt); font-family: var(--fb); font-size: .8rem;
+      outline: none; transition: border-color .2s;
+    }
+    .fi:focus { border-color: var(--line-b); }
+    .fi::placeholder { color: var(--txt3); }
+    select.fi { cursor: pointer; }
+
+    /* ─── STOCK BAR ─── */
+    .sbar { background: #111; border-radius: 3px; height: 4px; width: 72px; overflow: hidden; }
+    .sfill { height: 100%; border-radius: 3px; }
+    .sfill.hi { background: var(--green); }
+    .sfill.mi { background: var(--yellow); }
+    .sfill.lo { background: var(--red); }
+
+    /* ─── REPORT TABS ─── */
+    .rtabs { display: flex; gap: .45rem; margin-bottom: 1rem; }
+    .rtab {
+      padding: .42rem .9rem; border-radius: 8px; font-size: .8rem;
+      cursor: pointer; border: 1px solid var(--line);
+      background: transparent; color: var(--txt2); transition: all .18s;
+    }
+    .rtab.active { background: rgba(200,200,200,.1); color: var(--txt); border-color: var(--line-b); }
+    .rinfo {
+      background: rgba(66,165,245,.06); border: 1px solid rgba(66,165,245,.15);
+      border-radius: 10px; padding: .7rem 1rem; font-size: .78rem;
+      color: #90caf9; margin-bottom: .9rem;
+    }
+
+    /* ─── MODAL ─── */
+    .moverlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,.8);
+      backdrop-filter: blur(8px); z-index: 100;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; transition: opacity .22s;
+    }
+    .moverlay.open { opacity: 1; pointer-events: all; }
+    .mbox {
+      background: #0d0d0d; border: 1px solid var(--line-b);
+      border-radius: 16px; padding: 1.6rem;
+      width: 520px; max-width: 95vw; max-height: 90vh; overflow-y: auto;
+      transform: scale(.95); transition: transform .22s;
+    }
+    .moverlay.open .mbox { transform: scale(1); }
+    .mh { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.3rem; }
+    .mt { font-family: var(--fd); font-size: .95rem; font-weight: 700; }
+    .mc { background: none; border: none; color: var(--txt3); font-size: 1.1rem; cursor: pointer; transition: color .18s; }
+    .mc:hover { color: var(--txt); }
+    .frow { display: grid; grid-template-columns: 1fr 1fr; gap: .7rem; margin-bottom: .7rem; }
+    .fg { display: flex; flex-direction: column; gap: .35rem; }
+    .fl { font-size: .66rem; color: var(--txt3); text-transform: uppercase; letter-spacing: .08em; }
+    .fin {
+      background: var(--card); border: 1px solid var(--line);
+      border-radius: 8px; padding: .45rem .7rem;
+      color: var(--txt); font-family: var(--fb); font-size: .82rem;
+      outline: none; transition: border-color .2s; width: 100%;
+    }
+    .fin:focus { border-color: var(--line-b); }
+    .mfoot { display: flex; gap: .55rem; justify-content: flex-end; margin-top: 1.1rem; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 860px) {
+      .sidebar { display: none; }
+      .kpi-row { grid-template-columns: repeat(2,1fr); }
+      .g2 { grid-template-columns: 1fr; }
+      .g3 { grid-template-columns: repeat(2,1fr); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- DEMO BANNER -->
+  <div class="demo-banner">
+    <span>🟢 <strong>MonTech ERP — Demo interactiva</strong> · Datos de ejemplo · Navega los módulos del sidebar</span>
+    <a class="demo-cta" href="https://wa.me/18293430288?text=Vi%20la%20demo%20del%20ERP%20de%20MonTech%20y%20quiero%20m%C3%A1s%20informaci%C3%B3n" target="_blank">Quiero MonTech para mi empresa →</a>
+  </div>
+
+  <div class="app">
+
+    <!-- SIDEBAR -->
+    <nav class="sidebar">
+      <div class="sb-logo">MonTech ERP</div>
+
+      <div class="sb-section">
+        <div class="sb-lbl">Principal</div>
+        <button class="sb-btn active" onclick="nav('dashboard')"><span class="sb-ico">📊</span>Dashboard</button>
+        <button class="sb-btn" onclick="nav('ventas')"><span class="sb-ico">📋</span>Ventas<span class="sb-badge">3</span></button>
+        <button class="sb-btn" onclick="nav('inventario')"><span class="sb-ico">📦</span>Inventario</button>
+        <button class="sb-btn" onclick="nav('nomina')"><span class="sb-ico">👥</span>Nómina</button>
+        <button class="sb-btn" onclick="nav('reportes')"><span class="sb-ico">📑</span>Reportes DGII</button>
+      </div>
+
+      <div class="sb-section">
+        <div class="sb-lbl">Sistema</div>
+        <button class="sb-btn" onclick="tip('Usuarios y permisos disponibles en versión completa')"><span class="sb-ico">👤</span>Usuarios</button>
+        <button class="sb-btn" onclick="tip('Configuración disponible en versión completa')"><span class="sb-ico">⚙️</span>Configuración</button>
+      </div>
+
+      <div class="sb-footer">
+        <div class="sb-user">
+          <div class="sb-av">AD</div>
+          <div>
+            <div class="sb-uname">Administrador</div>
+            <div class="sb-urole">Empresa Demo S.R.L.</div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- MAIN -->
+    <main class="main">
+
+      <!-- TOPBAR -->
+      <div class="topbar">
+        <div class="tb-title" id="tb-title">Dashboard</div>
+        <div class="tb-search">
+          <span style="color:var(--txt3);font-size:.85rem">🔍</span>
+          <input type="text" placeholder="Buscar facturas, clientes..."/>
+        </div>
+        <div class="tb-ico" title="Notificaciones">🔔<div class="notif-dot"></div></div>
+        <div class="tb-ico" title="Perfil">👤</div>
+        <div class="tb-date" id="clock"></div>
+      </div>
+
+      <!-- PAGES -->
+      <div class="page-area">
+
+        <!-- ══ DASHBOARD ══ -->
+        <div id="page-dashboard" class="page active">
+
+          <div class="kpi-row">
+            <div class="kpi g">
+              <div class="kpi-lbl">Ventas hoy</div>
+              <div class="kpi-val">RD$284K</div>
+              <div class="kpi-sub">12 facturas emitidas</div>
+              <div class="kpi-delta up">↑ 18% vs ayer</div>
+            </div>
+            <div class="kpi y">
+              <div class="kpi-lbl">Facturas pendientes</div>
+              <div class="kpi-val">18</div>
+              <div class="kpi-sub">RD$1.24M en total</div>
+              <div class="kpi-delta dn">↑ 3 nuevas hoy</div>
+            </div>
+            <div class="kpi b">
+              <div class="kpi-lbl">Productos activos</div>
+              <div class="kpi-val">1,240</div>
+              <div class="kpi-sub">8 con stock bajo</div>
+              <div class="kpi-delta dn">⚠ Requiere atención</div>
+            </div>
+            <div class="kpi s">
+              <div class="kpi-lbl">Empleados</div>
+              <div class="kpi-val">24</div>
+              <div class="kpi-sub">Nómina: RD$820K/mes</div>
+              <div class="kpi-delta up">✓ Al día con DGII</div>
+            </div>
+          </div>
+
+          <div class="g2">
+            <div class="card">
+              <div class="card-h">
+                <span class="card-t">Ventas — últimos 7 días</span>
+                <span class="card-a" onclick="nav('ventas')">Ver detalle →</span>
+              </div>
+              <svg width="100%" height="130" viewBox="0 0 560 130" preserveAspectRatio="none" id="chart"></svg>
+              <div style="display:flex;justify-content:space-between;font-size:.62rem;color:var(--txt3);margin-top:.4rem;padding:0 4px">
+                <span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span><span>Hoy</span>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-h">
+                <span class="card-t">Alertas</span>
+                <span class="badge br">4</span>
+              </div>
+              <div class="alerts">
+                <div class="alert-item"><div class="a-dot a-dot-r"></div><div><div class="a-t">Stock bajo: Cemento Portland</div><div class="a-s">Quedan 12 sacos — mínimo 50</div></div></div>
+                <div class="alert-item"><div class="a-dot a-dot-y"></div><div><div class="a-t">Factura vencida: Distribuidora Norte</div><div class="a-s">RD$89,200 · Vence hace 5 días</div></div></div>
+                <div class="alert-item"><div class="a-dot a-dot-r"></div><div><div class="a-t">Stock bajo: Varilla corrugada 3/8"</div><div class="a-s">Quedan 8 quintales — mínimo 30</div></div></div>
+                <div class="alert-item"><div class="a-dot a-dot-y"></div><div><div class="a-t">Reporte 606 pendiente</div><div class="a-s">Mayo 2026 · Vence en 8 días</div></div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:.9rem">
+            <div class="card-h">
+              <span class="card-t">Facturas recientes</span>
+              <span class="card-a" onclick="nav('ventas')">Ver todas →</span>
+            </div>
+            <table class="tbl">
+              <thead><tr><th>Nº Factura</th><th>Cliente</th><th>Fecha</th><th>Total</th><th>NCF</th><th>Estado</th></tr></thead>
+              <tbody id="dash-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ══ VENTAS ══ -->
+        <div id="page-ventas" class="page">
+          <div class="ph">
+            <h1>Ventas y Facturación</h1>
+            <button class="btn btn-p" onclick="openM('m-factura')">+ Nueva Factura</button>
+          </div>
+          <div class="fbar">
+            <input class="fi" type="text" placeholder="🔍 Buscar cliente..." id="v-search" oninput="filtV()"/>
+            <select class="fi" id="v-estado" onchange="filtV()">
+              <option value="">Todos los estados</option>
+              <option value="pagada">Pagada</option>
+              <option value="pendiente">Pendiente</option>
+              <option value="vencida">Vencida</option>
+            </select>
+            <select class="fi"><option>Mayo 2026</option><option>Abril 2026</option><option>Marzo 2026</option></select>
+          </div>
+          <div class="card">
+            <table class="tbl">
+              <thead><tr><th>Nº Factura</th><th>Cliente</th><th>RNC</th><th>Fecha</th><th>ITBIS</th><th>Total</th><th>NCF</th><th>Estado</th></tr></thead>
+              <tbody id="v-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ══ INVENTARIO ══ -->
+        <div id="page-inventario" class="page">
+          <div class="ph">
+            <h1>Inventario</h1>
+            <button class="btn btn-p" onclick="tip('Agregar productos disponible en versión completa')">+ Nuevo Producto</button>
+          </div>
+          <div class="fbar">
+            <input class="fi" type="text" placeholder="🔍 Buscar producto..." id="i-search" oninput="filtI()"/>
+            <select class="fi" id="i-cat" onchange="filtI()">
+              <option value="">Todas las categorías</option>
+              <option value="construccion">Construcción</option>
+              <option value="herramientas">Herramientas</option>
+              <option value="acabados">Acabados</option>
+            </select>
+          </div>
+          <div class="card">
+            <table class="tbl">
+              <thead><tr><th>Código</th><th>Producto</th><th>Categoría</th><th>Stock</th><th>Nivel</th><th>Precio Costo</th><th>Precio Venta</th><th>Estado</th></tr></thead>
+              <tbody id="i-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ══ NÓMINA ══ -->
+        <div id="page-nomina" class="page">
+          <div class="ph">
+            <h1>Nómina y RRHH — Mayo 2026</h1>
+            <button class="btn btn-p" onclick="tip('✓ Nómina procesada. Reporte DGT-3 generado automáticamente y listo para la DGII.')">Procesar Nómina</button>
+          </div>
+          <div class="g3">
+            <div class="kpi s"><div class="kpi-lbl">Total bruto</div><div class="kpi-val" style="font-size:1.15rem">RD$820,500</div><div class="kpi-sub">24 empleados activos</div></div>
+            <div class="kpi y"><div class="kpi-lbl">Descuentos ISR + TSS</div><div class="kpi-val" style="font-size:1.15rem">RD$98,460</div><div class="kpi-sub">Calculado automáticamente</div></div>
+            <div class="kpi g"><div class="kpi-lbl">Total neto a pagar</div><div class="kpi-val" style="font-size:1.15rem">RD$722,040</div><div class="kpi-sub">Listo para pagar</div></div>
+          </div>
+          <div class="card">
+            <div class="card-h">
+              <span class="card-t">Detalle de empleados</span>
+              <div style="display:flex;gap:.45rem">
+                <span class="badge bg">✓ DGT-3</span>
+                <span class="badge bb">✓ DGT-5</span>
+                <span class="badge bgr">DGT-11</span>
+              </div>
+            </div>
+            <table class="tbl">
+              <thead><tr><th>Empleado</th><th>Cédula</th><th>Cargo</th><th>Sueldo Bruto</th><th>ISR</th><th>TSS</th><th>Regalía</th><th>Neto</th><th>Estado</th></tr></thead>
+              <tbody id="n-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ══ REPORTES ══ -->
+        <div id="page-reportes" class="page">
+          <div class="ph">
+            <h1>Reportes DGII</h1>
+            <button class="btn btn-p" onclick="tip('✓ Archivo generado en formato DGII. Listo para cargar en la OFV.')">⬇ Descargar</button>
+          </div>
+          <div class="rtabs">
+            <button class="rtab active" onclick="selRep(this,'606')">Formato 606</button>
+            <button class="rtab" onclick="selRep(this,'607')">Formato 607</button>
+            <button class="rtab" onclick="selRep(this,'608')">Formato 608</button>
+            <button class="rtab" onclick="selRep(this,'it1')">IT-1 ITBIS</button>
+          </div>
+          <div class="rinfo" id="rep-info">
+            📋 <strong>Formato 606</strong> — Comprobantes de compras y servicios recibidos. Período: Mayo 2026 · 34 registros encontrados.
+          </div>
+          <div class="card">
+            <table class="tbl">
+              <thead><tr><th>RNC Proveedor</th><th>Nombre</th><th>NCF</th><th>Fecha</th><th>Monto Servicios</th><th>Monto Bienes</th><th>ITBIS</th><th>Total</th></tr></thead>
+              <tbody id="r-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+      </div><!-- /page-area -->
+    </main>
+  </div>
+
+  <!-- MODAL: NUEVA FACTURA -->
+  <div class="moverlay" id="m-factura">
+    <div class="mbox">
+      <div class="mh">
+        <span class="mt">Nueva Factura</span>
+        <button class="mc" onclick="closeM('m-factura')">✕</button>
+      </div>
+      <div class="frow">
+        <div class="fg"><label class="fl">Cliente</label><input class="fin" type="text" placeholder="Nombre o RNC"/></div>
+        <div class="fg"><label class="fl">Tipo NCF</label><select class="fin"><option>B01 — Crédito Fiscal</option><option>B02 — Consumo</option><option>B14 — Régimen Especial</option></select></div>
+      </div>
+      <div class="frow">
+        <div class="fg"><label class="fl">Fecha</label><input class="fin" type="date" value="2026-05-24"/></div>
+        <div class="fg"><label class="fl">Forma de pago</label><select class="fin"><option>Efectivo</option><option>Transferencia</option><option>Tarjeta crédito/débito</option><option>Crédito 30 días</option></select></div>
+      </div>
+      <div class="fg" style="margin-bottom:.7rem"><label class="fl">Descripción / Producto</label><input class="fin" type="text" placeholder="Descripción del producto o servicio"/></div>
+      <div class="frow">
+        <div class="fg"><label class="fl">Subtotal (sin ITBIS)</label><input class="fin" type="number" id="m-sub" placeholder="0.00" oninput="calcItbis()"/></div>
+        <div class="fg"><label class="fl">ITBIS 18%</label><input class="fin" type="number" id="m-itbis" placeholder="0.00" style="color:var(--txt3)" readonly/></div>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--line);border-radius:10px;padding:.7rem 1rem;margin-bottom:.2rem;display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:.76rem;color:var(--txt2)">Total factura</span>
+        <span style="font-family:var(--fd);font-size:1.1rem;font-weight:700" id="m-total">RD$ 0.00</span>
+      </div>
+      <div class="mfoot">
+        <button class="btn btn-g" onclick="closeM('m-factura')">Cancelar</button>
+        <button class="btn btn-p" onclick="saveF()">Guardar Factura</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  (function(){
+    /* ─── DATA ─── */
+    var facturas=[
+      {id:'FCT-2026-001',cli:'Ferretería Ramírez',rnc:'101-45678-3',fecha:'24/05/2026',itbis:6973,total:45800,ncf:'B01-0000124',est:'pagada'},
+      {id:'FCT-2026-002',cli:'Supermercado El Éxito',rnc:'130-22345-7',fecha:'24/05/2026',itbis:19547,total:128500,ncf:'B01-0000125',est:'pendiente'},
+      {id:'FCT-2026-003',cli:'Constructora Mena & Asoc.',rnc:'101-89012-5',fecha:'23/05/2026',itbis:51763,total:340000,ncf:'B01-0000123',est:'pagada'},
+      {id:'FCT-2026-004',cli:'Clínica Dr. Pérez',rnc:'101-34567-1',fecha:'23/05/2026',itbis:3393,total:22300,ncf:'B02-0000034',est:'pendiente'},
+      {id:'FCT-2026-005',cli:'Import. Global RD',rnc:'130-67890-2',fecha:'22/05/2026',itbis:85271,total:560000,ncf:'B01-0000122',est:'pagada'},
+      {id:'FCT-2026-006',cli:'Distribuidora Norte S.R.L.',rnc:'101-11223-9',fecha:'18/05/2026',itbis:13573,total:89200,ncf:'B01-0000120',est:'vencida'},
+      {id:'FCT-2026-007',cli:'Farmacia La Salud',rnc:'101-55678-4',fecha:'22/05/2026',itbis:2376,total:15600,ncf:'B02-0000033',est:'pagada'},
+      {id:'FCT-2026-008',cli:'Grupo Herrera e Hijos',rnc:'101-99012-6',fecha:'21/05/2026',itbis:19420,total:127600,ncf:'B01-0000121',est:'pendiente'},
+    ];
+    var productos=[
+      {cod:'MAT-001',name:'Cemento Portland 42.5',cat:'construccion',stock:12,min:50,costo:680,venta:780},
+      {cod:'MAT-002',name:'Varilla corrugada 3/8"',cat:'construccion',stock:8,min:30,costo:2100,venta:2400},
+      {cod:'MAT-003',name:'Arena de río (m³)',cat:'construccion',stock:35,min:20,costo:900,venta:1200},
+      {cod:'MAT-004',name:'Block 6" estándar',cat:'construccion',stock:2400,min:500,costo:38,venta:45},
+      {cod:'MAT-005',name:'Pintura látex blanca 1gl',cat:'acabados',stock:48,min:20,costo:720,venta:950},
+      {cod:'MAT-006',name:'Tubería PVC 4" × 6m',cat:'construccion',stock:200,min:50,costo:240,venta:320},
+      {cod:'HER-001',name:'Mezcladora de concreto',cat:'herramientas',stock:3,min:2,costo:18500,venta:24000},
+      {cod:'MAT-007',name:'Madera pino 2×4×8',cat:'acabados',stock:85,min:30,costo:280,venta:380},
+      {cod:'MAT-008',name:'Porcelanato 60×60 gris',cat:'acabados',stock:18,min:40,costo:420,venta:580},
+    ];
+    var empleados=[
+      {name:'Carmen Mejía',ced:'001-4567890-1',cargo:'Directora General',bruto:75000},
+      {name:'Juan Rodríguez',ced:'001-1234567-8',cargo:'Gerente de Ventas',bruto:45000},
+      {name:'María Santos',ced:'001-2345678-9',cargo:'Contadora',bruto:38000},
+      {name:'Luis Familia',ced:'001-3456789-0',cargo:'Almacenista',bruto:28500},
+      {name:'Pedro Álvarez',ced:'001-5678901-2',cargo:'Vendedor',bruto:22000},
+      {name:'Rosa Martínez',ced:'001-6789012-3',cargo:'Asistente Adm.',bruto:20000},
+    ];
+    var rep606=[
+      {rnc:'130-11234-5',nombre:'Ferretería Central RD',ncf:'B01-0000234',fecha:'05/05/2026',serv:0,bienes:48000,itbis:8640,total:56640},
+      {rnc:'101-22345-6',nombre:'Distribuidora Materiales SA',ncf:'B01-0000189',fecha:'08/05/2026',serv:0,bienes:120000,itbis:21600,total:141600},
+      {rnc:'130-33456-7',nombre:'Grupo Eléctrico Dom.',ncf:'B01-0000302',fecha:'12/05/2026',serv:15000,bienes:32000,itbis:8460,total:55460},
+      {rnc:'101-44567-8',nombre:'Papelería Ofimundo',ncf:'B02-0000045',fecha:'15/05/2026',serv:3500,bienes:1200,itbis:846,total:5546},
+      {rnc:'101-55678-9',nombre:'Alquileres del Norte SRL',ncf:'B11-0000012',fecha:'01/05/2026',serv:35000,bienes:0,itbis:0,total:35000},
+    ];
+
+    /* ─── HELPERS ─── */
+    function f(n){return 'RD$'+n.toLocaleString('es-DO');}
+    function est(e){
+      var m={pagada:'bg Pagada',pendiente:'by Pendiente',vencida:'br Vencida'};
+      var p=(m[e]||'bgr '+e).split(' ');
+      return '<span class="badge '+p[0]+'">'+p[1]+'</span>';
+    }
+    window.tip=function(msg){alert(msg);};
+
+    /* ─── NAVIGATION ─── */
+    var pages=['dashboard','ventas','inventario','nomina','reportes'];
+    var titles={dashboard:'Dashboard',ventas:'Ventas y Facturación',inventario:'Inventario',nomina:'Nómina y RRHH',reportes:'Reportes DGII'};
+    window.nav=function(p){
+      pages.forEach(function(id){
+        document.getElementById('page-'+id).classList.toggle('active',id===p);
+      });
+      document.querySelectorAll('.sb-btn').forEach(function(b){
+        b.classList.toggle('active',b.getAttribute('onclick')==="nav('"+p+"')");
+      });
+      document.getElementById('tb-title').textContent=titles[p]||p;
+    };
+
+    /* ─── RENDER TABLES ─── */
+    function renderDash(){
+      document.getElementById('dash-tbody').innerHTML=facturas.slice(0,5).map(function(f){
+        return '<tr><td class="tw">'+f.id+'</td><td class="tw">'+f.cli+'</td><td>'+f.fecha+'</td><td class="tw">'+f(f.total)+'</td><td class="ts">'+f.ncf+'</td><td>'+est(f.est)+'</td></tr>';
+      }).join('');
+    }
+    // fix: use local alias
+    function rdf(){
+      document.getElementById('dash-tbody').innerHTML=facturas.slice(0,5).map(function(fct){
+        return '<tr><td class="tw">'+fct.id+'</td><td class="tw">'+fct.cli+'</td><td>'+fct.fecha+'</td><td class="tw">'+f(fct.total)+'</td><td class="ts">'+fct.ncf+'</td><td>'+est(fct.est)+'</td></tr>';
+      }).join('');
+    }
+    function rendV(data){
+      document.getElementById('v-tbody').innerHTML=data.map(function(fct){
+        return '<tr><td class="tw">'+fct.id+'</td><td class="tw">'+fct.cli+'</td><td class="ts">'+fct.rnc+'</td><td>'+fct.fecha+'</td><td>'+f(fct.itbis)+'</td><td class="tw">'+f(fct.total)+'</td><td class="ts">'+fct.ncf+'</td><td>'+est(fct.est)+'</td></tr>';
+      }).join('');
+    }
+    window.filtV=function(){
+      var q=document.getElementById('v-search').value.toLowerCase();
+      var es=document.getElementById('v-estado').value;
+      rendV(facturas.filter(function(fct){return(!q||fct.cli.toLowerCase().includes(q))&&(!es||fct.est===es);}));
+    };
+    rendV(facturas);
+
+    function rendI(data){
+      document.getElementById('i-tbody').innerHTML=data.map(function(p){
+        var pct=Math.min(100,Math.round(p.stock/p.min*100));
+        var cls=pct<50?'lo':pct<100?'mi':'hi';
+        var bdg=pct<50?'<span class="badge br">Stock bajo</span>':'<span class="badge bg">OK</span>';
+        return '<tr><td class="ts">'+p.cod+'</td><td class="tw">'+p.name+'</td><td>'+p.cat+'</td><td>'+p.stock+'</td><td><div class="sbar"><div class="sfill '+cls+'" style="width:'+Math.min(100,pct)+'%"></div></div></td><td>'+f(p.costo)+'</td><td class="tw">'+f(p.venta)+'</td><td>'+bdg+'</td></tr>';
+      }).join('');
+    }
+    window.filtI=function(){
+      var q=document.getElementById('i-search').value.toLowerCase();
+      var c=document.getElementById('i-cat').value;
+      rendI(productos.filter(function(p){return(!q||p.name.toLowerCase().includes(q))&&(!c||p.cat===c);}));
+    };
+    rendI(productos);
+
+    function isr(b){
+      var a=b*12;
+      if(a<=416220)return 0;
+      if(a<=624329)return Math.round((a-416220)*0.15/12);
+      if(a<=867123)return Math.round(((a-624329)*0.20+31216)/12);
+      return Math.round(((a-867123)*0.25+79776)/12);
+    }
+    document.getElementById('n-tbody').innerHTML=empleados.map(function(e){
+      var i=isr(e.bruto),t=Math.round(e.bruto*0.0287),r=Math.round(e.bruto/23.33),n=e.bruto-i-t;
+      return '<tr><td class="tw">'+e.name+'</td><td class="ts">'+e.ced+'</td><td>'+e.cargo+'</td><td>'+f(e.bruto)+'</td><td style="color:#ef9a9a">'+f(i)+'</td><td style="color:#ef9a9a">'+f(t)+'</td><td class="ts">'+f(r)+'</td><td class="tw">'+f(n)+'</td><td><span class="badge bg">✓ Pagado</span></td></tr>';
+    }).join('');
+
+    function rendR(){
+      document.getElementById('r-tbody').innerHTML=rep606.map(function(r){
+        return '<tr><td class="ts">'+r.rnc+'</td><td class="tw">'+r.nombre+'</td><td class="ts">'+r.ncf+'</td><td>'+r.fecha+'</td><td>'+f(r.serv)+'</td><td>'+f(r.bienes)+'</td><td>'+f(r.itbis)+'</td><td class="tw">'+f(r.total)+'</td></tr>';
+      }).join('');
+    }
+    rendR();
+    var repInfos={
+      '606':'📋 <strong>Formato 606</strong> — Comprobantes de compras y servicios recibidos. Período: Mayo 2026 · 34 registros.',
+      '607':'📋 <strong>Formato 607</strong> — Comprobantes de ventas emitidos. Período: Mayo 2026 · 47 registros.',
+      '608':'📋 <strong>Formato 608</strong> — Comprobantes anulados. Período: Mayo 2026 · 2 registros.',
+      'it1':'📋 <strong>IT-1</strong> — Declaración Jurada del ITBIS. Período: Mayo 2026 · ITBIS total: RD$156,430.',
+    };
+    window.selRep=function(btn,type){
+      document.querySelectorAll('.rtab').forEach(function(t){t.classList.remove('active');});
+      btn.classList.add('active');
+      document.getElementById('rep-info').innerHTML=repInfos[type]||'';
+    };
+
+    /* ─── SVG CHART ─── */
+    var data=[195000,340000,220000,410000,285000,180000,284000];
+    var mx=Math.max.apply(null,data);
+    var svg=document.getElementById('chart');
+    var bw=560/data.length;
+    svg.innerHTML=data.map(function(v,i){
+      var h=Math.round((v/mx)*110),x=i*bw+bw*.15,w=bw*.7,y=120-h;
+      var fill=i===data.length-1?'#ffffff':'#1e1e1e';
+      return '<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="4" fill="'+fill+'"/>';
+    }).join('')+data.map(function(v,i){
+      var h=Math.round((v/mx)*110),x=i*bw+bw/2,y=120-h-7;
+      return '<text x="'+x+'" y="'+y+'" text-anchor="middle" fill="#4a4a4a" font-size="9" font-family="DM Sans">'+(v>=1000?(v/1000).toFixed(0)+'K':v)+'</text>';
+    }).join('');
+
+    rdf();
+
+    /* ─── CLOCK ─── */
+    function tick(){
+      var d=new Date(),h=d.getHours(),m=d.getMinutes(),ap=h>=12?'PM':'AM';
+      h=h%12||12;
+      document.getElementById('clock').textContent=h+':'+(m<10?'0':'')+m+' '+ap+' · 24 May 2026';
+    }
+    tick(); setInterval(tick,60000);
+
+    /* ─── MODALS ─── */
+    window.openM=function(id){document.getElementById(id).classList.add('open');};
+    window.closeM=function(id){document.getElementById(id).classList.remove('open');};
+    document.querySelectorAll('.moverlay').forEach(function(o){
+      o.addEventListener('click',function(e){if(e.target===o)o.classList.remove('open');});
+    });
+    document.addEventListener('keydown',function(e){
+      if(e.key==='Escape')document.querySelectorAll('.moverlay.open').forEach(function(o){o.classList.remove('open');});
+    });
+
+    /* ─── MODAL FACTURA CALC ─── */
+    window.calcItbis=function(){
+      var s=parseFloat(document.getElementById('m-sub').value)||0;
+      var itbis=Math.round(s*0.18);
+      document.getElementById('m-itbis').value=itbis||'';
+      document.getElementById('m-total').textContent='RD$'+(s+itbis).toLocaleString('es-DO');
+    };
+    window.saveF=function(){
+      closeM('m-factura');
+      alert('✓ Factura guardada exitosamente.\nNCF asignado: B01-0000130\nEl reporte 607 de Mayo 2026 se actualizó automáticamente.');
+    };
+  })();
+  </script>
+</body>
+</html>

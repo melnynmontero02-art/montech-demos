@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MonTech Construcción — Demo Interactiva</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#070707;--sb:#0a0a0a;--card:#0e0e0e;--card2:#131313;--line:rgba(200,200,200,0.07);--line-b:rgba(200,200,200,0.14);--txt:#e0e0e0;--txt2:#8a8a8a;--txt3:#4a4a4a;--silver:#c8c8c8;--green:#4caf50;--yellow:#ffc107;--red:#ef5350;--blue:#42a5f5;--orange:#ff7043;--fd:'Syne',sans-serif;--fb:'DM Sans',sans-serif}
+    html,body{height:100%;overflow:hidden}
+    body{background:var(--bg);color:var(--txt);font-family:var(--fb);font-size:13px;display:flex;flex-direction:column}
+    .banner{background:rgba(200,200,200,0.04);border-bottom:1px solid var(--line-b);padding:.45rem 1.5rem;display:flex;align-items:center;justify-content:space-between;font-size:.76rem;color:var(--txt2);flex-shrink:0;gap:1rem}
+    .banner strong{color:var(--silver)}
+    .bcta{background:#fff;color:#000;font-weight:700;padding:.3rem 1rem;border-radius:20px;text-decoration:none;font-family:var(--fd);font-size:.73rem;white-space:nowrap;transition:background .2s}
+    .bcta:hover{background:var(--silver)}
+    .app{display:flex;flex:1;overflow:hidden}
+    .sidebar{width:210px;background:var(--sb);border-right:1px solid var(--line);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto}
+    .sb-logo{padding:1.1rem;border-bottom:1px solid var(--line);font-family:var(--fd);font-size:1rem;font-weight:800;letter-spacing:-.02em;background:linear-gradient(135deg,#fff,#888);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .sb-sec{padding:.7rem .7rem .2rem}
+    .sb-lbl{font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--txt3);padding:0 .45rem;margin-bottom:.35rem}
+    .sb-btn{display:flex;align-items:center;gap:.65rem;padding:.5rem .75rem;border-radius:8px;color:var(--txt2);font-size:.82rem;cursor:pointer;border:none;background:transparent;width:100%;text-align:left;transition:background .18s,color .18s}
+    .sb-btn:hover{background:rgba(200,200,200,0.05);color:var(--txt)}
+    .sb-btn.active{background:rgba(200,200,200,0.1);color:#fff}
+    .sb-ico{font-size:.95rem;width:17px;text-align:center;flex-shrink:0}
+    .sb-footer{margin-top:auto;padding:.9rem;border-top:1px solid var(--line)}
+    .sb-user{display:flex;align-items:center;gap:.6rem}
+    .sb-av{width:28px;height:28px;border-radius:50%;background:rgba(200,200,200,0.08);border:1px solid var(--line-b);display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:.65rem;font-weight:700;color:var(--silver)}
+    .sb-un{font-size:.8rem;color:var(--txt);font-weight:500;line-height:1.2}
+    .sb-ur{font-size:.68rem;color:var(--txt3)}
+    .main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+    .topbar{height:54px;border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 1.3rem;gap:.8rem;flex-shrink:0}
+    .tb-t{font-family:var(--fd);font-size:.9rem;font-weight:700;flex:1}
+    .tb-date{font-size:.74rem;color:var(--txt3);white-space:nowrap}
+    .pa{flex:1;overflow-y:auto;padding:1.3rem}
+    .page{display:none}.page.active{display:block}
+    .krow{display:grid;grid-template-columns:repeat(4,1fr);gap:.9rem;margin-bottom:1.2rem}
+    .kpi{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1.1rem;position:relative;overflow:hidden}
+    .kpi::after{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+    .kpi.b::after{background:var(--blue)}.kpi.g::after{background:var(--green)}.kpi.y::after{background:var(--yellow)}.kpi.o::after{background:var(--orange)}.kpi.s::after{background:var(--silver)}
+    .kl{font-size:.68rem;color:var(--txt3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.45rem}
+    .kv{font-family:var(--fd);font-size:1.5rem;font-weight:700;color:var(--txt);line-height:1;margin-bottom:.35rem}
+    .ks{font-size:.7rem;color:var(--txt2)}
+    .up{color:var(--green)}.dn{color:var(--red)}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1.1rem}
+    .card-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:.9rem}
+    .card-t{font-family:var(--fd);font-size:.82rem;font-weight:700}
+    .card-a{font-size:.72rem;color:var(--txt3);cursor:pointer;transition:color .2s}
+    .card-a:hover{color:var(--silver)}
+    .tbl{width:100%;border-collapse:collapse}
+    .tbl th{text-align:left;font-size:.64rem;text-transform:uppercase;letter-spacing:.09em;color:var(--txt3);padding:.35rem .55rem;border-bottom:1px solid var(--line);font-weight:500}
+    .tbl td{padding:.55rem .55rem;font-size:.8rem;color:var(--txt2);border-bottom:1px solid rgba(200,200,200,0.03);vertical-align:middle}
+    .tbl tr:last-child td{border-bottom:none}
+    .tbl tr:hover td{background:rgba(200,200,200,0.015)}
+    .tw{color:var(--txt);font-weight:500}
+    .ts{font-size:.68rem;color:var(--txt3)}
+    .badge{display:inline-flex;align-items:center;font-size:.64rem;padding:.15rem .5rem;border-radius:20px;font-weight:600;white-space:nowrap}
+    .bg{background:rgba(76,175,80,.12);color:#81c784}.by{background:rgba(255,193,7,.12);color:#ffd54f}.br{background:rgba(239,83,80,.12);color:#ef9a9a}.bb{background:rgba(66,165,245,.12);color:#90caf9}.bo{background:rgba(255,112,67,.12);color:#ffab91}.bgr{background:rgba(200,200,200,.07);color:var(--txt3)}
+    .ph{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.1rem}
+    .ph h1{font-family:var(--fd);font-size:1rem;font-weight:700}
+    .btn{padding:.48rem 1rem;border-radius:8px;font-family:var(--fb);font-size:.8rem;cursor:pointer;transition:all .18s;border:none}
+    .btn-p{background:#fff;color:#000;font-weight:600}
+    .btn-p:hover{background:var(--silver)}
+    .btn-s{background:rgba(200,200,200,0.07);color:var(--txt);font-weight:500}
+    .btn-s:hover{background:rgba(200,200,200,0.12)}
+    .g2{display:grid;grid-template-columns:1fr 1fr;gap:.9rem}
+
+    /* Project cards */
+    .proj-card{background:var(--card2);border:1px solid var(--line);border-radius:14px;padding:1.1rem;margin-bottom:.8rem;cursor:pointer;transition:border-color .2s}
+    .proj-card:hover{border-color:rgba(200,200,200,0.25)}
+    .proj-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:.8rem}
+    .proj-name{font-family:var(--fd);font-size:.9rem;font-weight:700;color:var(--txt);margin-bottom:.2rem}
+    .proj-loc{font-size:.72rem;color:var(--txt3)}
+    .proj-progress{margin-bottom:.6rem}
+    .prog-label{display:flex;justify-content:space-between;font-size:.72rem;color:var(--txt2);margin-bottom:.35rem}
+    .prog-label strong{color:var(--txt)}
+    .prog-track{height:8px;background:rgba(200,200,200,0.06);border-radius:4px;overflow:hidden}
+    .prog-fill{height:100%;border-radius:4px;transition:width .6s ease}
+    .proj-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem}
+    .proj-stat{background:rgba(200,200,200,0.03);border-radius:8px;padding:.45rem;text-align:center}
+    .ps-val{font-family:var(--fd);font-size:.82rem;font-weight:700;color:var(--txt);line-height:1}
+    .ps-lbl{font-size:.6rem;color:var(--txt3);margin-top:.18rem}
+
+    /* Gantt */
+    .gantt-container{overflow-x:auto}
+    .gantt-header{display:flex;border-bottom:1px solid var(--line);margin-bottom:.3rem}
+    .gantt-task-col{width:180px;flex-shrink:0;font-size:.65rem;color:var(--txt3);padding:.3rem .5rem;text-transform:uppercase;letter-spacing:.06em}
+    .gantt-months{display:flex;flex:1}
+    .gantt-month{flex:1;font-size:.65rem;color:var(--txt3);text-align:center;padding:.3rem;text-transform:uppercase;letter-spacing:.06em;border-left:1px solid rgba(200,200,200,0.04)}
+    .gantt-row{display:flex;align-items:center;border-bottom:1px solid rgba(200,200,200,0.03);min-height:34px}
+    .gantt-name{width:180px;flex-shrink:0;font-size:.78rem;color:var(--txt2);padding:.4rem .5rem;line-height:1.3}
+    .gantt-bars{flex:1;position:relative;height:34px;display:flex;align-items:center}
+    .gantt-bar{position:absolute;height:18px;border-radius:4px;display:flex;align-items:center;padding:0 .4rem;font-size:.6rem;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden}
+
+    /* budget */
+    .budget-row{display:flex;align-items:center;gap:.6rem;margin-bottom:.5rem}
+    .br-name{font-size:.78rem;color:var(--txt2);min-width:160px}
+    .br-track{flex:1;height:8px;background:rgba(200,200,200,0.06);border-radius:4px;overflow:hidden}
+    .br-fill{height:100%;border-radius:4px}
+    .br-vals{display:flex;flex-direction:column;align-items:flex-end;min-width:85px}
+    .br-pres{font-size:.72rem;color:var(--silver)}
+    .br-real{font-size:.68rem;color:var(--txt3)}
+
+    /* modal */
+    .modal-bg{position:fixed;inset:0;z-index:999;background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center}
+    .modal-bg.open{display:flex}
+    .modal{background:#111;border:1px solid var(--line-b);border-radius:18px;padding:2rem;width:460px;max-height:90vh;overflow-y:auto;position:relative}
+    .modal h3{font-family:var(--fd);font-size:1rem;font-weight:700;margin-bottom:1.2rem}
+    .modal label{font-size:.72rem;color:var(--txt3);display:block;margin-bottom:.25rem;margin-top:.7rem}
+    .modal input,.modal select,.modal textarea{width:100%;background:var(--card2);border:1px solid var(--line-b);border-radius:8px;padding:.5rem .75rem;color:var(--txt);font-family:var(--fb);font-size:.82rem;outline:none}
+    .modal textarea{resize:vertical;min-height:60px}
+    .modal-close{position:absolute;top:1rem;right:1rem;background:rgba(200,200,200,0.08);border:none;border-radius:50%;width:28px;height:28px;cursor:pointer;color:var(--txt2);font-size:.9rem;display:flex;align-items:center;justify-content:center}
+    .modal-close:hover{background:rgba(200,200,200,0.15);color:var(--txt)}
+    .modal-footer{display:flex;gap:.6rem;justify-content:flex-end;margin-top:1.2rem}
+  </style>
+</head>
+<body>
+
+<div class="banner">
+  <div><strong>MonTech Constructoras</strong> — Demo Interactiva · Vista de demostración</div>
+  <a class="bcta" href="https://wa.me/18293430288?text=Quiero%20ver%20el%20sistema%20para%20Constructoras%20de%20MonTech" target="_blank">📲 Solicitar Demo Real</a>
+</div>
+
+<div class="app">
+  <div class="sidebar">
+    <div class="sb-logo">MonTech Const.</div>
+    <div class="sb-sec">
+      <div class="sb-lbl">Principal</div>
+      <button class="sb-btn active" onclick="nav('dashboard',this)"><span class="sb-ico">📊</span> Dashboard</button>
+      <button class="sb-btn" onclick="nav('proyectos',this)"><span class="sb-ico">🏗️</span> Proyectos</button>
+      <button class="sb-btn" onclick="nav('gantt',this)"><span class="sb-ico">📅</span> Cronograma</button>
+    </div>
+    <div class="sb-sec">
+      <div class="sb-lbl">Recursos</div>
+      <button class="sb-btn" onclick="nav('presupuesto',this)"><span class="sb-ico">💰</span> Presupuestos</button>
+      <button class="sb-btn" onclick="nav('materiales',this)"><span class="sb-ico">📦</span> Materiales</button>
+      <button class="sb-btn" onclick="nav('subcontratistas',this)"><span class="sb-ico">👷</span> Subcontratistas</button>
+    </div>
+    <div class="sb-footer">
+      <div class="sb-user">
+        <div class="sb-av">GP</div>
+        <div><div class="sb-un">Gerente Proy.</div><div class="sb-ur">Admin. General</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <div class="tb-t" id="page-title">Dashboard</div>
+      <div class="tb-date" id="top-date"></div>
+    </div>
+    <div class="pa">
+
+      <!-- DASHBOARD -->
+      <div class="page active" id="pg-dashboard">
+        <div class="krow">
+          <div class="kpi o"><div class="kl">Proyectos Activos</div><div class="kv">7</div><div class="ks">2 por iniciar</div></div>
+          <div class="kpi b"><div class="kl">Presupuesto Total</div><div class="kv">RD$284M</div><div class="ks">7 proyectos activos</div></div>
+          <div class="kpi g"><div class="kl">Avance Promedio</div><div class="kv">63%</div><div class="ks"><span class="up">↑ 8%</span> este mes</div></div>
+          <div class="kpi y"><div class="kl">Materiales Pendientes</div><div class="kv">14</div><div class="ks">órdenes de compra</div></div>
+        </div>
+        <div class="g2">
+          <div class="card">
+            <div class="card-h"><div class="card-t">Resumen de Proyectos</div><div class="card-a" onclick="nav('proyectos',null)">Ver todos →</div></div>
+            <table class="tbl">
+              <tr><th>Proyecto</th><th>Cliente</th><th>Avance</th><th>Costo Ejecutado</th><th>Estado</th></tr>
+              <tr>
+                <td><div class="tw">Torres Bella Vista</div><div class="ts">Santo Domingo Este</div></td>
+                <td>Grupo Inmob. RD</td>
+                <td>
+                  <div style="display:flex;align-items:center;gap:.4rem">
+                    <div style="flex:1;height:5px;background:rgba(200,200,200,0.06);border-radius:3px;overflow:hidden;min-width:50px"><div style="width:78%;height:100%;background:var(--green);border-radius:3px"></div></div>
+                    <span style="font-size:.7rem;color:var(--green)">78%</span>
+                  </div>
+                </td>
+                <td>RD$62.4M</td><td><span class="badge bg">En Tiempo</span></td>
+              </tr>
+              <tr>
+                <td><div class="tw">Residencial Los Pinos</div><div class="ts">Santiago</div></td>
+                <td>Fam. Hernández</td>
+                <td>
+                  <div style="display:flex;align-items:center;gap:.4rem">
+                    <div style="flex:1;height:5px;background:rgba(200,200,200,0.06);border-radius:3px;overflow:hidden;min-width:50px"><div style="width:45%;height:100%;background:var(--blue);border-radius:3px"></div></div>
+                    <span style="font-size:.7rem;color:var(--blue)">45%</span>
+                  </div>
+                </td>
+                <td>RD$27.0M</td><td><span class="badge bb">En Progreso</span></td>
+              </tr>
+              <tr>
+                <td><div class="tw">Centro Comercial Naco</div><div class="ts">Distrito Nacional</div></td>
+                <td>Corp. Inversiones</td>
+                <td>
+                  <div style="display:flex;align-items:center;gap:.4rem">
+                    <div style="flex:1;height:5px;background:rgba(200,200,200,0.06);border-radius:3px;overflow:hidden;min-width:50px"><div style="width:91%;height:100%;background:var(--orange);border-radius:3px"></div></div>
+                    <span style="font-size:.7rem;color:var(--orange)">91%</span>
+                  </div>
+                </td>
+                <td>RD$108M</td><td><span class="badge bo">Por Entregar</span></td>
+              </tr>
+              <tr>
+                <td><div class="tw">Villas del Mar</div><div class="ts">Punta Cana</div></td>
+                <td>Beach Resort RD</td>
+                <td>
+                  <div style="display:flex;align-items:center;gap:.4rem">
+                    <div style="flex:1;height:5px;background:rgba(200,200,200,0.06);border-radius:3px;overflow:hidden;min-width:50px"><div style="width:22%;height:100%;background:var(--yellow);border-radius:3px"></div></div>
+                    <span style="font-size:.7rem;color:var(--yellow)">22%</span>
+                  </div>
+                </td>
+                <td>RD$15.4M</td><td><span class="badge by">Inicio Reciente</span></td>
+              </tr>
+            </table>
+          </div>
+          <div>
+            <div class="card" style="margin-bottom:.9rem">
+              <div class="card-h"><div class="card-t">Gastos del Mes</div></div>
+              <div style="display:flex;flex-direction:column;gap:.4rem">
+                <div class="budget-row"><div class="br-name">Materiales</div><div class="br-track"><div class="br-fill" style="width:72%;background:var(--orange)"></div></div><div class="br-vals"><div class="br-pres">RD$12.8M</div><div class="br-real">de RD$17.8M</div></div></div>
+                <div class="budget-row"><div class="br-name">Mano de Obra</div><div class="br-track"><div class="br-fill" style="width:85%;background:var(--blue)"></div></div><div class="br-vals"><div class="br-pres">RD$7.6M</div><div class="br-real">de RD$8.9M</div></div></div>
+                <div class="budget-row"><div class="br-name">Subcontratistas</div><div class="br-track"><div class="br-fill" style="width:60%;background:var(--green)"></div></div><div class="br-vals"><div class="br-pres">RD$4.2M</div><div class="br-real">de RD$7.0M</div></div></div>
+                <div class="budget-row"><div class="br-name">Equipos</div><div class="br-track"><div class="br-fill" style="width:45%;background:var(--yellow)"></div></div><div class="br-vals"><div class="br-pres">RD$2.0M</div><div class="br-real">de RD$4.5M</div></div></div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-h"><div class="card-t">Alertas Activas</div></div>
+              <div style="display:flex;flex-direction:column;gap:.4rem">
+                <div style="background:rgba(239,83,80,0.07);border:1px solid rgba(239,83,80,0.15);border-radius:8px;padding:.5rem .75rem;font-size:.76rem;color:#ef9a9a">⚠️ Acero corrugado — stock crítico (Torres BV)</div>
+                <div style="background:rgba(255,193,7,0.07);border:1px solid rgba(255,193,7,0.15);border-radius:8px;padding:.5rem .75rem;font-size:.76rem;color:#ffd54f">📅 Entrega Centro Comercial Naco en 15 días</div>
+                <div style="background:rgba(66,165,245,0.07);border:1px solid rgba(66,165,245,0.15);border-radius:8px;padding:.5rem .75rem;font-size:.76rem;color:#90caf9">📋 Factura subcontratista pendiente — RD$380K</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROYECTOS -->
+      <div class="page" id="pg-proyectos">
+        <div class="ph">
+          <h1>Proyectos</h1>
+          <button class="btn btn-p" onclick="document.getElementById('modal-proj').classList.add('open')">+ Nuevo Proyecto</button>
+        </div>
+
+        <div class="proj-card" onclick="nav('gantt',null)">
+          <div class="proj-header">
+            <div><div class="proj-name">Torres Bella Vista — 12 Apartamentos</div><div class="proj-loc">📍 Av. Los Próceres, Santo Domingo Este</div></div>
+            <span class="badge bg">En Tiempo</span>
+          </div>
+          <div class="proj-progress">
+            <div class="prog-label"><span>Avance Físico</span><strong>78%</strong></div>
+            <div class="prog-track"><div class="prog-fill" style="width:78%;background:var(--green)"></div></div>
+          </div>
+          <div class="proj-stats">
+            <div class="proj-stat"><div class="ps-val">RD$80M</div><div class="ps-lbl">Presupuesto</div></div>
+            <div class="proj-stat"><div class="ps-val" style="color:var(--green)">RD$62.4M</div><div class="ps-lbl">Ejecutado</div></div>
+            <div class="proj-stat"><div class="ps-val">Feb 2025</div><div class="ps-lbl">Inicio</div></div>
+            <div class="proj-stat"><div class="ps-val" style="color:var(--yellow)">Ago 2026</div><div class="ps-lbl">Entrega</div></div>
+          </div>
+        </div>
+
+        <div class="proj-card" onclick="nav('gantt',null)">
+          <div class="proj-header">
+            <div><div class="proj-name">Residencial Los Pinos — Casa Unifamiliar</div><div class="proj-loc">📍 Urbanización Privada, Santiago</div></div>
+            <span class="badge bb">En Progreso</span>
+          </div>
+          <div class="proj-progress">
+            <div class="prog-label"><span>Avance Físico</span><strong>45%</strong></div>
+            <div class="prog-track"><div class="prog-fill" style="width:45%;background:var(--blue)"></div></div>
+          </div>
+          <div class="proj-stats">
+            <div class="proj-stat"><div class="ps-val">RD$60M</div><div class="ps-lbl">Presupuesto</div></div>
+            <div class="proj-stat"><div class="ps-val" style="color:var(--blue)">RD$27M</div><div class="ps-lbl">Ejecutado</div></div>
+            <div class="proj-stat"><div class="ps-val">Oct 2025</div><div class="ps-lbl">Inicio</div></div>
+            <div class="proj-stat"><div class="ps-val">Dic 2026</div><div class="ps-lbl">Entrega</div></div>
+          </div>
+        </div>
+
+        <div class="proj-card">
+          <div class="proj-header">
+            <div><div class="proj-name">Centro Comercial Naco — Local Comercial</div><div class="proj-loc">📍 Naco, Distrito Nacional</div></div>
+            <span class="badge bo">Por Entregar</span>
+          </div>
+          <div class="proj-progress">
+            <div class="prog-label"><span>Avance Físico</span><strong>91%</strong></div>
+            <div class="prog-track"><div class="prog-fill" style="width:91%;background:var(--orange)"></div></div>
+          </div>
+          <div class="proj-stats">
+            <div class="proj-stat"><div class="ps-val">RD$118M</div><div class="ps-lbl">Presupuesto</div></div>
+            <div class="proj-stat"><div class="ps-val" style="color:var(--orange)">RD$108M</div><div class="ps-lbl">Ejecutado</div></div>
+            <div class="proj-stat"><div class="ps-val">Ene 2024</div><div class="ps-lbl">Inicio</div></div>
+            <div class="proj-stat"><div class="ps-val" style="color:var(--green)">Jun 2026</div><div class="ps-lbl">Entrega</div></div>
+          </div>
+        </div>
+
+        <div class="proj-card">
+          <div class="proj-header">
+            <div><div class="proj-name">Villas del Mar — 4 Villas Turísticas</div><div class="proj-loc">📍 Bavaro, Punta Cana</div></div>
+            <span class="badge by">Inicio Reciente</span>
+          </div>
+          <div class="proj-progress">
+            <div class="prog-label"><span>Avance Físico</span><strong>22%</strong></div>
+            <div class="prog-track"><div class="prog-fill" style="width:22%;background:var(--yellow)"></div></div>
+          </div>
+          <div class="proj-stats">
+            <div class="proj-stat"><div class="ps-val">RD$70M</div><div class="ps-lbl">Presupuesto</div></div>
+            <div class="proj-stat"><div class="ps-val" style="color:var(--yellow)">RD$15.4M</div><div class="ps-lbl">Ejecutado</div></div>
+            <div class="proj-stat"><div class="ps-val">Feb 2026</div><div class="ps-lbl">Inicio</div></div>
+            <div class="proj-stat"><div class="ps-val">Mar 2027</div><div class="ps-lbl">Entrega</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CRONOGRAMA GANTT -->
+      <div class="page" id="pg-gantt">
+        <div class="ph">
+          <h1>Cronograma — Torres Bella Vista</h1>
+          <div style="display:flex;gap:.6rem">
+            <select style="background:var(--card);border:1px solid var(--line-b);border-radius:8px;padding:.38rem .7rem;color:var(--txt);font-family:var(--fb);font-size:.8rem;outline:none">
+              <option>Torres Bella Vista</option><option>Residencial Los Pinos</option><option>Centro Comercial Naco</option><option>Villas del Mar</option>
+            </select>
+            <button class="btn btn-s">Exportar PDF</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="gantt-container">
+            <div class="gantt-header">
+              <div class="gantt-task-col">Tarea / Fase</div>
+              <div class="gantt-months">
+                <div class="gantt-month">Feb</div><div class="gantt-month">Mar</div><div class="gantt-month">Abr</div>
+                <div class="gantt-month">May</div><div class="gantt-month">Jun</div><div class="gantt-month">Jul</div>
+                <div class="gantt-month">Ago</div><div class="gantt-month">Sep</div>
+              </div>
+            </div>
+            <div id="gantt-rows"></div>
+          </div>
+          <div style="display:flex;gap:1rem;margin-top:.9rem;padding-top:.7rem;border-top:1px solid var(--line);flex-wrap:wrap">
+            <div style="display:flex;align-items:center;gap:.4rem;font-size:.72rem;color:var(--txt3)"><div style="width:14px;height:8px;border-radius:2px;background:var(--green)"></div>Completado</div>
+            <div style="display:flex;align-items:center;gap:.4rem;font-size:.72rem;color:var(--txt3)"><div style="width:14px;height:8px;border-radius:2px;background:var(--blue)"></div>En Progreso</div>
+            <div style="display:flex;align-items:center;gap:.4rem;font-size:.72rem;color:var(--txt3)"><div style="width:14px;height:8px;border-radius:2px;background:rgba(200,200,200,0.15)"></div>Pendiente</div>
+            <div style="display:flex;align-items:center;gap:.4rem;font-size:.72rem;color:var(--txt3)"><div style="width:14px;height:8px;border-radius:2px;background:var(--red)"></div>Con Retraso</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PRESUPUESTO -->
+      <div class="page" id="pg-presupuesto">
+        <div class="ph">
+          <h1>Presupuesto — Torres Bella Vista</h1>
+          <div style="display:flex;gap:.6rem">
+            <select style="background:var(--card);border:1px solid var(--line-b);border-radius:8px;padding:.38rem .7rem;color:var(--txt);font-family:var(--fb);font-size:.8rem;outline:none">
+              <option>Torres Bella Vista</option><option>Residencial Los Pinos</option><option>Centro Comercial Naco</option>
+            </select>
+            <button class="btn btn-p">+ Agregar Partida</button>
+          </div>
+        </div>
+        <div class="krow" style="grid-template-columns:repeat(3,1fr)">
+          <div class="kpi b"><div class="kl">Presupuesto Total</div><div class="kv">RD$80M</div><div class="ks">Aprobado por cliente</div></div>
+          <div class="kpi g"><div class="kl">Ejecutado</div><div class="kv">RD$62.4M</div><div class="ks">78% del total</div></div>
+          <div class="kpi y"><div class="kl">Por Ejecutar</div><div class="kv">RD$17.6M</div><div class="ks">22% restante</div></div>
+        </div>
+        <div class="card">
+          <table class="tbl">
+            <tr><th>Partida</th><th>Descripción</th><th>Presupuesto</th><th>Ejecutado</th><th>% Ejec.</th><th>Variación</th><th>Estado</th></tr>
+            <tr><td class="tw">01 — Obra Civil</td><td>Cimentación y estructura</td><td>RD$28,000,000</td><td>RD$28,000,000</td><td><span style="color:var(--green)">100%</span></td><td><span style="color:var(--green)">+RD$0</span></td><td><span class="badge bg">Completado</span></td></tr>
+            <tr><td class="tw">02 — Mampostería</td><td>Paredes y divisiones</td><td>RD$12,000,000</td><td>RD$11,200,000</td><td><span style="color:var(--green)">93%</span></td><td><span style="color:var(--green)">-RD$800K</span></td><td><span class="badge bg">Completado</span></td></tr>
+            <tr><td class="tw">03 — Impermeabiliz.</td><td>Techos y paredes</td><td>RD$4,500,000</td><td>RD$4,500,000</td><td><span style="color:var(--green)">100%</span></td><td><span style="color:var(--green)">+RD$0</span></td><td><span class="badge bg">Completado</span></td></tr>
+            <tr><td class="tw">04 — Instalaciones</td><td>Eléctricas, plomería, AC</td><td>RD$15,000,000</td><td>RD$11,250,000</td><td><span style="color:var(--blue)">75%</span></td><td><span style="color:var(--yellow)">+RD$450K</span></td><td><span class="badge bb">En Progreso</span></td></tr>
+            <tr><td class="tw">05 — Acabados</td><td>Cerámica, pintura, carpintería</td><td>RD$14,000,000</td><td>RD$7,000,000</td><td><span style="color:var(--yellow)">50%</span></td><td><span style="color:var(--green)">-RD$200K</span></td><td><span class="badge bb">En Progreso</span></td></tr>
+            <tr><td class="tw">06 — Urbanización</td><td>Parqueo, jardines, portón</td><td>RD$6,500,000</td><td>RD$450,000</td><td><span style="color:var(--txt3)">7%</span></td><td>—</td><td><span class="badge bgr">Pendiente</span></td></tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- MATERIALES -->
+      <div class="page" id="pg-materiales">
+        <div class="ph">
+          <h1>Materiales y Compras</h1>
+          <div style="display:flex;gap:.6rem">
+            <button class="btn btn-s">📋 Generar Orden de Compra</button>
+            <button class="btn btn-p" onclick="document.getElementById('modal-mat').classList.add('open')">+ Registrar Material</button>
+          </div>
+        </div>
+        <div class="card" style="margin-bottom:.9rem">
+          <div class="card-h"><div class="card-t">Inventario de Materiales — Torres Bella Vista</div></div>
+          <table class="tbl">
+            <tr><th>Material</th><th>Unidad</th><th>Stock</th><th>Mínimo</th><th>Precio Unit.</th><th>Valor Total</th><th>Estado</th></tr>
+            <tr><td class="tw">Acero Corrugado 3/8"</td><td>Quintales</td><td>8</td><td>50</td><td>RD$2,800</td><td>RD$22,400</td><td><span class="badge br">Crítico</span></td></tr>
+            <tr><td class="tw">Cemento Portland</td><td>Sacos 94lb</td><td>320</td><td>100</td><td>RD$420</td><td>RD$134,400</td><td><span class="badge bg">OK</span></td></tr>
+            <tr><td class="tw">Bloques 8x8x16</td><td>Unidades</td><td>1,200</td><td>500</td><td>RD$28</td><td>RD$33,600</td><td><span class="badge bg">OK</span></td></tr>
+            <tr><td class="tw">Arena Gruesa</td><td>M³</td><td>12</td><td>20</td><td>RD$1,800</td><td>RD$21,600</td><td><span class="badge by">Stock Bajo</span></td></tr>
+            <tr><td class="tw">Grava 3/4"</td><td>M³</td><td>18</td><td>10</td><td>RD$2,200</td><td>RD$39,600</td><td><span class="badge bg">OK</span></td></tr>
+            <tr><td class="tw">Tubería PVC 4"</td><td>Tramos 6m</td><td>45</td><td>20</td><td>RD$380</td><td>RD$17,100</td><td><span class="badge bg">OK</span></td></tr>
+            <tr><td class="tw">Cable #12 AWG</td><td>Rollos 100m</td><td>8</td><td>15</td><td>RD$1,650</td><td>RD$13,200</td><td><span class="badge by">Stock Bajo</span></td></tr>
+            <tr><td class="tw">Ceramica 60x60</td><td>Cajas (1.5m²)</td><td>180</td><td>50</td><td>RD$650</td><td>RD$117,000</td><td><span class="badge bg">OK</span></td></tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- SUBCONTRATISTAS -->
+      <div class="page" id="pg-subcontratistas">
+        <div class="ph">
+          <h1>Subcontratistas</h1>
+          <button class="btn btn-p" onclick="document.getElementById('modal-sub').classList.add('open')">+ Nuevo Subcontratista</button>
+        </div>
+        <div class="card">
+          <table class="tbl">
+            <tr><th>Empresa / Persona</th><th>Especialidad</th><th>Proyecto</th><th>Contrato</th><th>Pagado</th><th>Pendiente</th><th>Estado</th></tr>
+            <tr>
+              <td><div class="tw">Eléctrica Gómez & Asoc.</div><div class="ts">RNC 101-23456-8</div></td>
+              <td>Instalaciones Eléctricas</td><td>Torres BV</td>
+              <td>RD$4,200,000</td><td>RD$3,150,000</td><td class="tw" style="color:var(--yellow)">RD$1,050,000</td>
+              <td><span class="badge bb">Activo</span></td>
+            </tr>
+            <tr>
+              <td><div class="tw">Plomería Ramírez SRL</div><div class="ts">RNC 101-45678-2</div></td>
+              <td>Plomería y Sanitarios</td><td>Torres BV</td>
+              <td>RD$2,800,000</td><td>RD$2,800,000</td><td style="color:var(--green)">RD$0</td>
+              <td><span class="badge bg">Completado</span></td>
+            </tr>
+            <tr>
+              <td><div class="tw">AC&R Dominicana</div><div class="ts">RNC 101-78901-5</div></td>
+              <td>Aire Acondicionado</td><td>Torres BV + CC Naco</td>
+              <td>RD$6,500,000</td><td>RD$4,875,000</td><td class="tw" style="color:var(--yellow)">RD$1,625,000</td>
+              <td><span class="badge bb">Activo</span></td>
+            </tr>
+            <tr>
+              <td><div class="tw">Acabados de Lujo RD</div><div class="ts">RNC 101-34567-9</div></td>
+              <td>Carpintería y Ebanistería</td><td>CC Naco</td>
+              <td>RD$8,200,000</td><td>RD$7,820,000</td><td class="tw" style="color:var(--orange)">RD$380,000</td>
+              <td><span class="badge bo">Por Cobrar</span></td>
+            </tr>
+            <tr>
+              <td><div class="tw">Jardinería Tropical</div><div class="ts">RNC 101-56789-3</div></td>
+              <td>Paisajismo y Jardines</td><td>Villas del Mar</td>
+              <td>RD$1,400,000</td><td>RD$0</td><td class="tw">RD$1,400,000</td>
+              <td><span class="badge bgr">Por Iniciar</span></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- MODAL PROYECTO -->
+<div class="modal-bg" id="modal-proj">
+  <div class="modal">
+    <button class="modal-close" onclick="document.getElementById('modal-proj').classList.remove('open')">✕</button>
+    <h3>Nuevo Proyecto</h3>
+    <label>Nombre del Proyecto</label><input type="text" placeholder="Ej: Edificio La Esperanza"/>
+    <label>Cliente</label><input type="text" placeholder="Empresa o persona"/>
+    <label>Ubicación</label><input type="text" placeholder="Municipio, Provincia"/>
+    <label>Tipo de Obra</label>
+    <select><option>Residencial</option><option>Comercial</option><option>Industrial</option><option>Mixto</option><option>Infraestructura</option></select>
+    <label>Presupuesto (RD$)</label><input type="number" placeholder="0"/>
+    <label>Fecha de Inicio</label><input type="date"/>
+    <label>Fecha de Entrega</label><input type="date"/>
+    <div class="modal-footer">
+      <button class="btn btn-s" onclick="document.getElementById('modal-proj').classList.remove('open')">Cancelar</button>
+      <button class="btn btn-p" onclick="document.getElementById('modal-proj').classList.remove('open')">Crear Proyecto</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL MATERIAL -->
+<div class="modal-bg" id="modal-mat">
+  <div class="modal">
+    <button class="modal-close" onclick="document.getElementById('modal-mat').classList.remove('open')">✕</button>
+    <h3>Registrar Entrada de Material</h3>
+    <label>Proyecto</label>
+    <select><option>Torres Bella Vista</option><option>Residencial Los Pinos</option><option>CC Naco</option><option>Villas del Mar</option></select>
+    <label>Material</label><input type="text" placeholder="Ej: Acero Corrugado 3/8"/>
+    <label>Unidad</label>
+    <select><option>Quintales</option><option>Sacos</option><option>M³</option><option>Unidades</option><option>Tramos</option><option>Rollos</option><option>Cajas</option></select>
+    <label>Cantidad</label><input type="number" placeholder="0"/>
+    <label>Precio Unitario (RD$)</label><input type="number" placeholder="0.00"/>
+    <label>Suplidor</label><input type="text" placeholder="Nombre o empresa"/>
+    <div class="modal-footer">
+      <button class="btn btn-s" onclick="document.getElementById('modal-mat').classList.remove('open')">Cancelar</button>
+      <button class="btn btn-p" onclick="document.getElementById('modal-mat').classList.remove('open')">Registrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL SUBCONTRATISTA -->
+<div class="modal-bg" id="modal-sub">
+  <div class="modal">
+    <button class="modal-close" onclick="document.getElementById('modal-sub').classList.remove('open')">✕</button>
+    <h3>Nuevo Subcontratista</h3>
+    <label>Empresa / Persona</label><input type="text" placeholder="Nombre"/>
+    <label>RNC / Cédula</label><input type="text" placeholder="000-00000-0"/>
+    <label>Especialidad</label>
+    <select><option>Eléctrico</option><option>Plomería</option><option>Aire Acondicionado</option><option>Carpintería</option><option>Pintura</option><option>Cerámica</option><option>Estructural</option><option>Jardinería</option></select>
+    <label>Proyecto</label>
+    <select><option>Torres Bella Vista</option><option>Residencial Los Pinos</option><option>CC Naco</option><option>Villas del Mar</option></select>
+    <label>Monto del Contrato (RD$)</label><input type="number" placeholder="0"/>
+    <label>Teléfono de Contacto</label><input type="tel" placeholder="809-000-0000"/>
+    <div class="modal-footer">
+      <button class="btn btn-s" onclick="document.getElementById('modal-sub').classList.remove('open')">Cancelar</button>
+      <button class="btn btn-p" onclick="document.getElementById('modal-sub').classList.remove('open')">Registrar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function nav(page, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sb-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('pg-' + page).classList.add('active');
+  if (btn) btn.classList.add('active');
+  const titles = {dashboard:'Dashboard',proyectos:'Proyectos',gantt:'Cronograma Gantt',presupuesto:'Presupuestos',materiales:'Materiales y Compras',subcontratistas:'Subcontratistas'};
+  document.getElementById('page-title').textContent = titles[page] || page;
+}
+
+// Build Gantt
+const tasks = [
+  {name:'Cimentación',start:0,span:2,pct:100,col:'green'},
+  {name:'Estructura (Cols. y Losas)',start:1,span:3,pct:100,col:'green'},
+  {name:'Mampostería',start:2,span:2,pct:95,col:'green'},
+  {name:'Impermeabilización',start:3,span:1,pct:100,col:'green'},
+  {name:'Inst. Eléctricas',start:3,span:3,pct:75,col:'blue'},
+  {name:'Inst. Plomería',start:3,span:2,pct:100,col:'green'},
+  {name:'Inst. AC',start:4,span:2,pct:60,col:'blue'},
+  {name:'Acabados (Cerámica)',start:5,span:2,pct:50,col:'blue'},
+  {name:'Pintura y Carpintería',start:5,span:3,pct:20,col:'rgba(200,200,200,0.15)'},
+  {name:'Urbanización y Jardines',start:6,span:2,pct:7,col:'rgba(200,200,200,0.15)'},
+];
+const MONTHS = 8;
+const colors = {green:'var(--green)',blue:'var(--blue)',red:'var(--red)'};
+const ganttEl = document.getElementById('gantt-rows');
+tasks.forEach(t => {
+  const row = document.createElement('div');
+  row.className = 'gantt-row';
+  const nameEl = document.createElement('div');
+  nameEl.className = 'gantt-name';
+  nameEl.textContent = t.name;
+  const barsEl = document.createElement('div');
+  barsEl.className = 'gantt-bars';
+  barsEl.style.padding = '0 4px';
+  // background stripes
+  for (let i = 0; i < MONTHS; i++) {
+    const stripe = document.createElement('div');
+    stripe.style.cssText = `position:absolute;top:0;bottom:0;left:${i/MONTHS*100}%;width:${100/MONTHS}%;border-left:1px solid rgba(200,200,200,0.04)`;
+    barsEl.appendChild(stripe);
+  }
+  const bar = document.createElement('div');
+  bar.className = 'gantt-bar';
+  const left = (t.start / MONTHS * 100).toFixed(1) + '%';
+  const width = (t.span / MONTHS * 100).toFixed(1) + '%';
+  const bg = colors[t.col] || t.col;
+  bar.style.cssText = `left:${left};width:${width};background:${bg};opacity:0.85`;
+  bar.textContent = t.pct + '%';
+  barsEl.appendChild(bar);
+  row.appendChild(nameEl);
+  row.appendChild(barsEl);
+  ganttEl.appendChild(row);
+});
+
+const d = new Date();
+document.getElementById('top-date').textContent = d.toLocaleDateString('es-DO',{weekday:'long',day:'numeric',month:'long'});
+document.addEventListener('keydown', e => { if (e.key==='Escape') document.querySelectorAll('.modal-bg.open').forEach(m=>m.classList.remove('open')); });
+document.querySelectorAll('.modal-bg').forEach(bg => bg.addEventListener('click', e => { if (e.target===bg) bg.classList.remove('open'); }));
+</script>
+</body>
+</html>

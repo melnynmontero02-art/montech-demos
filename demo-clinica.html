@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MonTech Clínicas — Demo Interactiva</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#070707;--sb:#0a0a0a;--card:#0e0e0e;--card2:#131313;--line:rgba(200,200,200,0.07);--line-b:rgba(200,200,200,0.14);--txt:#e0e0e0;--txt2:#8a8a8a;--txt3:#4a4a4a;--silver:#c8c8c8;--green:#4caf50;--yellow:#ffc107;--red:#ef5350;--blue:#42a5f5;--teal:#26c6da;--fd:'Syne',sans-serif;--fb:'DM Sans',sans-serif}
+    html,body{height:100%;overflow:hidden}
+    body{background:var(--bg);color:var(--txt);font-family:var(--fb);font-size:13px;display:flex;flex-direction:column}
+    .banner{background:rgba(200,200,200,0.04);border-bottom:1px solid var(--line-b);padding:.45rem 1.5rem;display:flex;align-items:center;justify-content:space-between;font-size:.76rem;color:var(--txt2);flex-shrink:0;gap:1rem}
+    .banner strong{color:var(--silver)}
+    .bcta{background:#fff;color:#000;font-weight:700;padding:.3rem 1rem;border-radius:20px;text-decoration:none;font-family:var(--fd);font-size:.73rem;white-space:nowrap;transition:background .2s}
+    .bcta:hover{background:var(--silver)}
+    .app{display:flex;flex:1;overflow:hidden}
+    .sidebar{width:210px;background:var(--sb);border-right:1px solid var(--line);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto}
+    .sb-logo{padding:1.1rem;border-bottom:1px solid var(--line);font-family:var(--fd);font-size:1rem;font-weight:800;letter-spacing:-.02em;background:linear-gradient(135deg,#fff,#888);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .sb-sec{padding:.7rem .7rem .2rem}
+    .sb-lbl{font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--txt3);padding:0 .45rem;margin-bottom:.35rem}
+    .sb-btn{display:flex;align-items:center;gap:.65rem;padding:.5rem .75rem;border-radius:8px;color:var(--txt2);font-size:.82rem;cursor:pointer;border:none;background:transparent;width:100%;text-align:left;transition:background .18s,color .18s}
+    .sb-btn:hover{background:rgba(200,200,200,0.05);color:var(--txt)}
+    .sb-btn.active{background:rgba(200,200,200,0.1);color:#fff}
+    .sb-ico{font-size:.95rem;width:17px;text-align:center;flex-shrink:0}
+    .sb-badge{margin-left:auto;background:var(--teal);color:#000;font-size:.58rem;font-weight:700;padding:.1rem .38rem;border-radius:20px;min-width:17px;text-align:center}
+    .sb-footer{margin-top:auto;padding:.9rem;border-top:1px solid var(--line)}
+    .sb-user{display:flex;align-items:center;gap:.6rem}
+    .sb-av{width:28px;height:28px;border-radius:50%;background:rgba(200,200,200,0.08);border:1px solid var(--line-b);display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:.65rem;font-weight:700;color:var(--silver)}
+    .sb-un{font-size:.8rem;color:var(--txt);font-weight:500;line-height:1.2}
+    .sb-ur{font-size:.68rem;color:var(--txt3)}
+    .main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+    .topbar{height:54px;border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 1.3rem;gap:.8rem;flex-shrink:0}
+    .tb-t{font-family:var(--fd);font-size:.9rem;font-weight:700;flex:1}
+    .tb-date{font-size:.74rem;color:var(--txt3);white-space:nowrap}
+    .pa{flex:1;overflow-y:auto;padding:1.3rem}
+    .page{display:none}.page.active{display:block}
+    .krow{display:grid;grid-template-columns:repeat(4,1fr);gap:.9rem;margin-bottom:1.2rem}
+    .kpi{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1.1rem;position:relative;overflow:hidden}
+    .kpi::after{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+    .kpi.b::after{background:var(--blue)}.kpi.g::after{background:var(--green)}.kpi.y::after{background:var(--yellow)}.kpi.t::after{background:var(--teal)}.kpi.s::after{background:var(--silver)}
+    .kl{font-size:.68rem;color:var(--txt3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.45rem}
+    .kv{font-family:var(--fd);font-size:1.5rem;font-weight:700;color:var(--txt);line-height:1;margin-bottom:.35rem}
+    .ks{font-size:.7rem;color:var(--txt2)}
+    .up{color:var(--green)}.dn{color:var(--red)}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1.1rem}
+    .card-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:.9rem}
+    .card-t{font-family:var(--fd);font-size:.82rem;font-weight:700}
+    .card-a{font-size:.72rem;color:var(--txt3);cursor:pointer;transition:color .2s}
+    .card-a:hover{color:var(--silver)}
+    .tbl{width:100%;border-collapse:collapse}
+    .tbl th{text-align:left;font-size:.64rem;text-transform:uppercase;letter-spacing:.09em;color:var(--txt3);padding:.35rem .55rem;border-bottom:1px solid var(--line);font-weight:500}
+    .tbl td{padding:.55rem .55rem;font-size:.8rem;color:var(--txt2);border-bottom:1px solid rgba(200,200,200,0.03);vertical-align:middle}
+    .tbl tr:last-child td{border-bottom:none}
+    .tbl tr:hover td{background:rgba(200,200,200,0.015)}
+    .tw{color:var(--txt);font-weight:500}
+    .ts{font-size:.68rem;color:var(--txt3)}
+    .badge{display:inline-flex;align-items:center;font-size:.64rem;padding:.15rem .5rem;border-radius:20px;font-weight:600;white-space:nowrap}
+    .bg{background:rgba(76,175,80,.12);color:#81c784}.by{background:rgba(255,193,7,.12);color:#ffd54f}.br{background:rgba(239,83,80,.12);color:#ef9a9a}.bb{background:rgba(66,165,245,.12);color:#90caf9}.bt{background:rgba(38,198,218,.12);color:#80deea}.bgr{background:rgba(200,200,200,.07);color:var(--txt3)}
+    .ph{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.1rem}
+    .ph h1{font-family:var(--fd);font-size:1rem;font-weight:700}
+    .btn{padding:.48rem 1rem;border-radius:8px;font-family:var(--fb);font-size:.8rem;cursor:pointer;transition:all .18s;border:none}
+    .btn-p{background:#fff;color:#000;font-weight:600}
+    .btn-p:hover{background:var(--silver)}
+    .btn-s{background:rgba(200,200,200,0.07);color:var(--txt);font-weight:500}
+    .btn-s:hover{background:rgba(200,200,200,0.12)}
+    .g2{display:grid;grid-template-columns:1fr 1fr;gap:.9rem}
+
+    /* Agenda calendario */
+    .agenda-grid{display:grid;grid-template-columns:repeat(8,1fr);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+    .ag-header{background:var(--card2);padding:.45rem .35rem;font-size:.66rem;font-weight:600;text-align:center;color:var(--txt3);border-right:1px solid var(--line);border-bottom:1px solid var(--line);text-transform:uppercase;letter-spacing:.06em}
+    .ag-header:last-child{border-right:none}
+    .ag-time{background:var(--card2);padding:.4rem .35rem;font-size:.65rem;color:var(--txt3);text-align:right;border-right:1px solid var(--line);border-bottom:1px solid rgba(200,200,200,0.04);white-space:nowrap}
+    .ag-cell{padding:.25rem;border-right:1px solid rgba(200,200,200,0.04);border-bottom:1px solid rgba(200,200,200,0.04);min-height:36px;vertical-align:top;position:relative}
+    .ag-cell:last-child{border-right:none}
+    .apt{border-radius:6px;padding:.25rem .4rem;font-size:.65rem;line-height:1.3;cursor:pointer;transition:opacity .15s}
+    .apt:hover{opacity:.8}
+    .apt.conf{background:rgba(76,175,80,0.18);border-left:2px solid var(--green);color:#a5d6a7}
+    .apt.pend{background:rgba(255,193,7,0.15);border-left:2px solid var(--yellow);color:#ffe082}
+    .apt.canc{background:rgba(239,83,80,0.12);border-left:2px solid var(--red);color:#ef9a9a;text-decoration:line-through;opacity:.6}
+    .apt.block{background:rgba(200,200,200,0.06);border-left:2px solid var(--txt3);color:var(--txt3)}
+    .apt-name{font-weight:600}
+    .apt-detail{opacity:.8;font-size:.6rem}
+
+    /* Expediente paciente */
+    .pat-card{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:1rem;display:flex;gap:.9rem;align-items:flex-start;margin-bottom:.6rem;cursor:pointer;transition:border-color .2s}
+    .pat-card:hover{border-color:rgba(200,200,200,0.25)}
+    .pat-av{width:38px;height:38px;border-radius:50%;background:rgba(38,198,218,0.1);border:1px solid rgba(38,198,218,0.25);display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:.8rem;font-weight:700;color:var(--teal);flex-shrink:0}
+    .pat-info{flex:1}
+    .pat-name{font-size:.85rem;font-weight:500;color:var(--txt);margin-bottom:.2rem}
+    .pat-detail{font-size:.71rem;color:var(--txt3);line-height:1.5}
+    .pat-tags{display:flex;gap:.3rem;margin-top:.35rem;flex-wrap:wrap}
+
+    /* Farmacia */
+    .med-bar{display:flex;align-items:center;gap:.6rem;margin-bottom:.5rem}
+    .med-name{font-size:.76rem;color:var(--txt);min-width:150px}
+    .med-track{flex:1;height:7px;background:rgba(200,200,200,0.06);border-radius:4px;overflow:hidden}
+    .med-fill{height:100%;border-radius:4px}
+    .med-stock{font-size:.72rem;min-width:60px;text-align:right}
+
+    /* modal */
+    .modal-bg{position:fixed;inset:0;z-index:999;background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center}
+    .modal-bg.open{display:flex}
+    .modal{background:#111;border:1px solid var(--line-b);border-radius:18px;padding:2rem;width:440px;max-height:90vh;overflow-y:auto;position:relative}
+    .modal h3{font-family:var(--fd);font-size:1rem;font-weight:700;margin-bottom:1.2rem}
+    .modal label{font-size:.72rem;color:var(--txt3);display:block;margin-bottom:.25rem;margin-top:.7rem}
+    .modal input,.modal select,.modal textarea{width:100%;background:var(--card2);border:1px solid var(--line-b);border-radius:8px;padding:.5rem .75rem;color:var(--txt);font-family:var(--fb);font-size:.82rem;outline:none}
+    .modal textarea{resize:vertical;min-height:70px}
+    .modal-close{position:absolute;top:1rem;right:1rem;background:rgba(200,200,200,0.08);border:none;border-radius:50%;width:28px;height:28px;cursor:pointer;color:var(--txt2);font-size:.9rem;display:flex;align-items:center;justify-content:center}
+    .modal-close:hover{background:rgba(200,200,200,0.15);color:var(--txt)}
+    .modal-footer{display:flex;gap:.6rem;justify-content:flex-end;margin-top:1.2rem}
+
+    /* Expediente modal */
+    .exp-section{background:var(--card2);border-radius:10px;padding:.9rem;margin-bottom:.7rem}
+    .exp-title{font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;color:var(--txt3);margin-bottom:.6rem}
+    .exp-row{display:flex;justify-content:space-between;margin-bottom:.3rem;font-size:.79rem}
+    .exp-lbl{color:var(--txt3)}
+    .exp-val{color:var(--txt);font-weight:500;text-align:right;max-width:55%}
+  </style>
+</head>
+<body>
+
+<div class="banner">
+  <div><strong>MonTech Clínicas</strong> — Demo Interactiva · Vista de demostración</div>
+  <a class="bcta" href="https://wa.me/18293430288?text=Quiero%20ver%20el%20sistema%20para%20Clínicas%20de%20MonTech" target="_blank">📲 Solicitar Demo Real</a>
+</div>
+
+<div class="app">
+  <div class="sidebar">
+    <div class="sb-logo">MonTech Clínicas</div>
+    <div class="sb-sec">
+      <div class="sb-lbl">Principal</div>
+      <button class="sb-btn active" onclick="nav('dashboard',this)"><span class="sb-ico">📊</span> Dashboard</button>
+      <button class="sb-btn" onclick="nav('agenda',this)"><span class="sb-ico">📅</span> Agenda <span class="sb-badge">5</span></button>
+      <button class="sb-btn" onclick="nav('pacientes',this)"><span class="sb-ico">🧑‍⚕️</span> Pacientes</button>
+    </div>
+    <div class="sb-sec">
+      <div class="sb-lbl">Clínica</div>
+      <button class="sb-btn" onclick="nav('facturacion',this)"><span class="sb-ico">🧾</span> Facturación</button>
+      <button class="sb-btn" onclick="nav('farmacia',this)"><span class="sb-ico">💊</span> Farmacia</button>
+    </div>
+    <div class="sb-footer">
+      <div class="sb-user">
+        <div class="sb-av">DR</div>
+        <div><div class="sb-un">Recepción</div><div class="sb-ur">Clínica MonSalud</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <div class="tb-t" id="page-title">Dashboard</div>
+      <div class="tb-date" id="top-date"></div>
+    </div>
+    <div class="pa">
+
+      <!-- DASHBOARD -->
+      <div class="page active" id="pg-dashboard">
+        <div class="krow">
+          <div class="kpi t"><div class="kl">Citas Hoy</div><div class="kv">24</div><div class="ks">5 pendientes, 19 completadas</div></div>
+          <div class="kpi g"><div class="kl">Pacientes Activos</div><div class="kv">1,284</div><div class="ks"><span class="up">+14</span> este mes</div></div>
+          <div class="kpi b"><div class="kl">Facturación Hoy</div><div class="kv">RD$68,400</div><div class="ks">ARS + Particular</div></div>
+          <div class="kpi y"><div class="kl">Pendiente ARS</div><div class="kv">RD$124,800</div><div class="ks">3 aseguradoras</div></div>
+        </div>
+        <div class="g2" style="margin-bottom:.9rem">
+          <div class="card">
+            <div class="card-h"><div class="card-t">Próximas Citas</div><div class="card-a" onclick="nav('agenda',null)">Ver agenda →</div></div>
+            <table class="tbl">
+              <tr><th>Hora</th><th>Paciente</th><th>Médico</th><th>Motivo</th><th>Estado</th></tr>
+              <tr><td>2:30 PM</td><td class="tw">Rosa Herrera</td><td>Dra. Méndez</td><td>Control</td><td><span class="badge bt">En sala</span></td></tr>
+              <tr><td>3:00 PM</td><td class="tw">Jorge Castillo</td><td>Dr. Ramos</td><td>Consulta</td><td><span class="badge by">Esperando</span></td></tr>
+              <tr><td>3:30 PM</td><td class="tw">María Soto</td><td>Dra. Méndez</td><td>Revisión</td><td><span class="badge bgr">Confirmado</span></td></tr>
+              <tr><td>4:00 PM</td><td class="tw">Luis Familia</td><td>Dr. Taveras</td><td>Ecografía</td><td><span class="badge bgr">Confirmado</span></td></tr>
+              <tr><td>4:30 PM</td><td class="tw">Carmen Núñez</td><td>Dr. Ramos</td><td>Seguimiento</td><td><span class="badge bgr">Confirmado</span></td></tr>
+            </table>
+          </div>
+          <div class="card">
+            <div class="card-h"><div class="card-t">Facturación por Tipo</div></div>
+            <div style="display:flex;flex-direction:column;gap:.5rem;margin-bottom:1rem">
+              <div class="med-bar"><div class="med-name">ARS SENASA</div><div class="med-track"><div class="med-fill" style="width:45%;background:var(--teal)"></div></div><div class="med-stock" style="color:var(--teal)">RD$30,780</div></div>
+              <div class="med-bar"><div class="med-name">ARS Universal</div><div class="med-track"><div class="med-fill" style="width:28%;background:var(--blue)"></div></div><div class="med-stock" style="color:var(--blue)">RD$19,152</div></div>
+              <div class="med-bar"><div class="med-name">ARS Humano</div><div class="med-track"><div class="med-fill" style="width:15%;background:var(--green)"></div></div><div class="med-stock" style="color:var(--green)">RD$10,260</div></div>
+              <div class="med-bar"><div class="med-name">Particular</div><div class="med-track"><div class="med-fill" style="width:12%;background:var(--yellow)"></div></div><div class="med-stock" style="color:var(--yellow)">RD$8,208</div></div>
+            </div>
+            <div class="card-h" style="margin-bottom:.5rem"><div class="card-t">Alertas</div></div>
+            <div style="display:flex;flex-direction:column;gap:.4rem">
+              <div style="background:rgba(239,83,80,0.07);border:1px solid rgba(239,83,80,0.15);border-radius:8px;padding:.55rem .75rem;font-size:.76rem;color:#ef9a9a">⚠️ 3 medicamentos con stock bajo en farmacia</div>
+              <div style="background:rgba(255,193,7,0.07);border:1px solid rgba(255,193,7,0.15);border-radius:8px;padding:.55rem .75rem;font-size:.76rem;color:#ffd54f">📋 2 reclamaciones ARS pendientes de envío</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AGENDA -->
+      <div class="page" id="pg-agenda">
+        <div class="ph">
+          <h1>Agenda — Semana 24–28 Mayo</h1>
+          <div style="display:flex;gap:.6rem">
+            <button class="btn btn-s">← Anterior</button>
+            <button class="btn btn-s">Siguiente →</button>
+            <button class="btn btn-p" onclick="document.getElementById('modal-cita').classList.add('open')">+ Nueva Cita</button>
+          </div>
+        </div>
+        <div class="card" style="overflow-x:auto">
+          <table style="width:100%;border-collapse:collapse">
+            <thead>
+              <tr>
+                <th style="width:55px;font-size:.64rem;color:var(--txt3);padding:.4rem .5rem;border-bottom:1px solid var(--line);text-align:center">Hora</th>
+                <th style="font-size:.64rem;color:var(--txt3);padding:.4rem;border-bottom:1px solid var(--line);text-align:center;background:rgba(38,198,218,0.05)">LUN 24</th>
+                <th style="font-size:.64rem;color:var(--txt3);padding:.4rem;border-bottom:1px solid var(--line);text-align:center">MAR 25</th>
+                <th style="font-size:.64rem;color:var(--txt3);padding:.4rem;border-bottom:1px solid var(--line);text-align:center">MIÉ 26</th>
+                <th style="font-size:.64rem;color:var(--txt3);padding:.4rem;border-bottom:1px solid var(--line);text-align:center">JUE 27</th>
+                <th style="font-size:.64rem;color:var(--txt3);padding:.4rem;border-bottom:1px solid var(--line);text-align:center">VIE 28</th>
+              </tr>
+            </thead>
+            <tbody id="agenda-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- PACIENTES -->
+      <div class="page" id="pg-pacientes">
+        <div class="ph">
+          <h1>Expedientes de Pacientes</h1>
+          <button class="btn btn-p" onclick="document.getElementById('modal-pac').classList.add('open')">+ Nuevo Paciente</button>
+        </div>
+        <div style="display:flex;gap:.6rem;margin-bottom:1rem">
+          <input style="background:var(--card);border:1px solid var(--line-b);border-radius:8px;padding:.4rem .75rem;color:var(--txt);font-family:var(--fb);font-size:.8rem;outline:none;flex:1" placeholder="🔍 Buscar paciente por nombre o cédula..."/>
+          <select style="background:var(--card);border:1px solid var(--line-b);border-radius:8px;padding:.4rem .75rem;color:var(--txt);font-family:var(--fb);font-size:.8rem;outline:none">
+            <option>Todos los médicos</option><option>Dra. Méndez</option><option>Dr. Ramos</option><option>Dr. Taveras</option>
+          </select>
+        </div>
+        <div id="patient-list">
+          <div class="pat-card" onclick="document.getElementById('modal-exp').classList.add('open')">
+            <div class="pat-av">RH</div>
+            <div class="pat-info">
+              <div class="pat-name">Rosa Herrera Sánchez · 42 años</div>
+              <div class="pat-detail">Cédula: 001-1234567-8 · Sangre: O+ · ARS: SENASA<br>Última visita: 15/05/2026 · Dr. Ramos · Hipertensión</div>
+              <div class="pat-tags"><span class="badge bt">Crónico</span><span class="badge by">Alérgica: Penicilina</span></div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:.3rem">
+              <span class="badge bg">Activa</span>
+              <div class="ts">Próxima: 24/05</div>
+            </div>
+          </div>
+          <div class="pat-card" onclick="document.getElementById('modal-exp').classList.add('open')">
+            <div class="pat-av">JC</div>
+            <div class="pat-info">
+              <div class="pat-name">Jorge Castillo Pérez · 58 años</div>
+              <div class="pat-detail">Cédula: 001-9876543-2 · Sangre: A+ · Particular<br>Última visita: 20/05/2026 · Dra. Méndez · Diabetes tipo 2</div>
+              <div class="pat-tags"><span class="badge bt">Crónico</span><span class="badge br">Diabético</span></div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:.3rem">
+              <span class="badge bg">Activo</span>
+              <div class="ts">Próxima: 25/05</div>
+            </div>
+          </div>
+          <div class="pat-card" onclick="document.getElementById('modal-exp').classList.add('open')">
+            <div class="pat-av">MS</div>
+            <div class="pat-info">
+              <div class="pat-name">María Soto de la Cruz · 35 años</div>
+              <div class="pat-detail">Cédula: 001-5554443-1 · Sangre: B+ · ARS: Universal<br>Última visita: 10/05/2026 · Dr. Taveras · Control prenatal</div>
+              <div class="pat-tags"><span class="badge bg">Embarazada</span></div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:.3rem">
+              <span class="badge bg">Activa</span>
+              <div class="ts">Próxima: 26/05</div>
+            </div>
+          </div>
+          <div class="pat-card" onclick="document.getElementById('modal-exp').classList.add('open')">
+            <div class="pat-av">LF</div>
+            <div class="pat-info">
+              <div class="pat-name">Luis Familia Díaz · 67 años</div>
+              <div class="pat-detail">Cédula: 001-3214567-9 · Sangre: AB- · ARS: Humano<br>Última visita: 05/05/2026 · Dr. Ramos · Cardiopatía</div>
+              <div class="pat-tags"><span class="badge bt">Crónico</span><span class="badge br">Cardíaco</span></div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:.3rem">
+              <span class="badge bg">Activo</span>
+              <div class="ts">Próxima: 27/05</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FACTURACIÓN -->
+      <div class="page" id="pg-facturacion">
+        <div class="ph">
+          <h1>Facturación</h1>
+          <div style="display:flex;gap:.6rem">
+            <button class="btn btn-s">📤 Enviar a ARS</button>
+            <button class="btn btn-p" onclick="document.getElementById('modal-fac').classList.add('open')">+ Nueva Factura</button>
+          </div>
+        </div>
+        <div class="krow" style="grid-template-columns:repeat(3,1fr)">
+          <div class="kpi g"><div class="kl">Facturado Mayo</div><div class="kv">RD$1.24M</div><div class="ks"><span class="up">↑ 11%</span> vs abril</div></div>
+          <div class="kpi t"><div class="kl">Cobrado</div><div class="kv">RD$984,200</div><div class="ks">79% del total</div></div>
+          <div class="kpi y"><div class="kl">Por Cobrar</div><div class="kv">RD$259,800</div><div class="ks">ARS + Particular</div></div>
+        </div>
+        <div class="card">
+          <table class="tbl">
+            <tr><th>NCF</th><th>Paciente</th><th>Médico</th><th>Servicio</th><th>Cobertura</th><th>Monto</th><th>ARS Paga</th><th>Paciente Paga</th><th>Estado</th></tr>
+            <tr><td class="ts">B01-0312</td><td class="tw">Rosa Herrera</td><td>Dr. Ramos</td><td>Consulta general</td><td>SENASA</td><td>RD$2,400</td><td>RD$2,000</td><td>RD$400</td><td><span class="badge bg">Cobrado</span></td></tr>
+            <tr><td class="ts">B01-0311</td><td class="tw">Jorge Castillo</td><td>Dra. Méndez</td><td>Endocrinología</td><td>Particular</td><td>RD$4,500</td><td>—</td><td>RD$4,500</td><td><span class="badge bg">Cobrado</span></td></tr>
+            <tr><td class="ts">B01-0310</td><td class="tw">María Soto</td><td>Dr. Taveras</td><td>Ecografía obstétrica</td><td>Universal</td><td>RD$5,800</td><td>RD$4,640</td><td>RD$1,160</td><td><span class="badge by">Pendiente ARS</span></td></tr>
+            <tr><td class="ts">B01-0309</td><td class="tw">Luis Familia</td><td>Dr. Ramos</td><td>Cardiología + ECG</td><td>Humano</td><td>RD$8,200</td><td>RD$6,150</td><td>RD$2,050</td><td><span class="badge by">Pendiente ARS</span></td></tr>
+            <tr><td class="ts">B01-0308</td><td class="tw">Carmen Núñez</td><td>Dra. Méndez</td><td>Ginecología</td><td>SENASA</td><td>RD$3,200</td><td>RD$2,800</td><td>RD$400</td><td><span class="badge bg">Cobrado</span></td></tr>
+            <tr><td class="ts">B01-0307</td><td class="tw">Pedro Almonte</td><td>Dr. Taveras</td><td>Laboratorio clínico</td><td>Particular</td><td>RD$1,800</td><td>—</td><td>RD$1,800</td><td><span class="badge bg">Cobrado</span></td></tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- FARMACIA -->
+      <div class="page" id="pg-farmacia">
+        <div class="ph">
+          <h1>Farmacia Interna</h1>
+          <button class="btn btn-p" onclick="document.getElementById('modal-med').classList.add('open')">+ Agregar Medicamento</button>
+        </div>
+        <div class="g2">
+          <div class="card">
+            <div class="card-h"><div class="card-t">Inventario de Medicamentos</div></div>
+            <table class="tbl">
+              <tr><th>Medicamento</th><th>Categoría</th><th>Stock</th><th>Unid.</th><th>Precio</th><th>Estado</th></tr>
+              <tr><td class="tw">Metformina 850mg</td><td>Antidiabético</td><td>240</td><td>Tabletas</td><td>RD$8</td><td><span class="badge bg">OK</span></td></tr>
+              <tr><td class="tw">Losartán 50mg</td><td>Antihipertensivo</td><td>180</td><td>Tabletas</td><td>RD$12</td><td><span class="badge bg">OK</span></td></tr>
+              <tr><td class="tw">Atorvastatina 20mg</td><td>Estatinas</td><td>12</td><td>Tabletas</td><td>RD$25</td><td><span class="badge by">Stock Bajo</span></td></tr>
+              <tr><td class="tw">Amoxicilina 500mg</td><td>Antibiótico</td><td>8</td><td>Cápsulas</td><td>RD$15</td><td><span class="badge br">Crítico</span></td></tr>
+              <tr><td class="tw">Ibuprofeno 400mg</td><td>Analgésico</td><td>350</td><td>Tabletas</td><td>RD$6</td><td><span class="badge bg">OK</span></td></tr>
+              <tr><td class="tw">Omeprazol 20mg</td><td>Gastrointestinal</td><td>5</td><td>Cápsulas</td><td>RD$18</td><td><span class="badge br">Crítico</span></td></tr>
+              <tr><td class="tw">Salbutamol Inhaler</td><td>Broncodilatador</td><td>42</td><td>Unidades</td><td>RD$180</td><td><span class="badge bg">OK</span></td></tr>
+              <tr><td class="tw">Glucosa IV 5%</td><td>Solución IV</td><td>24</td><td>Bolsas 500ml</td><td>RD$120</td><td><span class="badge bg">OK</span></td></tr>
+            </table>
+          </div>
+          <div>
+            <div class="card" style="margin-bottom:.9rem">
+              <div class="card-h"><div class="card-t">Nivel de Stock</div></div>
+              <div class="med-bar"><div class="med-name">Metformina</div><div class="med-track"><div class="med-fill" style="width:80%;background:var(--green)"></div></div><div class="med-stock" style="color:var(--green)">240</div></div>
+              <div class="med-bar"><div class="med-name">Losartán</div><div class="med-track"><div class="med-fill" style="width:60%;background:var(--green)"></div></div><div class="med-stock" style="color:var(--green)">180</div></div>
+              <div class="med-bar"><div class="med-name">Ibuprofeno</div><div class="med-track"><div class="med-fill" style="width:90%;background:var(--green)"></div></div><div class="med-stock" style="color:var(--green)">350</div></div>
+              <div class="med-bar"><div class="med-name">Salbutamol</div><div class="med-track"><div class="med-fill" style="width:42%;background:var(--blue)"></div></div><div class="med-stock" style="color:var(--blue)">42</div></div>
+              <div class="med-bar"><div class="med-name">Atorvastatina</div><div class="med-track"><div class="med-fill" style="width:12%;background:var(--yellow)"></div></div><div class="med-stock" style="color:var(--yellow)">12</div></div>
+              <div class="med-bar"><div class="med-name">Amoxicilina</div><div class="med-track"><div class="med-fill" style="width:8%;background:var(--red)"></div></div><div class="med-stock" style="color:var(--red)">8</div></div>
+              <div class="med-bar"><div class="med-name">Omeprazol</div><div class="med-track"><div class="med-fill" style="width:5%;background:var(--red)"></div></div><div class="med-stock" style="color:var(--red)">5</div></div>
+            </div>
+            <div class="card" style="background:rgba(239,83,80,0.04);border-color:rgba(239,83,80,0.15)">
+              <div class="card-h"><div class="card-t" style="color:#ef9a9a">⚠️ Reordenar Urgente</div></div>
+              <div style="font-size:.78rem;color:var(--txt2);line-height:1.8">
+                • <strong style="color:var(--txt)">Amoxicilina 500mg</strong> — 8 unidades<br>
+                • <strong style="color:var(--txt)">Omeprazol 20mg</strong> — 5 unidades<br>
+                • <strong style="color:var(--txt)">Atorvastatina 20mg</strong> — 12 unidades
+              </div>
+              <button class="btn btn-p" style="margin-top:.8rem;width:100%;padding:.4rem;font-size:.77rem">📋 Generar Orden de Compra</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- MODAL CITA -->
+<div class="modal-bg" id="modal-cita">
+  <div class="modal">
+    <button class="modal-close" onclick="document.getElementById('modal-cita').classList.remove('open')">✕</button>
+    <h3>Nueva Cita</h3>
+    <label>Paciente</label><input type="text" placeholder="Buscar paciente..."/>
+    <label>Médico</label>
+    <select><option>Dra. Méndez (Ginecología)</option><option>Dr. Ramos (Medicina Interna)</option><option>Dr. Taveras (Cardiología)</option></select>
+    <label>Fecha</label><input type="date"/>
+    <label>Hora</label>
+    <select><option>8:00 AM</option><option>8:30 AM</option><option>9:00 AM</option><option>9:30 AM</option><option>10:00 AM</option><option>2:00 PM</option><option>2:30 PM</option><option>3:00 PM</option><option>3:30 PM</option></select>
+    <label>Motivo de consulta</label><input type="text" placeholder="Ej: Control de hipertensión"/>
+    <label>ARS / Cobertura</label>
+    <select><option>Particular</option><option>SENASA</option><option>ARS Universal</option><option>ARS Humano</option><option>ARS MAPFRE</option></select>
+    <div class="modal-footer">
+      <button class="btn btn-s" onclick="document.getElementById('modal-cita').classList.remove('open')">Cancelar</button>
+      <button class="btn btn-p" onclick="document.getElementById('modal-cita').classList.remove('open')">Agendar Cita</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL EXPEDIENTE -->
+<div class="modal-bg" id="modal-exp">
+  <div class="modal" style="width:500px">
+    <button class="modal-close" onclick="document.getElementById('modal-exp').classList.remove('open')">✕</button>
+    <h3>Expediente — Rosa Herrera Sánchez</h3>
+    <div class="exp-section">
+      <div class="exp-title">Datos del Paciente</div>
+      <div class="exp-row"><span class="exp-lbl">Cédula</span><span class="exp-val">001-1234567-8</span></div>
+      <div class="exp-row"><span class="exp-lbl">Fecha de Nacimiento</span><span class="exp-val">12/03/1982 · 42 años</span></div>
+      <div class="exp-row"><span class="exp-lbl">Grupo Sanguíneo</span><span class="exp-val">O Positivo</span></div>
+      <div class="exp-row"><span class="exp-lbl">ARS</span><span class="exp-val">SENASA · NSS 123456789</span></div>
+      <div class="exp-row"><span class="exp-lbl">Alergias</span><span class="exp-val" style="color:#ffd54f">Penicilina</span></div>
+    </div>
+    <div class="exp-section">
+      <div class="exp-title">Condiciones Crónicas</div>
+      <div style="font-size:.79rem;color:var(--txt2);line-height:1.8">• Hipertensión arterial (diagnosticada 2018)<br>• Hipotiroidismo (diagnosticado 2020)</div>
+    </div>
+    <div class="exp-section">
+      <div class="exp-title">Medicamentos Actuales</div>
+      <div style="font-size:.79rem;color:var(--txt2);line-height:1.8">• Losartán 50mg — 1 tableta diaria<br>• Levotiroxina 100mcg — 1 tableta en ayunas<br>• Aspirina 81mg — 1 tableta diaria</div>
+    </div>
+    <div class="exp-section">
+      <div class="exp-title">Últimas Consultas</div>
+      <table class="tbl">
+        <tr><th>Fecha</th><th>Médico</th><th>Diagnóstico</th><th>Evolución</th></tr>
+        <tr><td class="ts">15/05/26</td><td>Dr. Ramos</td><td>Control HTA</td><td><span class="badge bg">Estable</span></td></tr>
+        <tr><td class="ts">15/03/26</td><td>Dr. Ramos</td><td>Control HTA</td><td><span class="badge bg">Estable</span></td></tr>
+        <tr><td class="ts">10/01/26</td><td>Dra. Méndez</td><td>Hipotiroidismo</td><td><span class="badge by">Ajuste dosis</span></td></tr>
+      </table>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-s" onclick="document.getElementById('modal-exp').classList.remove('open')">Cerrar</button>
+      <button class="btn btn-p">Agregar Consulta</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL PACIENTE -->
+<div class="modal-bg" id="modal-pac">
+  <div class="modal">
+    <button class="modal-close" onclick="document.getElementById('modal-pac').classList.remove('open')">✕</button>
+    <h3>Nuevo Paciente</h3>
+    <label>Nombre Completo</label><input type="text" placeholder="Apellidos, Nombre"/>
+    <label>Cédula</label><input type="text" placeholder="000-0000000-0"/>
+    <label>Fecha de Nacimiento</label><input type="date"/>
+    <label>Grupo Sanguíneo</label>
+    <select><option>O+</option><option>O-</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option></select>
+    <label>ARS / Aseguradora</label>
+    <select><option>Particular</option><option>SENASA</option><option>ARS Universal</option><option>ARS Humano</option><option>ARS MAPFRE</option></select>
+    <label>Alergias Conocidas</label><input type="text" placeholder="Ej: Penicilina, Mariscos"/>
+    <label>Teléfono</label><input type="tel" placeholder="809-000-0000"/>
+    <div class="modal-footer">
+      <button class="btn btn-s" onclick="document.getElementById('modal-pac').classList.remove('open')">Cancelar</button>
+      <button class="btn btn-p" onclick="document.getElementById('modal-pac').classList.remove('open')">Registrar Paciente</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL FACTURA -->
+<div class="modal-bg" id="modal-fac">
+  <div class="modal">
+    <button class="modal-close" onclick="document.getElementById('modal-fac').classList.remove('open')">✕</button>
+    <h3>Nueva Factura</h3>
+    <label>Paciente</label><input type="text" placeholder="Buscar paciente..."/>
+    <label>Médico</label>
+    <select><option>Dra. Méndez</option><option>Dr. Ramos</option><option>Dr. Taveras</option></select>
+    <label>Servicio</label>
+    <select><option>Consulta General (RD$2,400)</option><option>Especialidad (RD$4,500)</option><option>Ecografía (RD$5,800)</option><option>Laboratorio (RD$1,800)</option><option>Procedimiento (Variable)</option></select>
+    <label>ARS / Cobertura</label>
+    <select><option>Particular</option><option>SENASA</option><option>ARS Universal</option><option>ARS Humano</option></select>
+    <label>% Cobertura ARS</label><input type="number" placeholder="Ej: 80"/>
+    <div class="modal-footer">
+      <button class="btn btn-s" onclick="document.getElementById('modal-fac').classList.remove('open')">Cancelar</button>
+      <button class="btn btn-p" onclick="document.getElementById('modal-fac').classList.remove('open')">Generar Factura</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL MEDICAMENTO -->
+<div class="modal-bg" id="modal-med">
+  <div class="modal">
+    <button class="modal-close" onclick="document.getElementById('modal-med').classList.remove('open')">✕</button>
+    <h3>Agregar Medicamento</h3>
+    <label>Nombre Comercial</label><input type="text" placeholder="Ej: Glucophage"/>
+    <label>Principio Activo</label><input type="text" placeholder="Ej: Metformina 850mg"/>
+    <label>Categoría</label>
+    <select><option>Antidiabético</option><option>Antihipertensivo</option><option>Antibiótico</option><option>Analgésico</option><option>Gastrointestinal</option><option>Cardíaco</option></select>
+    <label>Unidad</label>
+    <select><option>Tabletas</option><option>Cápsulas</option><option>Ampollas</option><option>Frascos</option><option>Bolsas IV</option></select>
+    <label>Stock Inicial</label><input type="number" placeholder="0"/>
+    <label>Precio por Unidad (RD$)</label><input type="number" placeholder="0.00"/>
+    <div class="modal-footer">
+      <button class="btn btn-s" onclick="document.getElementById('modal-med').classList.remove('open')">Cancelar</button>
+      <button class="btn btn-p" onclick="document.getElementById('modal-med').classList.remove('open')">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function nav(page, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sb-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('pg-' + page).classList.add('active');
+  if (btn) btn.classList.add('active');
+  const titles = {dashboard:'Dashboard',agenda:'Agenda de Citas',pacientes:'Expedientes de Pacientes',facturacion:'Facturación',farmacia:'Farmacia'};
+  document.getElementById('page-title').textContent = titles[page] || page;
+}
+
+// Build agenda
+const slots = ['8:00','8:30','9:00','9:30','10:00','10:30','11:00','11:30','2:00','2:30','3:00','3:30','4:00','4:30'];
+const agenda = {
+  '8:00':  {1:{n:'Ana Beltrán',d:'Ginecología',cls:'conf'}, 3:{n:'Pedro Almonte',d:'Lab.',cls:'conf'}},
+  '8:30':  {2:{n:'Jorge Castro',d:'Cardiología',cls:'conf'}},
+  '9:00':  {1:{n:'María Torres',d:'Control',cls:'conf'}, 4:{n:'Carmen Félix',d:'Consulta',cls:'conf'}},
+  '9:30':  {3:{n:'Luis Marte',d:'ECG',cls:'conf'}},
+  '10:00': {2:{n:'Rosa Herrera',d:'HTA',cls:'conf'}, 5:{n:'Julia Ponce',d:'Ginec.',cls:'pend'}},
+  '10:30': {1:{n:'Carlos Rojas',d:'Endoc.',cls:'conf'}},
+  '11:00': {4:{n:'Patricia Ureña',d:'Prenatal',cls:'conf'}},
+  '2:00':  {1:{n:'Rosa Herrera',d:'Control',cls:'conf'}, 2:{n:'Jorge Castillo',d:'Consulta',cls:'pend'}},
+  '2:30':  {3:{n:'María Soto',d:'Revisión',cls:'conf'}},
+  '3:00':  {2:{n:'Luis Familia',d:'Ecografía',cls:'pend'}},
+  '3:30':  {5:{n:'Carmen Núñez',d:'Seguimiento',cls:'conf'}},
+  '4:00':  {1:{n:'BLOQUEADO',d:'Almuerzo',cls:'block'}},
+};
+const tbody = document.getElementById('agenda-body');
+slots.forEach(t => {
+  const row = document.createElement('tr');
+  row.innerHTML = `<td style="text-align:right;font-size:.65rem;color:var(--txt3);padding:.3rem .5rem;border-bottom:1px solid rgba(200,200,200,0.04);white-space:nowrap;vertical-align:top;padding-top:.55rem">${t}</td>`;
+  for (let d = 1; d <= 5; d++) {
+    const td = document.createElement('td');
+    td.style.cssText = 'padding:.25rem;border-bottom:1px solid rgba(200,200,200,0.04);border-left:1px solid rgba(200,200,200,0.04);vertical-align:top;min-height:38px';
+    if (d === 1) td.style.background = 'rgba(38,198,218,0.03)';
+    const apt = agenda[t] && agenda[t][d];
+    if (apt) td.innerHTML = `<div class="apt ${apt.cls}"><div class="apt-name">${apt.n}</div><div class="apt-detail">${apt.d}</div></div>`;
+    row.appendChild(td);
+  }
+  tbody.appendChild(row);
+});
+
+const d = new Date();
+document.getElementById('top-date').textContent = d.toLocaleDateString('es-DO',{weekday:'long',day:'numeric',month:'long'});
+document.addEventListener('keydown', e => { if (e.key==='Escape') document.querySelectorAll('.modal-bg.open').forEach(m=>m.classList.remove('open')); });
+document.querySelectorAll('.modal-bg').forEach(bg => bg.addEventListener('click', e => { if (e.target===bg) bg.classList.remove('open'); }));
+</script>
+</body>
+</html>

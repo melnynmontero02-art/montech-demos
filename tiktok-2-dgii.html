@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=390,initial-scale=1"/>
+<title>MonTech TikTok 2 - DGII</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#000;width:390px;height:844px;overflow:hidden;font-family:'DM Sans',sans-serif;position:relative}
+  .scene{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0}
+  .noise{position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none}
+
+  /* SCENE 1 - ALARM */
+  #s1{opacity:1}
+  .alarm-wrap{text-align:center;padding:2rem;position:relative;z-index:2}
+  .alarm-icon{font-size:5rem;margin-bottom:1.5rem;animation:shake 0.4s .5s 4 ease-in-out}
+  .alarm-title{font-family:'Syne',sans-serif;font-size:2.6rem;font-weight:800;letter-spacing:-.03em;line-height:1.0;color:#fff;opacity:0;animation:fadeUp .7s .4s forwards}
+  .alarm-title .red{color:#ff3333}
+  .alarm-sub{font-size:1rem;color:#666;margin-top:1.2rem;line-height:1.6;opacity:0;animation:fadeUp .6s 1s forwards}
+  .alarm-badge{display:inline-block;margin-top:1.5rem;font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;color:#ff3333;border:1px solid #ff333333;padding:.4rem 1rem;border-radius:20px;opacity:0;animation:fadeUp .6s 1.6s forwards}
+  .red-glow{position:absolute;top:30%;left:50%;transform:translateX(-50%);width:300px;height:300px;background:radial-gradient(ellipse,rgba(255,50,50,0.1) 0%,transparent 70%);pointer-events:none;animation:pulse 2s infinite}
+
+  /* SCENE 2 - FACTS */
+  #s2 .facts{padding:2.5rem 2rem;width:100%}
+  .facts-title{font-family:'Syne',sans-serif;font-size:.85rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:#555;margin-bottom:2rem;text-align:center}
+  .fact-card{background:#0d0d0d;border:1px solid #1a1a1a;border-radius:14px;padding:1.2rem 1.4rem;margin-bottom:1rem;opacity:0;transform:translateY(10px)}
+  .fact-num{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;color:#ff3333;line-height:1}
+  .fact-desc{font-size:.88rem;color:#888;margin-top:.3rem;line-height:1.4}
+  .fact-date{display:inline-block;margin-top:.8rem;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:#333;border:1px solid #1a1a1a;padding:.25rem .7rem;border-radius:10px}
+
+  /* SCENE 3 - SOLUTION */
+  #s3 .solution{padding:2.5rem 2rem;width:100%;text-align:center}
+  .sol-question{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;color:#888;letter-spacing:-.02em;margin-bottom:.5rem;opacity:0;animation-fill-mode:forwards}
+  .sol-answer{font-family:'Syne',sans-serif;font-size:2.6rem;font-weight:800;letter-spacing:-.03em;line-height:1;opacity:0;animation-fill-mode:forwards}
+  .sol-answer span{background:linear-gradient(135deg,#fff,#888);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .sol-days{display:flex;align-items:center;justify-content:center;gap:1.5rem;margin:2rem 0;opacity:0}
+  .sol-day-num{font-family:'Syne',sans-serif;font-size:3.5rem;font-weight:800;color:#fff;line-height:1}
+  .sol-day-label{font-size:.85rem;color:#555;text-align:left;line-height:1.4}
+  .sol-features{text-align:left;margin:1.5rem 0;opacity:0}
+  .sol-feat{font-size:.88rem;color:#888;padding:.5rem 0;border-bottom:1px solid #111;display:flex;gap:.8rem;align-items:center}
+  .sol-feat:last-child{border:none}
+  .sol-feat::before{content:'→';color:#555;flex-shrink:0}
+
+  /* SCENE 4 - CTA */
+  #s4 .final{text-align:center;padding:3rem 2rem}
+  .final-logo{font-family:'Syne',sans-serif;font-size:3.5rem;font-weight:800;letter-spacing:-.04em;background:linear-gradient(135deg,#fff,#888);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.5rem}
+  .final-tagline{font-size:.8rem;color:#444;letter-spacing:.14em;text-transform:uppercase;margin-bottom:3rem}
+  .final-cta-box{background:#0d0d0d;border:1px solid #1a1a1a;border-radius:16px;padding:1.8rem;margin-bottom:1.5rem}
+  .final-cta-label{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:#444;margin-bottom:.8rem}
+  .final-number{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;color:#fff}
+  .final-sub{font-size:.8rem;color:#333;margin-top:.5rem;letter-spacing:.06em;text-transform:uppercase}
+  .final-badge{display:inline-block;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:#666;border:1px solid #1a1a1a;padding:.4rem 1rem;border-radius:20px}
+
+  .progress{position:absolute;bottom:0;left:0;height:3px;background:linear-gradient(90deg,#ff3333,#ff8888);width:0;z-index:100;animation:progress 20s linear forwards}
+  .brand-tag{position:absolute;top:2rem;left:50%;transform:translateX(-50%);font-family:'Syne',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#333;z-index:50}
+
+  @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+  @keyframes progress{from{width:0}to{width:100%}}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+  @keyframes pulse{0%,100%{opacity:.5}50%{opacity:1}}
+  @keyframes cardIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+
+<div class="brand-tag">MonTech · RD</div>
+<div class="progress"></div>
+
+<!-- SCENE 1: ALARM HOOK -->
+<div class="scene" id="s1">
+  <div class="noise"></div>
+  <div class="red-glow"></div>
+  <div class="alarm-wrap">
+    <div class="alarm-icon">⚠️</div>
+    <h1 class="alarm-title">La DGII<br>viene.<br><span class="red">¿Estás listo?</span></h1>
+    <p class="alarm-sub">Desde mayo 2025, la facturación<br>electrónica es <strong style="color:#ccc">obligatoria</strong> en RD.</p>
+    <span class="alarm-badge">Aplica para tu negocio</span>
+  </div>
+</div>
+
+<!-- SCENE 2: FACTS -->
+<div class="scene" id="s2">
+  <div class="noise"></div>
+  <div class="facts">
+    <p class="facts-title">Lo que arriesgas sin sistema</p>
+    <div class="fact-card" id="fc1">
+      <div class="fact-num">50%</div>
+      <div class="fact-desc">de multa sobre el monto no facturado electrónicamente</div>
+      <span class="fact-date">DGII · Norma 05-19</span>
+    </div>
+    <div class="fact-card" id="fc2">
+      <div class="fact-num">Cierre</div>
+      <div class="fact-desc">temporal del negocio por incumplimiento fiscal reiterado</div>
+      <span class="fact-date">Código Tributario RD</span>
+    </div>
+    <div class="fact-card" id="fc3">
+      <div class="fact-num">0 días</div>
+      <div class="fact-desc">de plazo para actualizar si ya eres contribuyente mediano</div>
+      <span class="fact-date">Vigente desde mayo 2025</span>
+    </div>
+  </div>
+</div>
+
+<!-- SCENE 3: SOLUTION -->
+<div class="scene" id="s3">
+  <div class="noise"></div>
+  <div class="solution">
+    <p class="sol-question" id="sq">¿La solución?</p>
+    <h2 class="sol-answer" id="sa"><span>MonTech.</span><br>En 5 días.</h2>
+    <div class="sol-days" id="sd">
+      <div><div class="sol-day-num">5</div></div>
+      <div class="sol-day-label">días para<br>implementar<br>todo</div>
+    </div>
+    <div class="sol-features" id="sf">
+      <div class="sol-feat">Facturación e-CF compatible DGII</div>
+      <div class="sol-feat">Reportes 606, 607, 608 automáticos</div>
+      <div class="sol-feat">Nómina electrónica integrada</div>
+      <div class="sol-feat">Soporte presencial en Santo Domingo</div>
+    </div>
+  </div>
+</div>
+
+<!-- SCENE 4: FINAL -->
+<div class="scene" id="s4">
+  <div class="noise"></div>
+  <div class="final">
+    <div class="final-logo">MonTech</div>
+    <div class="final-tagline">Software Empresarial · RD</div>
+    <div class="final-cta-box">
+      <div class="final-cta-label">Escríbenos hoy</div>
+      <div class="final-number">829-343-0288</div>
+      <div class="final-sub">Demo gratis · Sin compromiso</div>
+    </div>
+    <div class="final-badge">montech.do</div>
+  </div>
+</div>
+
+<script>
+(function(){
+  function show(id,delay){
+    setTimeout(function(){
+      var el=document.getElementById(id);
+      el.style.transition='opacity .8s ease';
+      el.style.opacity='1';
+    },delay);
+  }
+  function hide(id,delay){
+    setTimeout(function(){
+      var el=document.getElementById(id);
+      el.style.transition='opacity .5s ease';
+      el.style.opacity='0';
+    },delay);
+  }
+  function anim(id,delay,cls){
+    setTimeout(function(){
+      var el=document.getElementById(id);
+      if(el){el.style.animation=(cls||'cardIn .5s ease forwards');}
+    },delay);
+  }
+
+  // S1: 0-5s (visible by default)
+  hide('s1',5000);
+
+  // S2: 5-11s
+  show('s2',5200);
+  anim('fc1',5600);
+  anim('fc2',6800);
+  anim('fc3',8000);
+  hide('s2',11000);
+
+  // S3: 11-17s
+  show('s3',11200);
+  setTimeout(function(){
+    var sq=document.getElementById('sq');
+    var sa=document.getElementById('sa');
+    var sd=document.getElementById('sd');
+    var sf=document.getElementById('sf');
+    sq.style.animation='fadeUp .6s ease forwards';
+    setTimeout(function(){sa.style.animation='fadeUp .7s ease forwards';},600);
+    setTimeout(function(){sd.style.animation='fadeIn .6s ease forwards';},1300);
+    setTimeout(function(){sf.style.animation='fadeIn .6s ease forwards';},2000);
+  },11300);
+  hide('s3',17000);
+
+  // S4: 17-20s
+  show('s4',17200);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=390,initial-scale=1"/>
+<title>MonTech — Clínicas</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#000;width:390px;height:844px;overflow:hidden;font-family:'DM Sans',sans-serif;position:relative}
+.scene{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0}
+#s1{opacity:1}
+.noise{position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none}
+
+/* S1 HOOK */
+.s1-wrap{text-align:center;padding:2.5rem 2rem;z-index:2;position:relative}
+.s1-tag{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:#555;margin-bottom:1.5rem;opacity:0;animation:fu .6s .2s forwards}
+.s1-question{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:700;color:#666;letter-spacing:-.01em;opacity:0;animation:fu .6s .5s forwards}
+.s1-title{font-family:'Syne',sans-serif;font-size:2.6rem;font-weight:800;letter-spacing:-.04em;line-height:1.05;background:linear-gradient(135deg,#fff,#999);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;opacity:0;animation:fu .8s .9s forwards}
+.s1-sub{font-size:.92rem;color:#555;margin-top:1.5rem;line-height:1.7;opacity:0;animation:fu .7s 1.5s forwards}
+.glow-teal{position:absolute;top:25%;left:50%;transform:translateX(-50%);width:300px;height:300px;background:radial-gradient(ellipse,rgba(0,180,180,0.07) 0%,transparent 70%);pointer-events:none}
+
+/* S2 PROBLEM */
+.prob-wrap{padding:2.5rem 1.5rem;width:100%}
+.prob-header{text-align:center;margin-bottom:1.8rem}
+.prob-header-title{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#555}
+.prob-scenario{background:#0d0d0d;border:1px solid #1a1a1a;border-radius:14px;padding:1.2rem 1.4rem;margin-bottom:.8rem;opacity:0;transform:translateY(8px)}
+.prob-time{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:#333;margin-bottom:.5rem}
+.prob-desc{font-size:.88rem;color:#888;line-height:1.5}
+.prob-result{font-size:.78rem;color:#ff6b6b;margin-top:.4rem;font-style:italic}
+
+/* S3 APPOINTMENT */
+.appt-wrap{padding:2rem 1.5rem;width:100%}
+.appt-title{font-family:'Syne',sans-serif;font-size:.9rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#444;margin-bottom:1.2rem;text-align:center}
+.appt-day{background:#0d0d0d;border:1px solid #1a1a1a;border-radius:12px;padding:1rem;margin-bottom:.8rem;opacity:0}
+.appt-day-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:.8rem}
+.appt-day-name{font-family:'Syne',sans-serif;font-size:.85rem;font-weight:700;color:#fff}
+.appt-day-count{font-size:.7rem;color:#555;letter-spacing:.08em;text-transform:uppercase}
+.appt-slot{display:flex;align-items:center;gap:.8rem;padding:.4rem 0;border-bottom:1px solid #111}
+.appt-slot:last-child{border:none}
+.appt-time{font-family:'Syne',sans-serif;font-size:.8rem;font-weight:700;color:#666;min-width:50px}
+.appt-patient{font-size:.82rem;color:#888}
+.appt-type{font-size:.7rem;color:#444;margin-left:auto}
+.appt-status{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.status-ok{background:#4caf50}
+.status-wait{background:#ff9800}
+.stat-row{display:flex;gap:.8rem;margin-top:.8rem;opacity:0}
+.stat-mini{flex:1;background:#0d0d0d;border:1px solid #111;border-radius:10px;padding:.7rem;text-align:center}
+.stat-mini-num{font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;color:#fff}
+.stat-mini-label{font-size:.65rem;color:#444;text-transform:uppercase;letter-spacing:.08em;margin-top:.2rem}
+
+/* S4 EXPEDIENTE */
+.exp-wrap{padding:2rem 1.5rem;width:100%}
+.exp-title{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#444;margin-bottom:1.2rem;text-align:center}
+.patient-card{background:#0d0d0d;border:1px solid #1a1a1a;border-radius:14px;padding:1.2rem;margin-bottom:.8rem;opacity:0}
+.patient-header{display:flex;gap:1rem;align-items:center;margin-bottom:1rem}
+.patient-avatar{width:40px;height:40px;border-radius:50%;background:#111;border:1px solid #1e1e1e;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:.9rem;font-weight:700;color:#888;flex-shrink:0}
+.patient-name{font-size:.95rem;color:#ddd;font-weight:500}
+.patient-info{font-size:.75rem;color:#444;margin-top:.2rem}
+.hist-item{display:flex;gap:.8rem;padding:.5rem 0;border-bottom:1px solid #0d0d0d;align-items:flex-start}
+.hist-item:last-child{border:none}
+.hist-date{font-size:.72rem;color:#333;min-width:55px;letter-spacing:.04em}
+.hist-desc{font-size:.8rem;color:#777;line-height:1.4}
+.features-inline{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;opacity:0}
+.fi-item{background:#0d0d0d;border:1px solid #111;border-radius:10px;padding:.7rem;text-align:center}
+.fi-icon{font-size:1.1rem;margin-bottom:.3rem}
+.fi-name{font-size:.72rem;color:#888;line-height:1.3}
+
+/* S5 PRICING */
+.pricing{padding:2.5rem 1.5rem;width:100%;text-align:center}
+.price-eyebrow{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:#555;margin-bottom:1rem;opacity:0;animation-fill-mode:forwards}
+.price-value{font-family:'Syne',sans-serif;font-size:3rem;font-weight:800;color:#fff;line-height:1;opacity:0;animation-fill-mode:forwards}
+.price-period{font-size:1rem;color:#444;font-family:'DM Sans',sans-serif}
+.price-impl{font-size:.8rem;color:#333;margin-top:.4rem;opacity:0;animation-fill-mode:forwards}
+.price-list{text-align:left;margin:1.5rem 0;background:#0d0d0d;border:1px solid #1a1a1a;border-radius:14px;padding:1rem 1.2rem;opacity:0;animation-fill-mode:forwards}
+.p-item{font-size:.85rem;color:#777;padding:.4rem 0;border-bottom:1px solid #111;display:flex;gap:.6rem}
+.p-item:last-child{border:none}
+.p-item::before{content:'✓';color:#555}
+.price-btn{background:#fff;color:#000;font-family:'Syne',sans-serif;font-size:.95rem;font-weight:800;padding:.9rem 2.5rem;border-radius:40px;display:inline-block;margin-top:.8rem;opacity:0;animation-fill-mode:forwards;letter-spacing:.02em}
+
+.final{text-align:center;padding:3rem 2rem}
+.final-logo{font-family:'Syne',sans-serif;font-size:3.2rem;font-weight:800;letter-spacing:-.04em;background:linear-gradient(135deg,#fff,#888);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.4rem}
+.final-service{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:#444;margin-bottom:2.5rem}
+.final-num{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;color:#fff;margin-bottom:.3rem}
+.final-num-label{font-size:.7rem;color:#444;letter-spacing:.12em;text-transform:uppercase;margin-bottom:2rem}
+.final-pill{display:inline-block;border:1px solid #1a1a1a;color:#555;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;padding:.4rem 1.1rem;border-radius:20px}
+
+.progress{position:absolute;bottom:0;left:0;height:3px;background:linear-gradient(90deg,#00b4b4,#aaa);width:0;z-index:100;animation:progress 24s linear forwards}
+.brand{position:absolute;top:1.8rem;left:50%;transform:translateX(-50%);font-family:'Syne',sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#2a2a2a;z-index:50}
+
+@keyframes fu{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fi{from{opacity:0}to{opacity:1}}
+@keyframes progress{from{width:0}to{width:100%}}
+@keyframes cardIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+<div class="brand">MonTech · Clínicas</div>
+<div class="progress"></div>
+
+<!-- S1 HOOK -->
+<div class="scene" id="s1">
+  <div class="noise"></div><div class="glow-teal"></div>
+  <div class="s1-wrap">
+    <p class="s1-tag">Para médicos · dentistas · centros de salud</p>
+    <p class="s1-question">¿Todavía buscas</p>
+    <h1 class="s1-title">el expediente<br>de tu paciente<br>en papel?</h1>
+    <p class="s1-sub">MonTech digitaliza tu clínica.<br>Citas, historial, facturación<br>y nómina — en un solo sistema.</p>
+  </div>
+</div>
+
+<!-- S2 PROBLEMS -->
+<div class="scene" id="s2">
+  <div class="noise"></div>
+  <div class="prob-wrap">
+    <div class="prob-header"><p class="prob-header-title">Sin sistema de gestión</p></div>
+    <div class="prob-scenario" id="ps1">
+      <div class="prob-time">Lunes 8:00 AM</div>
+      <div class="prob-desc">Paciente llega. Búsqueda del expediente en gavetas. 15 minutos perdidos antes de iniciar la consulta.</div>
+      <div class="prob-result">→ 4 pacientes menos por día</div>
+    </div>
+    <div class="prob-scenario" id="ps2">
+      <div class="prob-time">Fin de mes</div>
+      <div class="prob-desc">Facturas manuales, sin correlativo DGII. Contabilidad imposible. Ingresos que no cuadran.</div>
+      <div class="prob-result">→ Riesgo fiscal real</div>
+    </div>
+    <div class="prob-scenario" id="ps3">
+      <div class="prob-time">Todos los días</div>
+      <div class="prob-desc">Citas agendadas en WhatsApp y libretas. Doble reservas, pacientes que llegan sin estar en la agenda.</div>
+      <div class="prob-result">→ Caos en sala de espera</div>
+    </div>
+  </div>
+</div>
+
+<!-- S3 APPOINTMENTS -->
+<div class="scene" id="s3">
+  <div class="noise"></div>
+  <div class="appt-wrap">
+    <p class="appt-title">Con MonTech — Agenda digital</p>
+    <div class="appt-day" id="ad1">
+      <div class="appt-day-header"><span class="appt-day-name">Hoy — Lunes</span><span class="appt-day-count">12 citas confirmadas</span></div>
+      <div class="appt-slot"><span class="appt-time">8:00</span><span class="appt-patient">Pedro Martínez</span><span class="appt-type">Consulta general</span><div class="appt-status status-ok"></div></div>
+      <div class="appt-slot"><span class="appt-time">8:30</span><span class="appt-patient">Ana Rodríguez</span><span class="appt-type">Seguimiento</span><div class="appt-status status-ok"></div></div>
+      <div class="appt-slot"><span class="appt-time">9:00</span><span class="appt-patient">Carlos Marte</span><span class="appt-type">Primera vez</span><div class="appt-status status-wait"></div></div>
+      <div class="appt-slot"><span class="appt-time">9:30</span><span class="appt-patient">Rosa Castillo</span><span class="appt-type">Consulta general</span><div class="appt-status status-ok"></div></div>
+    </div>
+    <div class="stat-row" id="sr1">
+      <div class="stat-mini"><div class="stat-mini-num">12</div><div class="stat-mini-label">Citas hoy</div></div>
+      <div class="stat-mini"><div class="stat-mini-num">0</div><div class="stat-mini-label">Conflictos</div></div>
+      <div class="stat-mini"><div class="stat-mini-num">RD$48K</div><div class="stat-mini-label">Facturado</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- S4 EXPEDIENTE -->
+<div class="scene" id="s4">
+  <div class="noise"></div>
+  <div class="exp-wrap">
+    <p class="exp-title">Expediente clínico digital</p>
+    <div class="patient-card" id="ec1">
+      <div class="patient-header">
+        <div class="patient-avatar">PM</div>
+        <div><div class="patient-name">Pedro Martínez</div><div class="patient-info">42 años · Hipertensión · Tipo O+</div></div>
+      </div>
+      <div class="hist-item"><span class="hist-date">15/05/26</span><span class="hist-desc">Consulta general. Presión: 140/90. Ajuste medicamento.</span></div>
+      <div class="hist-item"><span class="hist-date">02/04/26</span><span class="hist-desc">Control mensual. Resultados de laboratorio normales.</span></div>
+      <div class="hist-item"><span class="hist-date">15/03/26</span><span class="hist-desc">Primera consulta. Diagnóstico hipertensión grado 1.</span></div>
+    </div>
+    <div class="features-inline" id="fi">
+      <div class="fi-item"><div class="fi-icon">💊</div><div class="fi-name">Recetas digitales</div></div>
+      <div class="fi-item"><div class="fi-icon">🧪</div><div class="fi-name">Resultados lab</div></div>
+      <div class="fi-item"><div class="fi-icon">💳</div><div class="fi-name">Factura e-CF</div></div>
+      <div class="fi-item"><div class="fi-icon">📱</div><div class="fi-name">Acceso móvil</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- S5 PRICING -->
+<div class="scene" id="s5">
+  <div class="noise"></div>
+  <div class="pricing">
+    <p class="price-eyebrow" id="pe">MonTech para Clínicas</p>
+    <div class="price-value" id="pv">US$200<span class="price-period">/mes</span></div>
+    <div class="price-impl" id="pi">+ US$2,500 implementación única</div>
+    <div class="price-list" id="pl">
+      <div class="p-item">Agenda digital con citas automáticas</div>
+      <div class="p-item">Expediente clínico digital completo</div>
+      <div class="p-item">Facturación electrónica e-CF DGII</div>
+      <div class="p-item">Nómina del personal de salud</div>
+      <div class="p-item">Implementación en 5 días · Soporte RD</div>
+    </div>
+    <div class="price-btn" id="pb">829-343-0288 → Demo gratis</div>
+  </div>
+</div>
+
+<!-- FINAL -->
+<div class="scene" id="sf">
+  <div class="noise"></div>
+  <div class="final">
+    <div class="final-logo">MonTech</div>
+    <div class="final-service">Software para Clínicas · República Dominicana</div>
+    <div class="final-num">829-343-0288</div>
+    <div class="final-num-label">WhatsApp · Demo Gratis</div>
+    <div class="final-pill">montech.do</div>
+  </div>
+</div>
+
+<script>
+(function(){
+  function show(id,d){setTimeout(function(){var e=document.getElementById(id);e.style.transition='opacity .8s ease';e.style.opacity='1';},d);}
+  function hide(id,d){setTimeout(function(){var e=document.getElementById(id);e.style.transition='opacity .5s ease';e.style.opacity='0';},d);}
+  function anim(id,d,a){setTimeout(function(){var e=document.getElementById(id);if(e)e.style.animation=(a||'cardIn .5s ease forwards');},d);}
+
+  hide('s1',5000);
+  show('s2',5200);
+  anim('ps1',5600);anim('ps2',6800);anim('ps3',8000);
+  hide('s2',11000);
+
+  show('s3',11200);
+  anim('ad1',11600);anim('sr1',13000,'cardIn .6s ease forwards');
+  hide('s3',16000);
+
+  show('s4',16200);
+  anim('ec1',16600);anim('fi',18200);
+  hide('s4',21000);
+
+  show('s5',21200);
+  anim('pe',21500,'fu .5s ease forwards');
+  anim('pv',21900,'fu .6s ease forwards');
+  anim('pi',22300,'fu .5s ease forwards');
+  anim('pl',22700,'fu .6s ease forwards');
+  anim('pb',23400,'fu .6s ease forwards');
+  hide('s5',26500);
+
+  show('sf',26700);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,2081 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MonTech — Soluciones de Software Empresarial</title>
+  <meta name="description" content="MonTech ofrece soluciones de software empresarial para República Dominicana: ERP, CRM, Nómina, POS, y sistemas a medida." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:          #070707;
+      --bg-2:        #0d0d0d;
+      --bg-card:     #111111;
+      --bg-card-2:   #161616;
+      --silver:      #c8c8c8;
+      --silver-2:    #a0a0a0;
+      --silver-3:    #6a6a6a;
+      --white:       #f0f0f0;
+      --accent:      #d4d4d4;
+      --line:        rgba(200,200,200,0.08);
+      --line-bright: rgba(200,200,200,0.18);
+      --glow:        rgba(200,200,200,0.06);
+      --font-display:'Syne', sans-serif;
+      --font-body:   'DM Sans', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--white);
+      font-family: var(--font-body);
+      font-weight: 300;
+      line-height: 1.6;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* CURSOR */
+    #cursor {
+      position: fixed;
+      width: 10px; height: 10px;
+      background: var(--silver);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%,-50%);
+      transition: transform .1s, width .3s, height .3s, background .3s;
+    }
+    #cursor-ring {
+      position: fixed;
+      width: 36px; height: 36px;
+      border: 1px solid rgba(200,200,200,0.4);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%,-50%);
+      transition: transform .18s ease-out, width .3s, height .3s, border-color .3s;
+    }
+    body:hover #cursor { opacity: 1; }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.4rem 4rem;
+      transition: background .4s, backdrop-filter .4s, border-bottom .4s;
+    }
+    nav.scrolled {
+      background: rgba(7,7,7,0.88);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      font-weight: 800;
+      letter-spacing: -.02em;
+      background: linear-gradient(135deg, #fff 0%, var(--silver) 50%, #888 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-decoration: none;
+    }
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+    .nav-links a {
+      color: var(--silver-2);
+      text-decoration: none;
+      font-size: .9rem;
+      letter-spacing: .04em;
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--white); }
+    .nav-cta {
+      background: transparent;
+      border: 1px solid var(--line-bright);
+      color: var(--white);
+      padding: .6rem 1.5rem;
+      border-radius: 40px;
+      font-family: var(--font-body);
+      font-size: .9rem;
+      cursor: none;
+      transition: background .3s, border-color .3s;
+      text-decoration: none;
+    }
+    .nav-cta:hover {
+      background: rgba(200,200,200,0.08);
+      border-color: var(--silver-2);
+    }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 8rem 2rem 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-noise {
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+      pointer-events: none;
+      opacity: .6;
+    }
+    .hero-glow {
+      position: absolute;
+      top: 20%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(ellipse, rgba(180,180,180,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(200,200,200,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(200,200,200,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 40%, transparent 100%);
+    }
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: .6rem;
+      font-size: .78rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--silver-2);
+      border: 1px solid var(--line-bright);
+      padding: .4rem 1.2rem;
+      border-radius: 40px;
+      margin-bottom: 2.5rem;
+      backdrop-filter: blur(8px);
+      background: rgba(255,255,255,0.03);
+      opacity: 0;
+      animation: fadeUp .8s .2s ease forwards;
+    }
+    .hero-eyebrow span.dot {
+      width: 6px; height: 6px;
+      background: var(--silver);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%,100% { opacity: 1; }
+      50% { opacity: .3; }
+    }
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 8vw, 7rem);
+      font-weight: 800;
+      line-height: 1.0;
+      letter-spacing: -.04em;
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: fadeUp .9s .4s ease forwards;
+    }
+    .hero-title .line-silver {
+      background: linear-gradient(135deg, #ffffff 0%, #c8c8c8 40%, #888 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-title .line-dim {
+      color: var(--silver-3);
+    }
+    .hero-sub {
+      font-size: clamp(1rem, 1.8vw, 1.2rem);
+      color: var(--silver-2);
+      max-width: 560px;
+      margin: 0 auto 3.5rem;
+      line-height: 1.7;
+      opacity: 0;
+      animation: fadeUp .9s .6s ease forwards;
+    }
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp .9s .8s ease forwards;
+    }
+    .btn-primary {
+      background: var(--white);
+      color: #000;
+      padding: .85rem 2.2rem;
+      border-radius: 40px;
+      font-family: var(--font-body);
+      font-weight: 500;
+      font-size: .95rem;
+      text-decoration: none;
+      transition: background .3s, transform .2s;
+      border: none;
+      cursor: none;
+    }
+    .btn-primary:hover { background: var(--silver); transform: translateY(-2px); }
+    .btn-ghost {
+      background: transparent;
+      color: var(--silver);
+      padding: .85rem 2.2rem;
+      border-radius: 40px;
+      border: 1px solid var(--line-bright);
+      font-family: var(--font-body);
+      font-size: .95rem;
+      text-decoration: none;
+      transition: border-color .3s, color .3s, transform .2s;
+      cursor: none;
+    }
+    .btn-ghost:hover { border-color: var(--silver); color: var(--white); transform: translateY(-2px); }
+    .hero-stats {
+      display: flex;
+      gap: 4rem;
+      margin-top: 6rem;
+      opacity: 0;
+      animation: fadeUp .9s 1s ease forwards;
+    }
+    .stat { text-align: center; }
+    .stat-num {
+      font-family: var(--font-display);
+      font-size: 2.2rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #fff, var(--silver));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .stat-label {
+      font-size: .8rem;
+      color: var(--silver-3);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* DIVIDER */
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--line-bright), transparent);
+    }
+
+    /* SERVICES */
+    .section {
+      padding: 7rem 4rem;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+    .section-label {
+      font-size: .75rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--silver-3);
+      margin-bottom: 1rem;
+    }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      font-weight: 700;
+      letter-spacing: -.03em;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+    }
+    .section-title em {
+      font-style: normal;
+      background: linear-gradient(135deg, #fff, var(--silver));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .section-sub {
+      color: var(--silver-2);
+      max-width: 500px;
+      font-size: 1.05rem;
+      line-height: 1.7;
+      margin-bottom: 4rem;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5px;
+      background: var(--line);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      overflow: hidden;
+    }
+    .service-card {
+      background: var(--bg-card);
+      padding: 2.5rem;
+      position: relative;
+      transition: background .3s;
+      overflow: hidden;
+    }
+    .service-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(200,200,200,0.06) 0%, transparent 70%);
+      opacity: 0;
+      transition: opacity .4s;
+    }
+    .service-card:hover { background: var(--bg-card-2); }
+    .service-card:hover::before { opacity: 1; }
+    .service-icon {
+      width: 44px; height: 44px;
+      border: 1px solid var(--line-bright);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      font-size: 1.2rem;
+      background: rgba(255,255,255,0.03);
+    }
+    .service-name {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: .8rem;
+      color: var(--white);
+    }
+    .service-desc {
+      font-size: .9rem;
+      color: var(--silver-2);
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+    .service-price {
+      font-family: var(--font-display);
+      font-size: .85rem;
+      font-weight: 600;
+      color: var(--silver-3);
+      letter-spacing: .04em;
+    }
+    .service-price strong {
+      color: var(--silver);
+      font-size: 1rem;
+    }
+    .service-tag {
+      display: inline-block;
+      margin-top: .8rem;
+      font-size: .72rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--silver-3);
+      border: 1px solid var(--line);
+      padding: .25rem .8rem;
+      border-radius: 20px;
+    }
+
+    /* WHY */
+    .why-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+    .why-visual {
+      position: relative;
+      height: 420px;
+    }
+    .why-card-stack {
+      position: absolute;
+      inset: 0;
+    }
+    .wcard {
+      position: absolute;
+      background: var(--bg-card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 1.5rem;
+    }
+    .wcard-1 { left: 0; top: 0; width: 62%; }
+    .wcard-2 { right: 0; top: 20%; width: 55%; }
+    .wcard-3 { left: 10%; bottom: 0; width: 68%; }
+    .wcard-label {
+      font-size: .7rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--silver-3);
+      margin-bottom: .6rem;
+    }
+    .wcard-val {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--white);
+    }
+    .wcard-sub {
+      font-size: .82rem;
+      color: var(--silver-2);
+      margin-top: .3rem;
+    }
+    .why-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+    .why-item {
+      display: flex;
+      gap: 1.2rem;
+      align-items: flex-start;
+    }
+    .why-bullet {
+      width: 32px; height: 32px;
+      flex-shrink: 0;
+      border: 1px solid var(--line-bright);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .85rem;
+      color: var(--silver);
+      margin-top: .1rem;
+    }
+    .why-item-title {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 1rem;
+      margin-bottom: .3rem;
+    }
+    .why-item-desc {
+      font-size: .9rem;
+      color: var(--silver-2);
+      line-height: 1.6;
+    }
+
+    /* PRICING */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    .pricing-card {
+      background: var(--bg-card);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 2.5rem;
+      position: relative;
+      transition: border-color .3s, transform .3s;
+    }
+    .pricing-card:hover { border-color: var(--silver-3); transform: translateY(-4px); }
+    .pricing-card.featured {
+      border-color: var(--silver-2);
+      background: var(--bg-card-2);
+    }
+    .pricing-card.featured::before {
+      content: 'Más popular';
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--white);
+      color: #000;
+      font-size: .7rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      font-weight: 600;
+      padding: .3rem 1rem;
+      border-radius: 20px;
+    }
+    .pricing-plan {
+      font-size: .75rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--silver-3);
+      margin-bottom: .8rem;
+    }
+    .pricing-price {
+      font-family: var(--font-display);
+      font-size: 2.8rem;
+      font-weight: 800;
+      color: var(--white);
+      line-height: 1;
+      margin-bottom: .5rem;
+    }
+    .pricing-price span {
+      font-size: 1rem;
+      font-weight: 400;
+      color: var(--silver-3);
+    }
+    .pricing-setup {
+      font-size: .82rem;
+      color: var(--silver-3);
+      margin-bottom: 2rem;
+    }
+    .pricing-features {
+      list-style: none;
+      margin-bottom: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: .8rem;
+    }
+    .pricing-features li {
+      font-size: .9rem;
+      color: var(--silver-2);
+      display: flex;
+      align-items: center;
+      gap: .7rem;
+    }
+    .pricing-features li::before {
+      content: '✓';
+      color: var(--silver);
+      font-size: .8rem;
+    }
+    .pricing-btn {
+      display: block;
+      text-align: center;
+      padding: .85rem;
+      border-radius: 12px;
+      font-family: var(--font-body);
+      font-size: .9rem;
+      text-decoration: none;
+      transition: all .3s;
+      cursor: none;
+    }
+    .pricing-btn-outline {
+      border: 1px solid var(--line-bright);
+      color: var(--silver);
+    }
+    .pricing-btn-outline:hover { border-color: var(--silver); color: var(--white); }
+    .pricing-btn-solid {
+      background: var(--white);
+      color: #000;
+      font-weight: 500;
+      border: none;
+    }
+    .pricing-btn-solid:hover { background: var(--silver); }
+
+    /* TESTIMONIALS */
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    .tcard {
+      background: var(--bg-card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 2rem;
+      transition: border-color .3s;
+    }
+    .tcard:hover { border-color: var(--line-bright); }
+    .tcard-stars {
+      color: var(--silver);
+      font-size: .85rem;
+      margin-bottom: 1rem;
+      letter-spacing: .1em;
+    }
+    .tcard-quote {
+      font-size: .95rem;
+      color: var(--silver-2);
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+      font-style: italic;
+    }
+    .tcard-author {
+      display: flex;
+      align-items: center;
+      gap: .8rem;
+    }
+    .tcard-avatar {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: var(--bg-card-2);
+      border: 1px solid var(--line-bright);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .8rem;
+      color: var(--silver);
+      font-family: var(--font-display);
+      font-weight: 700;
+    }
+    .tcard-name {
+      font-size: .88rem;
+      font-weight: 500;
+      color: var(--white);
+    }
+    .tcard-biz {
+      font-size: .78rem;
+      color: var(--silver-3);
+    }
+
+    /* CTA SECTION */
+    .cta-section {
+      margin: 0 4rem 7rem;
+      background: var(--bg-card);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 80%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--silver-2), transparent);
+    }
+    .cta-glow {
+      position: absolute;
+      top: -100px; left: 50%;
+      transform: translateX(-50%);
+      width: 500px; height: 400px;
+      background: radial-gradient(ellipse, rgba(180,180,180,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .cta-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 800;
+      letter-spacing: -.03em;
+      margin-bottom: 1rem;
+    }
+    .cta-sub {
+      color: var(--silver-2);
+      max-width: 480px;
+      margin: 0 auto 2.5rem;
+      font-size: 1.05rem;
+    }
+    .cta-form {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      max-width: 440px;
+      margin: 0 auto;
+    }
+    .cta-input {
+      flex: 1;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--line-bright);
+      border-radius: 12px;
+      padding: .85rem 1.2rem;
+      color: var(--white);
+      font-family: var(--font-body);
+      font-size: .95rem;
+      outline: none;
+      transition: border-color .3s;
+    }
+    .cta-input::placeholder { color: var(--silver-3); }
+    .cta-input:focus { border-color: var(--silver-2); }
+    .cta-form .btn-primary { white-space: nowrap; }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 3rem 4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+    .footer-logo {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #fff, var(--silver));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .footer-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+    .footer-links a {
+      color: var(--silver-3);
+      text-decoration: none;
+      font-size: .85rem;
+      transition: color .2s;
+    }
+    .footer-links a:hover { color: var(--silver); }
+    .footer-copy {
+      color: var(--silver-3);
+      font-size: .82rem;
+    }
+
+    /* REVEAL ANIMATION */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* MARQUEE */
+    .marquee-wrap {
+      overflow: hidden;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      padding: 1.2rem 0;
+      margin: 0;
+    }
+    .marquee-track {
+      display: flex;
+      gap: 4rem;
+      animation: marquee 30s linear infinite;
+      white-space: nowrap;
+      width: max-content;
+    }
+    .marquee-item {
+      font-family: var(--font-display);
+      font-size: .75rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--silver-3);
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    .marquee-item::after {
+      content: '◆';
+      font-size: .4rem;
+      color: var(--silver-3);
+    }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      nav { padding: 1.2rem 2rem; }
+      .nav-links { display: none; }
+      .section { padding: 5rem 1.5rem; }
+      .services-grid { grid-template-columns: 1fr; }
+      .why-grid { grid-template-columns: 1fr; }
+      .why-visual { height: 300px; margin-bottom: 3rem; }
+      .pricing-grid { grid-template-columns: 1fr; }
+      .testimonials-grid { grid-template-columns: 1fr; }
+      .cta-section { margin: 0 1.5rem 5rem; padding: 3rem 1.5rem; }
+      .cta-form { flex-direction: column; }
+      .hero-stats { gap: 2rem; }
+      footer { flex-direction: column; align-items: flex-start; padding: 2rem 1.5rem; }
+    }
+
+    /* SCROLL PROGRESS BAR */
+    #scroll-bar {
+      position: fixed;
+      top: 0; left: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #ffffff 0%, #888888 100%);
+      z-index: 10000;
+      width: 0%;
+      pointer-events: none;
+      transition: width .06s linear;
+    }
+
+    /* DIRECTIONAL REVEALS */
+    .reveal-left {
+      opacity: 0;
+      transform: translateX(-52px);
+      transition: opacity .85s ease, transform .85s ease;
+    }
+    .reveal-left.visible { opacity: 1; transform: translateX(0); }
+
+    .reveal-right {
+      opacity: 0;
+      transform: translateX(52px);
+      transition: opacity .85s ease, transform .85s ease;
+    }
+    .reveal-right.visible { opacity: 1; transform: translateX(0); }
+
+    /* STAGGERED GRID CHILDREN */
+    .stagger > * {
+      opacity: 0;
+      transform: translateY(36px);
+      transition: opacity .6s ease, transform .6s ease;
+    }
+    .stagger.visible > * { opacity: 1; transform: translateY(0); }
+    .stagger.visible > *:nth-child(1) { transition-delay: .04s; }
+    .stagger.visible > *:nth-child(2) { transition-delay: .14s; }
+    .stagger.visible > *:nth-child(3) { transition-delay: .24s; }
+    .stagger.visible > *:nth-child(4) { transition-delay: .34s; }
+    .stagger.visible > *:nth-child(5) { transition-delay: .44s; }
+    .stagger.visible > *:nth-child(6) { transition-delay: .54s; }
+
+    /* BUSINESS FINDER */
+    .finder-section {
+      padding: 4rem 4rem 2.5rem;
+      max-width: 1300px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .finder-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 700;
+      letter-spacing: -.03em;
+      margin-bottom: .6rem;
+    }
+    .finder-title em {
+      font-style: normal;
+      background: linear-gradient(135deg, #fff, var(--silver));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .finder-sub {
+      color: var(--silver-3);
+      font-size: .95rem;
+      margin-bottom: 2rem;
+    }
+    .biz-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .65rem;
+      justify-content: center;
+    }
+    .biz-chip {
+      background: transparent;
+      border: 1px solid var(--line-bright);
+      color: var(--silver-2);
+      padding: .65rem 1.4rem;
+      border-radius: 40px;
+      font-family: var(--font-body);
+      font-size: .88rem;
+      cursor: none;
+      transition: all .22s ease;
+      white-space: nowrap;
+    }
+    .biz-chip:hover {
+      border-color: var(--silver-2);
+      color: var(--white);
+      background: rgba(200,200,200,0.06);
+      transform: translateY(-1px);
+    }
+    .biz-chip.active {
+      background: var(--white);
+      color: #000;
+      border-color: var(--white);
+      font-weight: 500;
+    }
+    .finder-hint {
+      margin-top: 1.2rem;
+      font-size: .78rem;
+      color: var(--silver-3);
+      letter-spacing: .05em;
+    }
+
+    /* SERVICE CARD STATES (filtro) */
+    .services-grid { transition: none; }
+    .service-card {
+      transition: background .3s, opacity .45s ease, transform .45s ease, filter .45s ease;
+    }
+    .service-card.dimmed {
+      opacity: .14;
+      filter: grayscale(.7);
+      transform: scale(.965);
+      pointer-events: none;
+    }
+    .service-card.highlighted {
+      background: var(--bg-card-2);
+      outline: 1px solid var(--silver-3);
+    }
+    .service-card.highlighted::after {
+      content: 'Recomendado ✓';
+      position: absolute;
+      top: 1rem; right: 1rem;
+      font-size: .65rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      background: var(--white);
+      color: #000;
+      padding: .22rem .75rem;
+      border-radius: 20px;
+      font-weight: 700;
+      font-family: var(--font-body);
+    }
+
+    /* FLOATING WHATSAPP */
+    .wa-float {
+      position: fixed;
+      bottom: 2rem; right: 2rem;
+      width: 58px; height: 58px;
+      background: #25D366;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 500;
+      box-shadow: 0 4px 20px rgba(37,211,102,0.38);
+      transition: transform .3s, box-shadow .3s;
+      cursor: none;
+      text-decoration: none;
+    }
+    .wa-float:hover { transform: scale(1.12); box-shadow: 0 8px 32px rgba(37,211,102,0.55); }
+    .wa-float svg { width: 28px; height: 28px; fill: #fff; }
+    .wa-pulse {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: #25D366;
+      animation: waPulse 2.6s ease-out infinite;
+      z-index: -1;
+    }
+    @keyframes waPulse {
+      0% { transform: scale(1); opacity: .55; }
+      100% { transform: scale(1.75); opacity: 0; }
+    }
+
+    /* MOBILE NAV TOGGLE */
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: transparent;
+      border: none;
+      cursor: none;
+      padding: .4rem;
+      z-index: 200;
+    }
+    .nav-toggle span {
+      display: block;
+      width: 22px; height: 1.5px;
+      background: var(--silver);
+      border-radius: 2px;
+      transition: transform .3s, opacity .3s;
+    }
+    .nav-toggle.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .nav-toggle.open span:nth-child(2) { opacity: 0; }
+    .nav-toggle.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+    .nav-mobile {
+      position: fixed;
+      inset: 0;
+      background: rgba(7,7,7,0.97);
+      backdrop-filter: blur(20px);
+      z-index: 150;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .3s;
+    }
+    .nav-mobile.open { opacity: 1; pointer-events: all; }
+    .nav-mobile ul {
+      list-style: none;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 2.2rem;
+    }
+    .nav-mobile a {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--silver-2);
+      text-decoration: none;
+      transition: color .2s;
+      letter-spacing: -.02em;
+    }
+    .nav-mobile a:hover { color: var(--white); }
+
+    @media (max-width: 900px) {
+      .nav-toggle { display: flex; }
+      .nav-cta { display: none; }
+      .wa-float { bottom: 1.4rem; right: 1.4rem; }
+      .finder-section { padding: 3rem 1.5rem 2rem; }
+      .biz-chips { gap: .5rem; }
+      .biz-chip { font-size: .82rem; padding: .55rem 1rem; }
+    }
+
+    /* ─── MODALES DE SERVICIO ─── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.82);
+      backdrop-filter: blur(14px);
+      z-index: 1000;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .3s ease;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .modal-box {
+      background: #0a0a0a;
+      border: 1px solid rgba(200,200,200,0.1);
+      border-bottom: none;
+      border-radius: 24px 24px 0 0;
+      width: 100%;
+      max-width: 920px;
+      max-height: 88vh;
+      overflow-y: auto;
+      padding: 2.5rem;
+      transform: translateY(80px);
+      transition: transform .42s cubic-bezier(.22,1,.36,1);
+    }
+    .modal-overlay.open .modal-box { transform: translateY(0); }
+    .modal-handle {
+      width: 40px; height: 4px;
+      background: var(--line-bright);
+      border-radius: 4px;
+      margin: 0 auto 2rem;
+    }
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+    }
+    .modal-header-left { display: flex; align-items: center; gap: 1rem; }
+    .modal-icon { font-size: 1.6rem; }
+    .modal-title {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -.02em;
+    }
+    .modal-close {
+      width: 36px; height: 36px;
+      background: rgba(200,200,200,0.07);
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      color: var(--silver);
+      font-size: 1.1rem;
+      flex-shrink: 0;
+      transition: background .2s;
+    }
+    .modal-close:hover { background: rgba(200,200,200,0.15); }
+    .modal-body {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      gap: 2rem;
+      align-items: start;
+    }
+    /* MOCK UI */
+    .mock-ui {
+      background: #050505;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 1.2rem;
+      overflow: hidden;
+    }
+    .mock-topbar {
+      display: flex; align-items: center; gap: .45rem;
+      margin-bottom: 1rem; padding-bottom: .8rem;
+      border-bottom: 1px solid var(--line);
+    }
+    .mock-dot { width: 8px; height: 8px; border-radius: 50%; }
+    .mock-dot-r { background: #ff5f57; }
+    .mock-dot-y { background: #febc2e; }
+    .mock-dot-g { background: #28c840; }
+    .mock-app-name { font-size: .7rem; color: var(--silver-3); letter-spacing: .08em; margin-left: .4rem; }
+    .mock-kpi-row {
+      display: grid; grid-template-columns: repeat(3,1fr); gap: .5rem; margin-bottom: .8rem;
+    }
+    .mock-kpi {
+      background: #0d0d0d; border: 1px solid #1a1a1a; border-radius: 10px; padding: .65rem;
+    }
+    .mock-kpi-val { font-family: var(--font-display); font-size: 1rem; font-weight: 700; color: #fff; }
+    .mock-kpi-lbl { font-size: .6rem; color: var(--silver-3); text-transform: uppercase; letter-spacing: .07em; margin-top: .15rem; }
+    .mock-row {
+      display: flex; align-items: center; justify-content: space-between;
+      background: #0d0d0d; border: 1px solid #1a1a1a; border-radius: 8px;
+      padding: .45rem .7rem; margin-bottom: .4rem; font-size: .75rem;
+    }
+    .mock-row-left { color: #bbb; }
+    .mock-badge { display: inline-block; font-size: .6rem; padding: .12rem .5rem; border-radius: 20px; font-weight: 600; }
+    .mock-badge-green { background: rgba(76,175,80,.15); color: #4caf50; }
+    .mock-badge-yellow { background: rgba(255,193,7,.15); color: #ffc107; }
+    .mock-badge-gray { background: #1a1a1a; color: #666; }
+    .mock-kanban { display: grid; grid-template-columns: repeat(3,1fr); gap: .5rem; }
+    .mock-col-title { font-size: .6rem; color: var(--silver-3); text-transform: uppercase; letter-spacing: .1em; margin-bottom: .5rem; }
+    .mock-card-sm {
+      background: #111; border: 1px solid #1a1a1a; border-radius: 8px;
+      padding: .45rem .55rem; margin-bottom: .35rem; font-size: .7rem; color: #bbb; line-height: 1.4;
+    }
+    .mock-table { width: 100%; border-collapse: collapse; font-size: .7rem; }
+    .mock-table th {
+      color: var(--silver-3); text-transform: uppercase; letter-spacing: .07em;
+      padding: .3rem .4rem; text-align: left; border-bottom: 1px solid #1a1a1a; font-size: .6rem;
+    }
+    .mock-table td { padding: .4rem .4rem; color: #bbb; border-bottom: 1px solid #0d0d0d; }
+    .mock-pos { display: grid; grid-template-columns: 1.2fr 1fr; gap: .5rem; }
+    .mock-pos-item {
+      display: flex; justify-content: space-between;
+      font-size: .75rem; padding: .35rem 0; border-bottom: 1px solid #111; color: #bbb;
+    }
+    .mock-pos-total {
+      font-family: var(--font-display); font-size: 1.1rem; font-weight: 700;
+      color: #fff; text-align: right; margin-top: .6rem;
+    }
+    .mock-pos-btn {
+      display: block; width: 100%; background: #fff; color: #000; font-size: .75rem;
+      font-weight: 600; text-align: center; border-radius: 8px; padding: .5rem; margin-top: .5rem; border: none;
+    }
+    .mock-calendar { display: grid; grid-template-columns: repeat(5,1fr); gap: .3rem; margin-bottom: .7rem; }
+    .mock-cal-slot {
+      background: #111; border: 1px solid #1a1a1a; border-radius: 6px;
+      padding: .3rem .2rem; text-align: center; font-size: .6rem; color: var(--silver-3);
+    }
+    .mock-cal-slot.busy { background: rgba(200,200,200,.07); color: #bbb; border-color: rgba(200,200,200,.14); }
+    .mock-gantt { display: flex; flex-direction: column; gap: .45rem; }
+    .mock-gantt-row { display: flex; align-items: center; gap: .6rem; }
+    .mock-gantt-label { font-size: .66rem; color: var(--silver-3); width: 72px; flex-shrink: 0; }
+    .mock-gantt-track { flex: 1; background: #111; border-radius: 4px; height: 7px; overflow: hidden; }
+    .mock-gantt-bar { height: 100%; border-radius: 4px; background: linear-gradient(90deg, #fff, #888); }
+    /* INFO PANEL */
+    .modal-info h4 {
+      font-family: var(--font-display); font-size: .95rem; font-weight: 600;
+      color: var(--silver); margin-bottom: .9rem; text-transform: uppercase; letter-spacing: .08em;
+    }
+    .modal-features { list-style: none; margin-bottom: 1.5rem; }
+    .modal-features li {
+      display: flex; align-items: center; gap: .6rem;
+      font-size: .88rem; color: var(--silver-2);
+      padding: .45rem 0; border-bottom: 1px solid var(--line);
+    }
+    .modal-features li:last-child { border-bottom: none; }
+    .modal-features li::before { content: '✓'; color: var(--silver); font-weight: 700; flex-shrink: 0; }
+    .modal-price-badge {
+      background: rgba(200,200,200,.05); border: 1px solid var(--line-bright);
+      border-radius: 12px; padding: .8rem 1rem; margin-bottom: 1.2rem;
+    }
+    .modal-price-badge span { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: #fff; }
+    .modal-price-badge small { display: block; font-size: .76rem; color: var(--silver-3); margin-top: .2rem; }
+    .modal-cta {
+      display: block; text-align: center;
+      background: #25D366; color: #fff;
+      font-family: var(--font-display); font-weight: 700; font-size: .92rem;
+      padding: .85rem; border-radius: 12px; text-decoration: none;
+      transition: background .25s, transform .2s;
+    }
+    .modal-cta:hover { background: #1fb055; transform: translateY(-1px); }
+
+    /* "Ver demo" hint */
+    .service-card { cursor: pointer; }
+    .card-hint {
+      display: flex; align-items: center; gap: .35rem;
+      font-size: .76rem; color: var(--silver-3);
+      margin-top: 1rem; transition: color .2s, gap .2s;
+    }
+    .service-card:hover .card-hint { color: var(--silver); gap: .6rem; }
+
+    @media (max-width: 700px) {
+      .modal-box { padding: 1.5rem 1.2rem; border-radius: 20px 20px 0 0; }
+      .modal-body { grid-template-columns: 1fr; }
+      .mock-kpi-row { grid-template-columns: repeat(2,1fr); }
+      .modal-title { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+  <div id="scroll-bar"></div>
+  <div id="cursor"></div>
+  <div id="cursor-ring"></div>
+
+  <!-- NAV -->
+  <nav id="nav">
+    <a href="#" class="nav-logo"><img src="https://d8j0ntlcm91z4.cloudfront.net/user_3BgBAyOyeh2AqaIixNVeQkadoIG/hf_20260523_161309_22384276-a2e5-44df-97cc-79c49a40299b.png" alt="MonTech" style="height:40px;width:auto;vertical-align:middle;" /></a>
+    <ul class="nav-links">
+      <li><a href="#servicios">Servicios</a></li>
+      <li><a href="#por-que">¿Por qué MonTech?</a></li>
+      <li><a href="#precios">Precios</a></li>
+      <li><a href="#contacto">Contacto</a></li>
+    </ul>
+    <a href="#contacto" class="nav-cta">Solicitar Demo</a>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Menú">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="nav-mobile" id="nav-mobile">
+    <ul>
+      <li><a href="#buscar">Encontrar mi solución</a></li>
+      <li><a href="#servicios">Servicios</a></li>
+      <li><a href="#por-que">¿Por qué MonTech?</a></li>
+      <li><a href="#precios">Precios</a></li>
+      <li><a href="#contacto">Contacto</a></li>
+    </ul>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-noise"></div>
+    <div class="hero-glow"></div>
+    <div class="hero-grid"></div>
+
+    <div class="hero-eyebrow">
+      <span class="dot"></span>
+      Software empresarial · República Dominicana
+    </div>
+
+    <h1 class="hero-title">
+      <span class="line-silver">Software que</span><br>
+      <span class="line-dim">transforma</span><br>
+      <span class="line-silver">tu negocio.</span>
+    </h1>
+
+    <p class="hero-sub">
+      Soluciones de ERP, CRM, Nómina y POS diseñadas para empresas dominicanas. Cumplimiento DGII incluido, soporte local, precios en pesos.
+    </p>
+
+    <div class="hero-actions">
+      <a href="#contacto" class="btn-primary">Solicitar Demo Gratis</a>
+      <a href="#servicios" class="btn-ghost">Ver Servicios</a>
+    </div>
+
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-num">+50</div>
+        <div class="stat-label">Clientes activos</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">100%</div>
+        <div class="stat-label">Compatible DGII</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">24/7</div>
+        <div class="stat-label">Soporte local</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee-wrap">
+    <div class="marquee-track">
+      <span class="marquee-item">ERP Empresarial</span>
+      <span class="marquee-item">Facturación DGII</span>
+      <span class="marquee-item">CRM Ventas</span>
+      <span class="marquee-item">Nómina y RRHH</span>
+      <span class="marquee-item">Punto de Venta</span>
+      <span class="marquee-item">Software para Clínicas</span>
+      <span class="marquee-item">Gestión de Inventario</span>
+      <span class="marquee-item">Soporte en RD</span>
+      <span class="marquee-item">ERP Empresarial</span>
+      <span class="marquee-item">Facturación DGII</span>
+      <span class="marquee-item">CRM Ventas</span>
+      <span class="marquee-item">Nómina y RRHH</span>
+      <span class="marquee-item">Punto de Venta</span>
+      <span class="marquee-item">Software para Clínicas</span>
+      <span class="marquee-item">Gestión de Inventario</span>
+      <span class="marquee-item">Soporte en RD</span>
+    </div>
+  </div>
+
+  <!-- BUSINESS FINDER -->
+  <div class="finder-section reveal" id="buscar">
+    <p class="section-label">Encuentra tu solución</p>
+    <h2 class="finder-title">¿Qué tipo de <em>negocio</em> tienes?</h2>
+    <p class="finder-sub">Toca tu industria y te mostramos exactamente qué necesitas.</p>
+    <div class="biz-chips">
+      <button class="biz-chip" data-targets="erp,crm,nomina">🏢 Empresa / Distribuidora</button>
+      <button class="biz-chip" data-targets="pos,erp">🔧 Ferretería / Tienda</button>
+      <button class="biz-chip" data-targets="clinica">🏥 Clínica / Médico</button>
+      <button class="biz-chip" data-targets="construccion,erp">🏗️ Constructora</button>
+      <button class="biz-chip" data-targets="nomina">👥 Empresa con empleados</button>
+      <button class="biz-chip" data-targets="pos">🛍️ Colmado / Restaurante</button>
+    </div>
+    <p class="finder-hint">↓ Las soluciones recomendadas se resaltan abajo</p>
+  </div>
+
+  <!-- SERVICES -->
+  <section class="section" id="servicios">
+    <div class="reveal">
+      <p class="section-label">Nuestros servicios</p>
+      <h2 class="section-title">Cada negocio necesita<br><em>su propio sistema.</em></h2>
+      <p class="section-sub">Desde colmados hasta empresas de construcción, tenemos la solución exacta para tu operación.</p>
+    </div>
+
+    <div class="services-grid stagger">
+      <div class="service-card" data-service="erp">
+        <div class="service-icon">⚡</div>
+        <div class="service-name">ERP Completo</div>
+        <p class="service-desc">Integra ventas, inventario, contabilidad y finanzas en un solo sistema. Control total de tu empresa en tiempo real.</p>
+        <div class="service-price">Desde <strong>US$150/mes</strong></div>
+        <span class="service-tag">Implementación incluida</span>
+        <div class="card-hint">Ver demo <span>→</span></div>
+      </div>
+      <div class="service-card" data-service="crm">
+        <div class="service-icon">📊</div>
+        <div class="service-name">CRM de Ventas</div>
+        <p class="service-desc">Gestiona clientes, oportunidades y pipeline de ventas. Cierra más negocios con datos en tiempo real.</p>
+        <div class="service-price">Desde <strong>US$80/mes</strong></div>
+        <span class="service-tag">Integración WhatsApp</span>
+        <div class="card-hint">Ver demo <span>→</span></div>
+      </div>
+      <div class="service-card" data-service="nomina">
+        <div class="service-icon">👥</div>
+        <div class="service-name">Nómina y RRHH</div>
+        <p class="service-desc">Cálculo automático de ISR, TSS, regalía pascual, vacaciones y reportes DGT-3, DGT-5, DGT-11 para la DGII.</p>
+        <div class="service-price">Desde <strong>US$100/mes</strong></div>
+        <span class="service-tag">Cumplimiento DGII</span>
+        <div class="card-hint">Ver demo <span>→</span></div>
+      </div>
+      <div class="service-card" data-service="pos">
+        <div class="service-icon">🛒</div>
+        <div class="service-name">Punto de Venta POS</div>
+        <p class="service-desc">Sistema de caja completo con facturación electrónica, inventario y reportes. Ideal para tiendas, colmados y ferreterías.</p>
+        <div class="service-price">Desde <strong>US$50/mes</strong></div>
+        <span class="service-tag">Factura electrónica</span>
+        <div class="card-hint">Ver demo <span>→</span></div>
+      </div>
+      <div class="service-card" data-service="clinica">
+        <div class="service-icon">🏥</div>
+        <div class="service-name">Software para Clínicas</div>
+        <p class="service-desc">Gestión de citas, expedientes médicos, inventario de farmacia y facturación. Para médicos, dentistas y centros de salud.</p>
+        <div class="service-price">Desde <strong>US$200/mes</strong></div>
+        <span class="service-tag">Historial clínico digital</span>
+        <div class="card-hint">Ver demo <span>→</span></div>
+      </div>
+      <div class="service-card" data-service="construccion">
+        <div class="service-icon">🏗️</div>
+        <div class="service-name">Software para Constructoras</div>
+        <p class="service-desc">Control de proyectos, presupuestos, materiales y subcontratistas. Reportes de avance en tiempo real.</p>
+        <div class="service-price">Desde <strong>US$300/mes</strong></div>
+        <span class="service-tag">Gestión de proyectos</span>
+        <div class="card-hint">Ver demo <span>→</span></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- WHY -->
+  <section class="section" id="por-que">
+    <div class="why-grid">
+      <div class="why-visual reveal-left">
+        <div class="why-card-stack">
+          <div class="wcard wcard-1">
+            <div class="wcard-label">Clientes este mes</div>
+            <div class="wcard-val">+12</div>
+            <div class="wcard-sub">Nuevas empresas implementadas</div>
+          </div>
+          <div class="wcard wcard-2">
+            <div class="wcard-label">Tiempo de implementación</div>
+            <div class="wcard-val">5 días</div>
+            <div class="wcard-sub">Promedio de puesta en marcha</div>
+          </div>
+          <div class="wcard wcard-3">
+            <div class="wcard-label">Cumplimiento fiscal</div>
+            <div class="wcard-val">100%</div>
+            <div class="wcard-sub">Compatible con DGII desde el día uno</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal-right">
+        <p class="section-label">Por qué MonTech</p>
+        <h2 class="section-title" style="margin-bottom:2.5rem;">La ventaja<br><em>local.</em></h2>
+        <ul class="why-list">
+          <li class="why-item">
+            <div class="why-bullet">🇩🇴</div>
+            <div>
+              <div class="why-item-title">Soporte presencial en RD</div>
+              <p class="why-item-desc">Nuestro equipo está en Santo Domingo. Visitas, capacitaciones y soporte en español, sin tickets internacionales.</p>
+            </div>
+          </li>
+          <li class="why-item">
+            <div class="why-bullet">📋</div>
+            <div>
+              <div class="why-item-title">DGII integrada desde el inicio</div>
+              <p class="why-item-desc">Facturación electrónica, e-CF, reportes 606/607/608 y nómina electrónica listos sin configuraciones extras.</p>
+            </div>
+          </li>
+          <li class="why-item">
+            <div class="why-bullet">💰</div>
+            <div>
+              <div class="why-item-title">Precios en pesos dominicanos</div>
+              <p class="why-item-desc">Sin sorpresas de tipo de cambio. Planes flexibles adaptados a la realidad del mercado local.</p>
+            </div>
+          </li>
+          <li class="why-item">
+            <div class="why-bullet">⚙️</div>
+            <div>
+              <div class="why-item-title">Implementación en 5 días</div>
+              <p class="why-item-desc">Instalamos, configuramos y capacitamos a tu equipo. Tu negocio operando con el nuevo sistema en menos de una semana.</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- PRICING -->
+  <section class="section" id="precios">
+    <div class="reveal" style="text-align:center; margin-bottom:4rem;">
+      <p class="section-label">Planes y precios</p>
+      <h2 class="section-title">Transparencia<br><em>sin letras pequeñas.</em></h2>
+    </div>
+
+    <div class="pricing-grid stagger">
+      <div class="pricing-card">
+        <div class="pricing-plan">Starter</div>
+        <div class="pricing-price">US$80<span>/mes</span></div>
+        <div class="pricing-setup">+ US$1,000 implementación</div>
+        <ul class="pricing-features">
+          <li>POS o CRM (un módulo)</li>
+          <li>Facturación electrónica DGII</li>
+          <li>Hasta 3 usuarios</li>
+          <li>Soporte por WhatsApp</li>
+          <li>Capacitación inicial (4h)</li>
+        </ul>
+        <a href="#contacto" class="pricing-btn pricing-btn-outline">Empezar</a>
+      </div>
+
+      <div class="pricing-card featured">
+        <div class="pricing-plan">Business</div>
+        <div class="pricing-price">US$200<span>/mes</span></div>
+        <div class="pricing-setup">+ US$3,500 implementación</div>
+        <ul class="pricing-features">
+          <li>ERP + CRM + Nómina</li>
+          <li>Facturación electrónica DGII</li>
+          <li>Hasta 15 usuarios</li>
+          <li>Soporte 24/7 + visitas</li>
+          <li>Capacitación completa</li>
+          <li>Migración de datos incluida</li>
+        </ul>
+        <a href="#contacto" class="pricing-btn pricing-btn-solid">Solicitar Demo</a>
+      </div>
+
+      <div class="pricing-card">
+        <div class="pricing-plan">Enterprise</div>
+        <div class="pricing-price">A medida</div>
+        <div class="pricing-setup">Cotización personalizada</div>
+        <ul class="pricing-features">
+          <li>Sistema 100% personalizado</li>
+          <li>Módulos a la medida</li>
+          <li>Usuarios ilimitados</li>
+          <li>Gerente de cuenta dedicado</li>
+          <li>SLA de respuesta garantizado</li>
+          <li>Integración con sistemas existentes</li>
+        </ul>
+        <a href="#contacto" class="pricing-btn pricing-btn-outline">Contactar</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- TESTIMONIALS -->
+  <section class="section">
+    <div class="reveal" style="margin-bottom:3rem;">
+      <p class="section-label">Testimonios</p>
+      <h2 class="section-title">Lo que dicen<br><em>nuestros clientes.</em></h2>
+    </div>
+
+    <div class="testimonials-grid stagger">
+      <div class="tcard">
+        <div class="tcard-stars">★★★★★</div>
+        <p class="tcard-quote">"MonTech transformó la gestión de nuestra ferretería. El inventario en tiempo real y la facturación electrónica nos ahorra horas cada semana."</p>
+        <div class="tcard-author">
+          <div class="tcard-avatar">JM</div>
+          <div>
+            <div class="tcard-name">José Martínez</div>
+            <div class="tcard-biz">Ferretería El Progreso, Santiago</div>
+          </div>
+        </div>
+      </div>
+      <div class="tcard">
+        <div class="tcard-stars">★★★★★</div>
+        <p class="tcard-quote">"La implementación fue rapidísima. En 5 días ya teníamos todo funcionando. El soporte local hace la diferencia, te llaman y vienen en persona."</p>
+        <div class="tcard-author">
+          <div class="tcard-avatar">AL</div>
+          <div>
+            <div class="tcard-name">Ana López</div>
+            <div class="tcard-biz">Clínica Dental Santo Domingo Este</div>
+          </div>
+        </div>
+      </div>
+      <div class="tcard">
+        <div class="tcard-stars">★★★★★</div>
+        <p class="tcard-quote">"Nómina que antes tomaba 2 días ahora se procesa en 2 horas. Los reportes de la DGII salen automáticos. Valió cada peso invertido."</p>
+        <div class="tcard-author">
+          <div class="tcard-avatar">RC</div>
+          <div>
+            <div class="tcard-name">Rafael Cruz</div>
+            <div class="tcard-biz">Constructora Cruz & Asociados</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <div class="cta-section reveal" id="contacto">
+    <div class="cta-glow"></div>
+    <h2 class="cta-title">¿Listo para modernizar<br>tu empresa?</h2>
+    <p class="cta-sub">Solicita una demo gratuita. Te mostramos el sistema funcionando con los datos reales de tu negocio.</p>
+    <form class="cta-form" onsubmit="handleSubmit(event)">
+      <input type="tel" class="cta-input" placeholder="Tu número de WhatsApp" id="phone" required />
+      <button type="submit" class="btn-primary">Solicitar Demo</button>
+    </form>
+    <p style="margin-top:1rem; font-size:.8rem; color:var(--silver-3);">Sin compromisos · Respuesta en menos de 2 horas</p>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">MonTech</div>
+    <ul class="footer-links">
+      <li><a href="#servicios">Servicios</a></li>
+      <li><a href="#precios">Precios</a></li>
+      <li><a href="#contacto">Contacto</a></li>
+    </ul>
+    <div class="footer-copy">© 2026 MonTech · República Dominicana</div>
+  </footer>
+
+  <!-- FLOATING WHATSAPP -->
+  <a class="wa-float" href="https://wa.me/18293430288?text=Hola%20MonTech%2C%20quiero%20informaci%C3%B3n%20sobre%20sus%20servicios" target="_blank" aria-label="WhatsApp">
+    <div class="wa-pulse"></div>
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </a>
+
+  <!-- MODAL: ERP -->
+  <div class="modal-overlay" id="modal-erp">
+    <div class="modal-box">
+      <div class="modal-handle"></div>
+      <div class="modal-header">
+        <div class="modal-header-left">
+          <span class="modal-icon">⚡</span>
+          <span class="modal-title">ERP Completo</span>
+        </div>
+        <button class="modal-close" data-close>✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="mock-ui">
+          <div class="mock-topbar">
+            <div class="mock-dot mock-dot-r"></div><div class="mock-dot mock-dot-y"></div><div class="mock-dot mock-dot-g"></div>
+            <span class="mock-app-name">MonTech ERP · Dashboard</span>
+          </div>
+          <div class="mock-kpi-row">
+            <div class="mock-kpi"><div class="mock-kpi-val">RD$284K</div><div class="mock-kpi-lbl">Ventas hoy</div></div>
+            <div class="mock-kpi"><div class="mock-kpi-val">1,240</div><div class="mock-kpi-lbl">Productos</div></div>
+            <div class="mock-kpi"><div class="mock-kpi-val">18</div><div class="mock-kpi-lbl">Facturas pend.</div></div>
+          </div>
+          <div class="mock-row"><span class="mock-row-left">Factura #0012384</span><span class="mock-badge mock-badge-green">Pagada</span></div>
+          <div class="mock-row"><span class="mock-row-left">Orden de compra #445</span><span class="mock-badge mock-badge-yellow">Pendiente</span></div>
+          <div class="mock-row"><span class="mock-row-left">Inventario bajo: Cemento</span><span class="mock-badge mock-badge-yellow">Alerta</span></div>
+          <div class="mock-row"><span class="mock-row-left">Reporte 606 · Mayo 2026</span><span class="mock-badge mock-badge-green">Listo DGII</span></div>
+        </div>
+        <div class="modal-info">
+          <h4>Funciones incluidas</h4>
+          <ul class="modal-features">
+            <li>Ventas, compras y facturación e-CF</li>
+            <li>Control de inventario multi-almacén</li>
+            <li>Contabilidad y estados financieros</li>
+            <li>Reportes 606 / 607 / 608 DGII</li>
+            <li>Multi-sucursal y multi-usuario</li>
+            <li>Dashboard en tiempo real</li>
+          </ul>
+          <div class="modal-price-badge">
+            <span>Desde US$150/mes</span>
+            <small>+ implementación · Hasta 10 usuarios incluidos</small>
+          </div>
+          <a class="modal-cta" href="https://wa.me/18293430288?text=Quiero%20una%20demo%20del%20ERP%20de%20MonTech" target="_blank">📲 Solicitar demo gratis</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: CRM -->
+  <div class="modal-overlay" id="modal-crm">
+    <div class="modal-box">
+      <div class="modal-handle"></div>
+      <div class="modal-header">
+        <div class="modal-header-left">
+          <span class="modal-icon">📊</span>
+          <span class="modal-title">CRM de Ventas</span>
+        </div>
+        <button class="modal-close" data-close>✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="mock-ui">
+          <div class="mock-topbar">
+            <div class="mock-dot mock-dot-r"></div><div class="mock-dot mock-dot-y"></div><div class="mock-dot mock-dot-g"></div>
+            <span class="mock-app-name">MonTech CRM · Pipeline</span>
+          </div>
+          <div class="mock-kanban">
+            <div>
+              <div class="mock-col-title">Prospecto</div>
+              <div class="mock-card-sm">Ferretería Ramírez<br><span style="color:#555;font-size:.65rem">RD$80,000</span></div>
+              <div class="mock-card-sm">Clínica Dr. Pérez<br><span style="color:#555;font-size:.65rem">RD$45,000</span></div>
+            </div>
+            <div>
+              <div class="mock-col-title">Cotización</div>
+              <div class="mock-card-sm">Constructora Mena<br><span style="color:#555;font-size:.65rem">RD$320,000</span></div>
+              <div class="mock-card-sm">Supermercado R&amp;R<br><span style="color:#555;font-size:.65rem">RD$190,000</span></div>
+            </div>
+            <div>
+              <div class="mock-col-title">Cerrado ✓</div>
+              <div class="mock-card-sm" style="border-color:rgba(76,175,80,.25)">Import. Global<br><span style="color:#4caf50;font-size:.65rem">RD$550,000</span></div>
+              <div class="mock-card-sm" style="border-color:rgba(76,175,80,.25)">Grupo Herrera<br><span style="color:#4caf50;font-size:.65rem">RD$210,000</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-info">
+          <h4>Funciones incluidas</h4>
+          <ul class="modal-features">
+            <li>Pipeline visual de oportunidades</li>
+            <li>Historial completo por cliente</li>
+            <li>Cotizaciones y propuestas en PDF</li>
+            <li>Integración WhatsApp Business</li>
+            <li>Alertas de seguimiento automático</li>
+            <li>Reportes de rendimiento del equipo</li>
+          </ul>
+          <div class="modal-price-badge">
+            <span>Desde US$80/mes</span>
+            <small>+ implementación · Usuarios ilimitados de consulta</small>
+          </div>
+          <a class="modal-cta" href="https://wa.me/18293430288?text=Quiero%20una%20demo%20del%20CRM%20de%20MonTech" target="_blank">📲 Solicitar demo gratis</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: NÓMINA -->
+  <div class="modal-overlay" id="modal-nomina">
+    <div class="modal-box">
+      <div class="modal-handle"></div>
+      <div class="modal-header">
+        <div class="modal-header-left">
+          <span class="modal-icon">👥</span>
+          <span class="modal-title">Nómina y RRHH</span>
+        </div>
+        <button class="modal-close" data-close>✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="mock-ui">
+          <div class="mock-topbar">
+            <div class="mock-dot mock-dot-r"></div><div class="mock-dot mock-dot-y"></div><div class="mock-dot mock-dot-g"></div>
+            <span class="mock-app-name">MonTech Nómina · Mayo 2026</span>
+          </div>
+          <table class="mock-table">
+            <thead><tr><th>Empleado</th><th>Bruto</th><th>ISR</th><th>TSS</th><th>Neto</th></tr></thead>
+            <tbody>
+              <tr><td>J. Rodríguez</td><td>45,000</td><td>2,820</td><td>1,440</td><td><span class="mock-badge mock-badge-green">40,740</span></td></tr>
+              <tr><td>M. Santos</td><td>32,000</td><td>1,280</td><td>1,024</td><td><span class="mock-badge mock-badge-green">29,696</span></td></tr>
+              <tr><td>L. Familia</td><td>28,500</td><td>855</td><td>912</td><td><span class="mock-badge mock-badge-green">26,733</span></td></tr>
+              <tr><td>C. Mejía</td><td>55,000</td><td>4,125</td><td>1,760</td><td><span class="mock-badge mock-badge-green">49,115</span></td></tr>
+            </tbody>
+          </table>
+          <div style="margin-top:.8rem; display:flex; gap:.5rem;">
+            <span class="mock-badge mock-badge-gray" style="font-size:.68rem; padding:.3rem .8rem;">DGT-3 listo</span>
+            <span class="mock-badge mock-badge-green" style="font-size:.68rem; padding:.3rem .8rem;">Enviado DGII ✓</span>
+          </div>
+        </div>
+        <div class="modal-info">
+          <h4>Funciones incluidas</h4>
+          <ul class="modal-features">
+            <li>Cálculo automático ISR y TSS</li>
+            <li>Regalía pascual y vacaciones</li>
+            <li>Reportes DGT-3, DGT-5, DGT-11</li>
+            <li>Nómina electrónica para DGII</li>
+            <li>Control de asistencia y horas extra</li>
+            <li>Expediente digital por empleado</li>
+          </ul>
+          <div class="modal-price-badge">
+            <span>Desde US$100/mes</span>
+            <small>+ implementación · Sin límite de empleados</small>
+          </div>
+          <a class="modal-cta" href="https://wa.me/18293430288?text=Quiero%20una%20demo%20de%20N%C3%B3mina%20de%20MonTech" target="_blank">📲 Solicitar demo gratis</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: POS -->
+  <div class="modal-overlay" id="modal-pos">
+    <div class="modal-box">
+      <div class="modal-handle"></div>
+      <div class="modal-header">
+        <div class="modal-header-left">
+          <span class="modal-icon">🛒</span>
+          <span class="modal-title">Punto de Venta POS</span>
+        </div>
+        <button class="modal-close" data-close>✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="mock-ui">
+          <div class="mock-topbar">
+            <div class="mock-dot mock-dot-r"></div><div class="mock-dot mock-dot-y"></div><div class="mock-dot mock-dot-g"></div>
+            <span class="mock-app-name">MonTech POS · Caja #1</span>
+          </div>
+          <div class="mock-pos">
+            <div>
+              <div class="mock-pos-item"><span>Cemento Portland x3</span><span>RD$1,290</span></div>
+              <div class="mock-pos-item"><span>Pintura blanca 1gl</span><span>RD$850</span></div>
+              <div class="mock-pos-item"><span>Brocha 4"</span><span>RD$180</span></div>
+              <div class="mock-pos-item"><span>ITBIS (18%)</span><span>RD$401</span></div>
+              <div class="mock-pos-total">RD$2,721</div>
+            </div>
+            <div>
+              <div class="mock-kpi" style="margin-bottom:.5rem"><div class="mock-kpi-val">NCF B01</div><div class="mock-kpi-lbl">Factura crédito fiscal</div></div>
+              <div class="mock-kpi"><div class="mock-kpi-val">Efectivo</div><div class="mock-kpi-lbl">Forma de pago</div></div>
+              <button class="mock-pos-btn">Cobrar →</button>
+            </div>
+          </div>
+        </div>
+        <div class="modal-info">
+          <h4>Funciones incluidas</h4>
+          <ul class="modal-features">
+            <li>Factura electrónica NCF / e-CF</li>
+            <li>Múltiples formas de pago</li>
+            <li>Inventario actualizado en tiempo real</li>
+            <li>Corte de caja diario</li>
+            <li>Funciona sin internet (modo offline)</li>
+            <li>Reportes de ventas por producto</li>
+          </ul>
+          <div class="modal-price-badge">
+            <span>Desde US$50/mes</span>
+            <small>+ implementación · Hardware opcional</small>
+          </div>
+          <a class="modal-cta" href="https://wa.me/18293430288?text=Quiero%20una%20demo%20del%20POS%20de%20MonTech" target="_blank">📲 Solicitar demo gratis</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: CLÍNICAS -->
+  <div class="modal-overlay" id="modal-clinica">
+    <div class="modal-box">
+      <div class="modal-handle"></div>
+      <div class="modal-header">
+        <div class="modal-header-left">
+          <span class="modal-icon">🏥</span>
+          <span class="modal-title">Software para Clínicas</span>
+        </div>
+        <button class="modal-close" data-close>✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="mock-ui">
+          <div class="mock-topbar">
+            <div class="mock-dot mock-dot-r"></div><div class="mock-dot mock-dot-y"></div><div class="mock-dot mock-dot-g"></div>
+            <span class="mock-app-name">MonTech Clínica · Agenda</span>
+          </div>
+          <div class="mock-calendar">
+            <div class="mock-cal-slot">9:00</div>
+            <div class="mock-cal-slot busy">9:30<br>A. Reyes</div>
+            <div class="mock-cal-slot busy">10:00<br>M. Cruz</div>
+            <div class="mock-cal-slot">10:30</div>
+            <div class="mock-cal-slot busy">11:00<br>J. Díaz</div>
+            <div class="mock-cal-slot busy">11:30<br>R. López</div>
+            <div class="mock-cal-slot">12:00</div>
+            <div class="mock-cal-slot">12:30</div>
+            <div class="mock-cal-slot busy">2:00<br>S. Pérez</div>
+            <div class="mock-cal-slot busy">2:30<br>C. Vargas</div>
+          </div>
+          <div class="mock-row"><span class="mock-row-left">Ana Reyes · Expediente digital</span><span class="mock-badge mock-badge-green">Activo</span></div>
+          <div class="mock-row"><span class="mock-row-left">Factura ARS Humano</span><span class="mock-badge mock-badge-yellow">En proceso</span></div>
+        </div>
+        <div class="modal-info">
+          <h4>Funciones incluidas</h4>
+          <ul class="modal-features">
+            <li>Agenda médica y recordatorios SMS</li>
+            <li>Expedientes clínicos digitales</li>
+            <li>Recetas e informes médicos</li>
+            <li>Farmacia e inventario de insumos</li>
+            <li>Facturación ARS / ADARS / particular</li>
+            <li>Reportes e historial por paciente</li>
+          </ul>
+          <div class="modal-price-badge">
+            <span>Desde US$200/mes</span>
+            <small>+ implementación · Ilimitado de pacientes</small>
+          </div>
+          <a class="modal-cta" href="https://wa.me/18293430288?text=Quiero%20una%20demo%20del%20software%20de%20cl%C3%ADnicas%20de%20MonTech" target="_blank">📲 Solicitar demo gratis</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: CONSTRUCTORAS -->
+  <div class="modal-overlay" id="modal-construccion">
+    <div class="modal-box">
+      <div class="modal-handle"></div>
+      <div class="modal-header">
+        <div class="modal-header-left">
+          <span class="modal-icon">🏗️</span>
+          <span class="modal-title">Software para Constructoras</span>
+        </div>
+        <button class="modal-close" data-close>✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="mock-ui">
+          <div class="mock-topbar">
+            <div class="mock-dot mock-dot-r"></div><div class="mock-dot mock-dot-y"></div><div class="mock-dot mock-dot-g"></div>
+            <span class="mock-app-name">MonTech Construcción · Proyectos</span>
+          </div>
+          <div class="mock-gantt">
+            <div class="mock-gantt-row">
+              <span class="mock-gantt-label">Cimentación</span>
+              <div class="mock-gantt-track"><div class="mock-gantt-bar" style="width:100%"></div></div>
+              <span style="font-size:.62rem;color:#4caf50">100%</span>
+            </div>
+            <div class="mock-gantt-row">
+              <span class="mock-gantt-label">Estructura</span>
+              <div class="mock-gantt-track"><div class="mock-gantt-bar" style="width:72%"></div></div>
+              <span style="font-size:.62rem;color:#bbb">72%</span>
+            </div>
+            <div class="mock-gantt-row">
+              <span class="mock-gantt-label">Mampostería</span>
+              <div class="mock-gantt-track"><div class="mock-gantt-bar" style="width:38%"></div></div>
+              <span style="font-size:.62rem;color:#bbb">38%</span>
+            </div>
+            <div class="mock-gantt-row">
+              <span class="mock-gantt-label">Acabados</span>
+              <div class="mock-gantt-track"><div class="mock-gantt-bar" style="width:5%"></div></div>
+              <span style="font-size:.62rem;color:#555">5%</span>
+            </div>
+          </div>
+          <div style="margin-top:.8rem;">
+            <div class="mock-row"><span class="mock-row-left">Presupuesto: RD$12.4M</span><span class="mock-badge mock-badge-green">En rango</span></div>
+            <div class="mock-row"><span class="mock-row-left">Materiales pendientes</span><span class="mock-badge mock-badge-yellow">3 OC abiertas</span></div>
+          </div>
+        </div>
+        <div class="modal-info">
+          <h4>Funciones incluidas</h4>
+          <ul class="modal-features">
+            <li>Control de proyectos con Gantt</li>
+            <li>Presupuestos y análisis de costos</li>
+            <li>Inventario de materiales por obra</li>
+            <li>Gestión de subcontratistas</li>
+            <li>Reportes de avance en tiempo real</li>
+            <li>Integración con facturación DGII</li>
+          </ul>
+          <div class="modal-price-badge">
+            <span>Desde US$300/mes</span>
+            <small>+ implementación · Proyectos ilimitados</small>
+          </div>
+          <a class="modal-cta" href="https://wa.me/18293430288?text=Quiero%20una%20demo%20del%20software%20para%20constructoras%20de%20MonTech" target="_blank">📲 Solicitar demo gratis</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script defer>
+    (function() {
+      // CURSOR
+      var cur = document.getElementById('cursor');
+      var ring = document.getElementById('cursor-ring');
+      var mx = 0, my = 0, rx = 0, ry = 0;
+      document.addEventListener('mousemove', function(e) {
+        mx = e.clientX; my = e.clientY;
+        cur.style.left = mx + 'px';
+        cur.style.top = my + 'px';
+      });
+      function animRing() {
+        rx += (mx - rx) * 0.12;
+        ry += (my - ry) * 0.12;
+        ring.style.left = rx + 'px';
+        ring.style.top = ry + 'px';
+        requestAnimationFrame(animRing);
+      }
+      animRing();
+      document.querySelectorAll('a,button').forEach(function(el) {
+        el.addEventListener('mouseenter', function() {
+          cur.style.width = '6px'; cur.style.height = '6px';
+          ring.style.width = '50px'; ring.style.height = '50px';
+          ring.style.borderColor = 'rgba(200,200,200,0.7)';
+        });
+        el.addEventListener('mouseleave', function() {
+          cur.style.width = '10px'; cur.style.height = '10px';
+          ring.style.width = '36px'; ring.style.height = '36px';
+          ring.style.borderColor = 'rgba(200,200,200,0.4)';
+        });
+      });
+
+      // SCROLL: progress bar + nav + parallax + marquee speed
+      var nav = document.getElementById('nav');
+      var scrollBar = document.getElementById('scroll-bar');
+      var heroGrid = document.querySelector('.hero-grid');
+      var heroGlow = document.querySelector('.hero-glow');
+      var marqueeTrack = document.querySelector('.marquee-track');
+      var lastScrollY = 0;
+
+      window.addEventListener('scroll', function() {
+        var scrollY = window.scrollY;
+
+        // Progress bar
+        var docH = document.documentElement.scrollHeight - window.innerHeight;
+        if (scrollBar) scrollBar.style.width = (scrollY / docH * 100) + '%';
+
+        // Nav
+        nav.classList.toggle('scrolled', scrollY > 50);
+
+        // Hero parallax
+        if (heroGrid) heroGrid.style.transform = 'translateY(' + (scrollY * 0.28) + 'px)';
+        if (heroGlow) heroGlow.style.transform = 'translateX(-50%) translateY(' + (scrollY * 0.14) + 'px)';
+
+        // Marquee speeds up when scrolling fast
+        if (marqueeTrack) {
+          var delta = Math.abs(scrollY - lastScrollY);
+          var speed = Math.max(10, 30 - delta * 0.7);
+          marqueeTrack.style.animationDuration = speed + 's';
+        }
+        lastScrollY = scrollY;
+      }, { passive: true });
+
+      // REVEAL ON SCROLL (all variants + stagger)
+      var allReveal = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .stagger');
+      var io = new IntersectionObserver(function(entries) {
+        entries.forEach(function(e) {
+          if (e.isIntersecting) {
+            e.target.classList.add('visible');
+            io.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.05 });
+      allReveal.forEach(function(el) { io.observe(el); });
+      setTimeout(function() {
+        allReveal.forEach(function(el) { el.classList.add('visible'); });
+      }, 6000);
+
+      // FORM
+      window.handleSubmit = function(e) {
+        e.preventDefault();
+        var phone = document.getElementById('phone').value;
+        var msg = encodeURIComponent('Hola MonTech, quiero solicitar una demo de su software. Mi número es: ' + phone);
+        window.open('https://wa.me/18293430288?text=' + msg, '_blank');
+      };
+
+      // COUNTER ANIMATION (fixed: preserva el prefijo "+")
+      function animateCount(el, prefix, target) {
+        var duration = 1800;
+        var startTime = null;
+        function step(ts) {
+          if (!startTime) startTime = ts;
+          var progress = Math.min((ts - startTime) / duration, 1);
+          var val = Math.floor(progress * target);
+          el.textContent = prefix + val;
+          if (progress < 1) requestAnimationFrame(step);
+          else el.textContent = prefix + target;
+        }
+        requestAnimationFrame(step);
+      }
+      var statsObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(e) {
+          if (e.isIntersecting) {
+            e.target.querySelectorAll('.stat-num').forEach(function(num) {
+              var text = num.textContent.trim();
+              if (text.startsWith('+')) {
+                animateCount(num, '+', parseInt(text.slice(1)));
+              }
+            });
+            statsObserver.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.3 });
+      document.querySelectorAll('.hero-stats').forEach(function(s) { statsObserver.observe(s); });
+
+      // BUSINESS FINDER CHIPS
+      var chips = document.querySelectorAll('.biz-chip');
+      var serviceCards = document.querySelectorAll('.service-card[data-service]');
+      chips.forEach(function(chip) {
+        chip.addEventListener('click', function() {
+          chips.forEach(function(c) { c.classList.remove('active'); });
+          chip.classList.add('active');
+          var targets = (chip.dataset.targets || '').split(',');
+          serviceCards.forEach(function(card) {
+            if (targets.includes(card.dataset.service)) {
+              card.classList.remove('dimmed');
+              card.classList.add('highlighted');
+            } else {
+              card.classList.add('dimmed');
+              card.classList.remove('highlighted');
+            }
+          });
+          setTimeout(function() {
+            document.getElementById('servicios').scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 120);
+        });
+      });
+
+      // MOBILE MENU
+      var navToggle = document.getElementById('nav-toggle');
+      var navMobile = document.getElementById('nav-mobile');
+      if (navToggle) {
+        navToggle.addEventListener('click', function() {
+          navToggle.classList.toggle('open');
+          navMobile.classList.toggle('open');
+          document.body.style.overflow = navMobile.classList.contains('open') ? 'hidden' : '';
+        });
+        navMobile.querySelectorAll('a').forEach(function(link) {
+          link.addEventListener('click', function() {
+            navToggle.classList.remove('open');
+            navMobile.classList.remove('open');
+            document.body.style.overflow = '';
+          });
+        });
+      }
+
+      // MODALES DE SERVICIO
+      function openModal(id) {
+        var overlay = document.getElementById('modal-' + id);
+        if (!overlay) return;
+        overlay.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+      function closeModal(overlay) {
+        overlay.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+      // Abrir al hacer clic en tarjeta
+      serviceCards.forEach(function(card) {
+        card.addEventListener('click', function() {
+          openModal(card.dataset.service);
+        });
+      });
+      // Cerrar con botón X o backdrop
+      document.querySelectorAll('.modal-overlay').forEach(function(overlay) {
+        overlay.addEventListener('click', function(e) {
+          if (e.target === overlay) closeModal(overlay);
+        });
+        overlay.querySelectorAll('[data-close]').forEach(function(btn) {
+          btn.addEventListener('click', function() { closeModal(overlay); });
+        });
+      });
+      // Cerrar con ESC
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          document.querySelectorAll('.modal-overlay.open').forEach(function(o) { closeModal(o); });
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
